@@ -1,6 +1,9 @@
 import SidebarItem from '@/components/sidebar/sidebar-item'
 import { getServerAuthSession } from '@/server/auth'
 import { Avatar, AvatarImage } from '../ui/avatar'
+import { Button } from '../ui/button'
+import { CogIcon, CometIcon, CreateIcon, HomeIcon, ShapesIcon } from '@/components/icons'
+import WorkspaceSwitcher from '../workspace-switcher'
 
 const Sidebar = async () => {
   const session = await getServerAuthSession()
@@ -10,18 +13,35 @@ const Sidebar = async () => {
   }
 
   return (
-    <div className="grid h-screen w-72 flex-shrink-0 grid-rows-sidebar border-r">
-      <div>Yo</div>
+    <div className="grid h-screen w-[300px] flex-shrink-0 grid-rows-sidebar border-r">
+      <WorkspaceSwitcher />
 
-      <div>
+      <div className="overflow-y-auto p-4">
+        <Button className="bg-newSnippy text-newSnippy-foreground hover:bg-newSnippy/90 flex h-12 w-full select-none justify-start rounded-lg px-3">
+          <CreateIcon className="mr-3 h-6" />
+          New Snippy
+        </Button>
+
         <div className="mt-2.5 grid gap-1">
-          <SidebarItem href="/">Home</SidebarItem>
+          <SidebarItem href="/">
+            <HomeIcon className="mr-3 h-6" />
+            Home
+          </SidebarItem>
 
-          <SidebarItem href="/community">Community</SidebarItem>
+          <SidebarItem href="/community">
+            <ShapesIcon className="mr-3 h-6" />
+            Community
+          </SidebarItem>
 
-          <SidebarItem href="/install">Install Extension</SidebarItem>
+          <SidebarItem href="/install">
+            <CometIcon className="mr-3 h-6" />
+            Install Extension
+          </SidebarItem>
 
-          <SidebarItem href="/settings">Settings & Help</SidebarItem>
+          <SidebarItem href="/settings">
+            <CogIcon className="mr-3 h-6" />
+            Settings & Help
+          </SidebarItem>
         </div>
       </div>
 
