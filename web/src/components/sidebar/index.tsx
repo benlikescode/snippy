@@ -1,8 +1,16 @@
 import SidebarItem from '@/components/sidebar/sidebar-item'
+import { getServerAuthSession } from '@/server/auth'
+import { Avatar, AvatarImage } from '../ui/avatar'
 
-const Sidebar = () => {
+const Sidebar = async () => {
+  const session = await getServerAuthSession()
+
+  if (!session || !session.user) {
+    return null
+  }
+
   return (
-    <div className="grid-rows-sidebar grid h-screen w-72 flex-shrink-0 border-r">
+    <div className="grid h-screen w-72 flex-shrink-0 grid-rows-sidebar border-r">
       <div>Yo</div>
 
       <div>
@@ -17,7 +25,12 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div>Yoooo</div>
+      <div className="flex items-center border border-input p-4">
+        <Avatar>
+          <AvatarImage src={session.user.image || ''} />
+        </Avatar>
+        <span className="ml-3">{session.user.name}</span>
+      </div>
     </div>
   )
 }
