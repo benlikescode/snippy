@@ -96,7 +96,13 @@ export default function HomePage() {
 
       <div className="grid grid-cols-3 gap-5">
         {CARDS.map((card) => (
-          <HomeCard key={card.id} name={card.name} content={card.content} type="snippet" />
+          <HomeCard
+            key={card.id}
+            id={card.id}
+            name={card.name}
+            content={card.content}
+            type="snippet"
+          />
         ))}
       </div>
     </main>

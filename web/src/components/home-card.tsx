@@ -1,14 +1,16 @@
+import Link from 'next/link'
 import { FC } from 'react'
 
 type Props = {
+  id: string
   name: string
   content: string
   type: 'snippet' | 'template'
 }
 
-const HomeCard: FC<Props> = ({ name, content, type }) => {
+const HomeCard: FC<Props> = ({ id, name, content, type }) => {
   return (
-    <div className="grid gap-4">
+    <Link href={`/snippy/${id}`} className="grid gap-4">
       <div className="h-44 overflow-hidden rounded-md border border-border bg-black pl-4 pt-4">
         <div className="h-full w-full rounded-tl-md border border-border bg-background p-4 text-xs text-[#a3a3a3]">
           {content}
@@ -23,7 +25,7 @@ const HomeCard: FC<Props> = ({ name, content, type }) => {
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   )
 }
 

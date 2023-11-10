@@ -1,12 +1,18 @@
+'use client'
+
 import SidebarItem from '@/components/sidebar/sidebar-item'
 import { getServerAuthSession } from '@/server/auth'
 import { Avatar, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
 import { CogIcon, CometIcon, CreateIcon, HomeIcon, ShapesIcon } from '@/components/icons'
 import WorkspaceSwitcher from '../workspace-switcher'
+import { usePathname, useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
-const Sidebar = async () => {
-  const session = await getServerAuthSession()
+const Sidebar = () => {
+  // const session = await getServerAuthSession()
+  const { data: session } = useSession()
+  const router = useRouter()
 
   if (!session || !session.user) {
     return null
@@ -17,7 +23,10 @@ const Sidebar = async () => {
       <WorkspaceSwitcher />
 
       <div className="overflow-y-auto p-4">
-        <Button className="bg-newSnippy text-newSnippy-foreground hover:bg-newSnippy/90 flex h-12 w-full select-none justify-start rounded-lg px-3">
+        <Button
+          onClick={() => router.push('/snippy/new')}
+          className="bg-newSnippy text-newSnippy-foreground hover:bg-newSnippy/90 flex h-12 w-full select-none justify-start rounded-lg px-3"
+        >
           <CreateIcon className="mr-3 h-6" />
           New Snippy
         </Button>
