@@ -1,7 +1,6 @@
 'use client'
 
 import SidebarItem from '@/components/sidebar/sidebar-item'
-import { getServerAuthSession } from '@/server/auth'
 import { Avatar, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
 import { CogIcon, CometIcon, CreateIcon, HomeIcon, ShapesIcon } from '@/components/icons'
@@ -10,11 +9,11 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
 const Sidebar = () => {
-  // const session = await getServerAuthSession()
   const { data: session } = useSession()
+  const pathname = usePathname()
   const router = useRouter()
 
-  if (!session || !session.user) {
+  if (!session || !session.user || pathname === '/login') {
     return null
   }
 
@@ -25,7 +24,7 @@ const Sidebar = () => {
       <div className="overflow-y-auto p-4">
         <Button
           onClick={() => router.push('/snippy/new')}
-          className="bg-newSnippy text-newSnippy-foreground hover:bg-newSnippy/90 flex h-12 w-full select-none justify-start rounded-lg px-3"
+          className="flex h-12 w-full select-none justify-start rounded-lg bg-newSnippy px-3 text-newSnippy-foreground hover:bg-newSnippy/90"
         >
           <CreateIcon className="mr-3 h-6" />
           New Snippy
@@ -56,7 +55,7 @@ const Sidebar = () => {
 
       <div className="flex items-center border border-input p-4">
         <Avatar>
-          <AvatarImage src={session.user.image || ''} />
+          <AvatarImage src={session.user.image ?? ''} />
         </Avatar>
         <span className="ml-3">{session.user.name}</span>
       </div>

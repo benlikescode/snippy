@@ -1,4 +1,4 @@
-import { useRef, useEffect, FC, useState } from 'react'
+import { useRef, useEffect, type FC, useState } from 'react'
 import AutosizeInput from 'react-input-autosize'
 
 const DEFAULT_TEMPLATE_NAME = 'Untitled Snippy'
@@ -8,7 +8,7 @@ const NameInput: FC = () => {
   const [isEditing, setIsEditing] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const handleSaveName = async () => {
+  const handleSaveName = () => {
     if (!name) {
       setName(DEFAULT_TEMPLATE_NAME)
     }
@@ -20,7 +20,7 @@ const NameInput: FC = () => {
     }
   }
 
-  const handleKeyDown = async (e: KeyboardEvent) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (isEditing && e.key === 'Enter') {
       handleSaveName()
     }
