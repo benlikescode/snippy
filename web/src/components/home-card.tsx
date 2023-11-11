@@ -20,7 +20,7 @@ const HomeCard: FC<Props> = ({ id, name, content, type }) => {
       <div className="grid gap-2">
         <div className="flex items-center justify-between">
           <p className="">{name}</p>
-          <div className="text-bold flex h-6 items-center justify-center rounded-full bg-[#262626] p-2 text-xs uppercase tracking-wide">
+          <div className="flex h-6 items-center justify-center rounded-full bg-[#262626] p-2 text-xs font-bold uppercase tracking-wide">
             <span>{type}</span>
           </div>
         </div>
