@@ -53,7 +53,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div className="flex items-center border border-input p-4">
+      <div className="flex items-center border-t border-input p-4">
         <Avatar>
           <AvatarImage src={session.user.image ?? ''} />
         </Avatar>
