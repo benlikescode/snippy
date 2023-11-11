@@ -1,4 +1,4 @@
-import { FC, SVGAttributes } from 'react'
+import { type FC, type SVGAttributes } from 'react'
 
 type Props = SVGAttributes<SVGElement>
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { FC, useState } from 'react'
+import { type FC, useState } from 'react'
 import { signIn } from 'next-auth/react'
 
 type Props = {

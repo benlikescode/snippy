@@ -37,7 +37,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { ComponentPropsWithoutRef, FC, useState } from 'react'
+import { type ComponentPropsWithoutRef, type FC, useState } from 'react'
 import pluralize from '@/utils/pluralize'
 
 const groups = [

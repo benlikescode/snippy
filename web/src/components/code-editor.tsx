@@ -1,12 +1,10 @@
 'use client'
 
-import { FC, useState } from 'react'
-import { Editor, Monaco, type EditorProps } from '@monaco-editor/react'
-import * as monaco from 'monaco-editor'
+import { type FC } from 'react'
+import { Editor, type Monaco, type EditorProps } from '@monaco-editor/react'
+import type * as monaco from 'monaco-editor'
 
-type Props = {} & EditorProps
-
-const CodeEditor: FC<Props> = ({ value, onChange }) => {
+const CodeEditor: FC<EditorProps> = ({ value, onChange }) => {
   const handleMount = (editor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) => {
     const themeData: monaco.editor.IStandaloneThemeData = {
       base: 'vs-dark',

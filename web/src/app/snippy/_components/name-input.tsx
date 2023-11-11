@@ -1,4 +1,4 @@
-import { useRef, useEffect, type FC, useState } from 'react'
+import { type FC, useState, type KeyboardEvent } from 'react'
 import AutosizeInput from 'react-input-autosize'
 
 const DEFAULT_TEMPLATE_NAME = 'Untitled Snippy'
@@ -6,42 +6,31 @@ const DEFAULT_TEMPLATE_NAME = 'Untitled Snippy'
 const NameInput: FC = () => {
   const [name, setName] = useState(DEFAULT_TEMPLATE_NAME)
   const [isEditing, setIsEditing] = useState(false)
-  const inputRef = useRef<HTMLInputElement>(null)
 
-  const handleSaveName = () => {
+  const handleSaveName = (target?: HTMLInputElement) => {
     if (!name) {
       setName(DEFAULT_TEMPLATE_NAME)
     }
 
     setIsEditing(false)
-
-    if (inputRef.current) {
-      inputRef.current.blur()
-    }
+    target?.blur()
   }
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (isEditing && e.key === 'Enter') {
-      handleSaveName()
+      handleSaveName(e.target as HTMLInputElement)
     }
   }
 
-  useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      document.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [name, isEditing])
-
   return (
     <AutosizeInput
-      ref={inputRef as any}
       type="text"
       value={name}
-      onBlur={() => handleSaveName()}
+      onBlur={(e) => handleSaveName(e.target)}
       onChange={(e) => setName(e.target.value)}
       onClick={() => setIsEditing(true)}
+      onKeyDown={(e) => handleKeyDown(e)}
+      placeholder={DEFAULT_TEMPLATE_NAME}
       inputStyle={{
         fontSize: 22,
         borderRadius: '4px',
@@ -51,7 +40,7 @@ const NameInput: FC = () => {
         outline: 'none',
         maxWidth: '100%',
       }}
-      className="max-w-[390px] rounded-sm px-1 focus-within:ring-1 focus-within:ring-ring"
+      className="max-w-[390px] rounded-sm px-1 focus-within:ring-1 focus-within:ring-input hover:ring-1 hover:ring-input [&>input]:placeholder:text-[#3b3e42]"
     />
   )
 }

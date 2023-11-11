@@ -1,7 +1,6 @@
 'use client'
 
 import Link, { type LinkProps } from 'next/link'
-import { usePathname } from 'next/navigation'
 import type { FC, ReactNode } from 'react'
 
 type Props = {
@@ -9,8 +8,6 @@ type Props = {
 } & LinkProps
 
 const SidebarItem: FC<Props> = ({ children, href, ...rest }) => {
-  const pathname = usePathname()
-
   return (
     <Link
       href={href}
