@@ -72,7 +72,7 @@ type Props = ComponentPropsWithoutRef<typeof DropdownMenuTrigger>
 const WorkspaceSwitcher: FC<Props> = ({ className }) => {
   const [open, setOpen] = useState(false)
   const [showNewTeamDialog, setShowNewTeamDialog] = useState(false)
-  const [selectedTeam, setSelectedTeam] = useState<Team>(groups[0].teams[0])
+  const [selectedTeam, setSelectedTeam] = useState<Team>(groups[0]!.teams[0]!)
 
   const getAcronym = (str: string) => {
     if (!str) return ''
