@@ -11,8 +11,8 @@ type Props = {
 const HomeCard: FC<Props> = ({ id, name, content, type }) => {
   return (
     <Link href={`/snippy/${id}`} className="grid gap-4">
-      <div className="h-44 overflow-hidden rounded-md border border-border bg-black pl-4 pt-4">
-        <div className="h-full w-full rounded-tl-md border border-border bg-background p-4 text-xs text-[#a3a3a3]">
+      <div className="h-44 overflow-hidden rounded-md border bg-black pl-4 pt-4">
+        <div className="h-full w-full rounded-tl-md border bg-background p-4 text-xs text-[#a3a3a3]">
           {content}
         </div>
       </div>
