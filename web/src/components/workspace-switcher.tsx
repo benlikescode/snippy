@@ -88,12 +88,10 @@ const WorkspaceSwitcher: FC<Props> = ({ className }) => {
     <Dialog open={showNewTeamDialog} onOpenChange={setShowNewTeamDialog}>
       <DropdownMenu open={open} onOpenChange={setOpen}>
         <DropdownMenuTrigger asChild>
-          <Button
-            variant="outline"
-            role="combobox"
-            aria-expanded={open}
+          <div
+            aria-expanded={true}
             aria-label="Select a team"
-            className={cn('h-full rounded-none', className)}
+            className="flex cursor-pointer items-center border-b p-4 hover:bg-stone-900"
           >
             <div className="mr-3 flex h-11 w-11 items-center justify-center rounded-md bg-[#2c3036] font-semibold">
               {getAcronym(selectedTeam.label)}
@@ -105,9 +103,9 @@ const WorkspaceSwitcher: FC<Props> = ({ className }) => {
             </div>
 
             <CaretSortIcon className="ml-auto h-6 w-6 shrink-0 opacity-50" />
-          </Button>
+          </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-[268px] p-0">
+        <DropdownMenuContent className="p-0" align="start" alignOffset={16}>
           <Command>
             <CommandList>
               <CommandInput placeholder="Find workspace..." />
