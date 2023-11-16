@@ -35,12 +35,12 @@ const NameInput: FC = () => {
         fontSize: 22,
         borderRadius: '4px',
         fontWeight: 'bold',
-        color: '#656972',
+        color: '#fff',
         background: 'transparent',
         outline: 'none',
         maxWidth: '100%',
       }}
-      className="max-w-[390px] rounded-sm px-1 focus-within:ring-1 focus-within:ring-input hover:ring-1 hover:ring-input [&>input]:placeholder:text-[#3b3e42]"
+      className="max-w-[390px] rounded-sm px-1 focus-within:ring-1 focus-within:ring-border hover:ring-1 hover:ring-border [&>input]:placeholder:text-[#464646]"
     />
   )
 }

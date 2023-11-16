@@ -34,7 +34,6 @@ const CodeEditor: FC<EditorProps> = ({ value, onChange }) => {
       onMount={handleMount}
       options={EDITOR_OPTIONS}
       value={value}
-      loading={<span>loading...</span>}
     />
   )
 }
