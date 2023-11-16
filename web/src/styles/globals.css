@@ -28,6 +28,9 @@
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 60 9.1% 97.8%;
 
+    --scrollbar: #222222;
+    --scrollbar-thumb: #333333;
+
     --border: 0 0% 20%;
     --input: 12 6.5% 15.1%;
     --ring: 24 5.7% 82.9%;
@@ -40,6 +43,7 @@
     @apply border-border;
     box-sizing: border-box;
   }
+
   body {
     @apply bg-background text-foreground;
     padding: 0;
@@ -47,5 +51,14 @@
     display: flex;
     height: 100dvh;
     overflow: hidden auto;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    background: var(--scrollbar);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb);
   }
 }
