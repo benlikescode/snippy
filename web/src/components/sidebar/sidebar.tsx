@@ -1,19 +1,17 @@
 'use client'
 
 import SidebarItem from '@/components/sidebar/sidebar-item'
-import { Avatar, AvatarImage } from '../ui/avatar'
 import { Button } from '../ui/button'
 import { CogIcon, CometIcon, CreateIcon, HomeIcon, ShapesIcon } from '@/components/icons'
 import WorkspaceSwitcher from '../workspace-switcher'
 import { usePathname, useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
+import AccountPopover from '@/components/account-popover'
 
 const Sidebar = () => {
-  const { data: session } = useSession()
   const pathname = usePathname()
   const router = useRouter()
 
-  if (!session || !session.user || pathname === '/login') {
+  if (pathname === '/login') {
     return null
   }
 
@@ -53,12 +51,7 @@ const Sidebar = () => {
         </div>
       </div>
 
-      <div className="flex items-center border-t border-input p-4">
-        <Avatar>
-          <AvatarImage src={session.user.image ?? ''} />
-        </Avatar>
-        <span className="ml-3">{session.user.name}</span>
-      </div>
+      <AccountPopover />
     </div>
   )
 }

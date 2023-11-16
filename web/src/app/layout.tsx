@@ -1,4 +1,4 @@
-import Sidebar from '@/components/sidebar'
+import Sidebar from '@/components/sidebar/sidebar'
 import '@/styles/globals.css'
 
 import { Inter } from 'next/font/google'
