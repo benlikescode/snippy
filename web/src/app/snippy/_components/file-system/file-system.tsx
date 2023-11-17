@@ -46,7 +46,7 @@ const FileSystem = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="flex-1 border-t bg-[#070707]">
+      <div className="flex-1 overflow-y-auto border-t bg-[#070707]">
         <div className="flex h-[63px] items-center justify-between border-b px-[22px] text-[#767676]">
           <h2 className="text-[15px] font-semibold">Template Structure</h2>
           <div className="flex items-center gap-1">
