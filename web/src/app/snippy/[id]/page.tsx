@@ -1,5 +1,7 @@
+import Snippy from '@/app/snippy/_components/snippy'
+
 const SnippyPage = () => {
-  return <div>YOOO</div>
+  return <Snippy />
 }
 
 export default SnippyPage

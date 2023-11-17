@@ -17,9 +17,7 @@ const Sidebar = () => {
   const { sidebarCollapsed, setSidebarCollapsed } = useSnippyStore()
 
   useEffect(() => {
-    const COLLAPSED_PATHS = ['/snippy/new']
-
-    setSidebarCollapsed(COLLAPSED_PATHS.includes(pathname))
+    setSidebarCollapsed(pathname.startsWith('/snippy'))
   }, [pathname])
 
   if (pathname === '/login') {
