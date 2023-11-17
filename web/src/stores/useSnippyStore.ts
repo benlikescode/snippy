@@ -7,6 +7,9 @@ type State = {
   addPrompt: (prompt: PromptType) => void
   removePrompt: (id: string) => void
   updatePrompt: (prompt: PromptType) => void
+
+  sidebarCollapsed: boolean
+  setSidebarCollapsed: (sidebarCollapsed: boolean) => void
 }
 
 const useSnippyStore = create<State>()(
@@ -18,6 +21,9 @@ const useSnippyStore = create<State>()(
       set(({ prompts }) => ({
         prompts: prompts.map((x) => (x.id === prompt.id ? { ...x, ...prompt } : x)),
       })),
+
+    sidebarCollapsed: false,
+    setSidebarCollapsed: (sidebarCollapsed) => set({ sidebarCollapsed }),
   })),
 )
 

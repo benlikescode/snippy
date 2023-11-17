@@ -18,10 +18,13 @@ import {
 import { useSession } from 'next-auth/react'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Switch } from '@/components/ui/switch'
+import useSnippyStore from '@/stores/useSnippyStore'
+import { cn } from '@/utils/cn'
 
 const AccountPopover = () => {
   const [open, setOpen] = useState(false)
   const { data: session } = useSession()
+  const { sidebarCollapsed } = useSnippyStore()
 
   if (!session || !session.user) {
     return null
@@ -33,20 +36,29 @@ const AccountPopover = () => {
         <div
           aria-expanded={open}
           aria-label="Account options"
-          className="flex cursor-pointer items-center border-t p-4 hover:bg-stone-900"
+          className={cn(
+            'flex cursor-pointer items-center border-t p-4 hover:bg-stone-900',
+            sidebarCollapsed && 'justify-center p-3',
+          )}
         >
           <Avatar>
             <AvatarImage src={session.user.image ?? ''} />
           </Avatar>
 
-          <div className="ml-3">
+          <div className={cn('ml-3', sidebarCollapsed && 'hidden')}>
             <div>{session.user.name}</div>
             <div className="text-left text-sm text-[#5a626c]">{session.user.email}</div>
           </div>
-          <CaretSortIcon className="ml-auto h-6 w-6 shrink-0 opacity-50" />
+          <CaretSortIcon
+            className={cn('ml-auto h-6 w-6 shrink-0 opacity-50', sidebarCollapsed && 'hidden')}
+          />
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[250px] p-0" align="start" alignOffset={16}>
+      <DropdownMenuContent
+        className="w-[250px] p-0"
+        align="start"
+        alignOffset={sidebarCollapsed ? 12 : 16}
+      >
         <div className="flex items-center  p-4">
           <Avatar>
             <AvatarImage src={session.user.image ?? ''} />

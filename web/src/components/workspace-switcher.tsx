@@ -39,6 +39,7 @@ import {
 } from '@/components/ui/select'
 import { type ComponentPropsWithoutRef, type FC, useState } from 'react'
 import pluralize from '@/utils/pluralize'
+import useSnippyStore from '@/stores/useSnippyStore'
 
 const groups = [
   {
@@ -73,6 +74,7 @@ const WorkspaceSwitcher: FC<Props> = ({ className }) => {
   const [open, setOpen] = useState(false)
   const [showNewTeamDialog, setShowNewTeamDialog] = useState(false)
   const [selectedTeam, setSelectedTeam] = useState<Team>(groups[0]!.teams[0]!)
+  const { sidebarCollapsed } = useSnippyStore()
 
   const getAcronym = (str: string) => {
     if (!str) return ''
@@ -91,21 +93,26 @@ const WorkspaceSwitcher: FC<Props> = ({ className }) => {
           <div
             aria-expanded={true}
             aria-label="Select a team"
-            className="flex cursor-pointer items-center border-b p-4 hover:bg-stone-900"
+            className={cn(
+              'flex cursor-pointer items-center border-b p-4 hover:bg-stone-900',
+              sidebarCollapsed && 'justify-center p-3',
+            )}
           >
-            <div className="mr-3 flex h-11 w-11 items-center justify-center rounded-md bg-[#2c3036] font-semibold">
+            <div className="flex h-11 w-11 items-center justify-center rounded-md bg-[#2c3036] font-semibold">
               {getAcronym(selectedTeam.label)}
             </div>
 
-            <div className="">
+            <div className={cn('ml-3', sidebarCollapsed && 'hidden')}>
               <div>{selectedTeam.label}</div>
               <div className="text-left text-sm text-[#5a626c]">{pluralize('member', 1)}</div>
             </div>
 
-            <CaretSortIcon className="ml-auto h-6 w-6 shrink-0 opacity-50" />
+            <CaretSortIcon
+              className={cn('ml-auto h-6 w-6 shrink-0 opacity-50', sidebarCollapsed && 'hidden')}
+            />
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="p-0" align="start" alignOffset={16}>
+        <DropdownMenuContent className="p-0" align="start" alignOffset={sidebarCollapsed ? 12 : 16}>
           <Command>
             <CommandList>
               <CommandInput placeholder="Find workspace..." />
