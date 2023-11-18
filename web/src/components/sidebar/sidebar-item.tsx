@@ -4,7 +4,7 @@ import { cn } from '@/utils/cn'
 import Link, { type LinkProps } from 'next/link'
 import type { FC, ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
-import useSnippyStore from '@/stores/useSnippyStore'
+import useGlobalStore from '@/stores/useGlobalStore'
 
 type Props = {
   children: ReactNode
@@ -13,7 +13,7 @@ type Props = {
 const SidebarItem: FC<Props> = ({ children, href, ...rest }) => {
   const pathname = usePathname()
 
-  const { sidebarCollapsed } = useSnippyStore()
+  const { sidebarCollapsed } = useGlobalStore()
 
   return (
     <Link
