@@ -15,19 +15,33 @@ import {
   PersonIcon,
   SunIcon,
 } from '@radix-ui/react-icons'
-import { useSession } from 'next-auth/react'
+import { signOut, useSession } from 'next-auth/react'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Switch } from '@/components/ui/switch'
 import useSnippyStore from '@/stores/useSnippyStore'
 import { cn } from '@/utils/cn'
+import Link from 'next/link'
 
 const AccountPopover = () => {
   const [open, setOpen] = useState(false)
   const { data: session } = useSession()
   const { sidebarCollapsed } = useSnippyStore()
 
+  const handleSignOut = async () => {
+    await signOut({ redirect: false })
+  }
+
   if (!session || !session.user) {
-    return null
+    return (
+      <div className="border-t p-4">
+        <Link
+          href="/login"
+          className="flex h-full items-center justify-center rounded bg-indigo-700 hover:bg-indigo-600"
+        >
+          Login
+        </Link>
+      </div>
+    )
   }
 
   return (
@@ -93,7 +107,10 @@ const AccountPopover = () => {
 
         <DropdownMenuSeparator />
 
-        <div className="flex cursor-pointer items-center px-4 py-2 text-[#B0B0B0] hover:bg-[#222]">
+        <div
+          className="flex cursor-pointer items-center px-4 py-2 text-[#B0B0B0] hover:bg-[#222]"
+          onClick={handleSignOut}
+        >
           <ExitIcon className="mr-3 h-4 w-4 shrink-0 text-[#737373]" />
           Logout
         </div>

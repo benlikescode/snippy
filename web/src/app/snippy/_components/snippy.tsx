@@ -1,6 +1,5 @@
 'use client'
 
-import CodeEditor from '@/components/code-editor'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState, type UIEvent } from 'react'
 import NameInput from './name-input'
@@ -11,11 +10,14 @@ import useFileStore from '@/stores/useFileStore'
 import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { cn } from '@/utils/cn'
 import useSnippyStore from '@/stores/useSnippyStore'
+import CodeEditor from '@/app/snippy/_components/code-editor'
+import { createTemplate } from '@/server/actions/template.actions'
+import { toast } from '@/components/ui/use-toast'
 
 const Snippy = () => {
   const [editorValue, setEditorValue] = useState('')
   const [showHeaderBorder, setShowHeaderBorder] = useState(false)
-  const { openFile, pathToOpenFile } = useFileStore()
+  const { files, openFile, pathToOpenFile } = useFileStore()
   const { prompts } = useSnippyStore()
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
@@ -30,6 +32,20 @@ const Snippy = () => {
 
     setEditorValue(openFile.data.content)
   }, [openFile])
+
+  const handleSaveChanges = async () => {
+    console.log('goated')
+    const res = await createTemplate(
+      'Cool one',
+      JSON.stringify(prompts),
+      JSON.stringify(files),
+      'clp3fq9er000kt3goh5f88rda',
+    )
+
+    if (res.error) {
+      toast({ description: res.error.message })
+    }
+  }
 
   return (
     <div className="flex h-full w-full">
@@ -61,7 +77,9 @@ const Snippy = () => {
           <Button size="lg" variant="secondary">
             Cancel
           </Button>
-          <Button size="lg">Save Changes</Button>
+          <Button size="lg" onClick={() => handleSaveChanges()}>
+            Save Changes
+          </Button>
         </div>
       </div>
 

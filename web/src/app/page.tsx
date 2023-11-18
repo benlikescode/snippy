@@ -1,54 +1,49 @@
-'use client'
-
 import HomeCard from '@/components/home-card'
-import { Button } from '@/components/ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
-import { cn } from '@/utils/cn'
-import { ArrowDownIcon, ArrowUpIcon, CaretSortIcon, EyeNoneIcon } from '@radix-ui/react-icons'
-import { useState } from 'react'
+import { db } from '@/server/db'
+import { type Prisma } from '@prisma/client'
 
-const CARDS = [
-  {
-    id: '1',
-    name: 'React Component',
-    content: `import classNames from 'classNames'`,
-  },
-  {
-    id: '2',
-    name: 'Button',
-    content: `import classNames from 'classNames'`,
-  },
-  {
-    id: '3',
-    name: 'NextJS Component',
-    content: `import classNames from 'classNames'`,
-  },
-  {
-    id: '4',
-    name: 'React Component',
-    content: `import classNames from 'classNames'`,
-  },
-  {
-    id: '5',
-    name: 'Button',
-    content: `import classNames from 'classNames'`,
-  },
-  {
-    id: '6',
-    name: 'NextJS Component',
-    content: `import classNames from 'classNames'`,
-  },
-] as any[]
+// const CARDS = [
+//   {
+//     id: '1',
+//     name: 'React Component',
+//     content: `import classNames from 'classNames'`,
+//   },
+//   {
+//     id: '2',
+//     name: 'Button',
+//     content: `import classNames from 'classNames'`,
+//   },
+//   {
+//     id: '3',
+//     name: 'NextJS Component',
+//     content: `import classNames from 'classNames'`,
+//   },
+//   {
+//     id: '4',
+//     name: 'React Component',
+//     content: `import classNames from 'classNames'`,
+//   },
+//   {
+//     id: '5',
+//     name: 'Button',
+//     content: `import classNames from 'classNames'`,
+//   },
+//   {
+//     id: '6',
+//     name: 'NextJS Component',
+//     content: `import classNames from 'classNames'`,
+//   },
+// ] as any[]
 
-export default function HomePage() {
-  const [state, setState] = useState('asc')
+const HomePage = async () => {
+  // const [state, setState] = useState('asc')
+
+  const templates = await db.template.findMany({
+    where: {
+      workspaceId: 'clp3fq9er000kt3goh5f88rda',
+    },
+  })
 
   return (
     <main className="mx-auto my-16 w-full max-w-screen-lg px-4">
@@ -63,48 +58,44 @@ export default function HomePage() {
           placeholder="Find templates..."
           className="md:w-[100px] lg:w-[600px]"
         />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-9 data-[state=open]:bg-accent">
-              <span>Recently Created</span>
-              {state === 'desc' ? (
-                <ArrowDownIcon className="ml-2 h-4 w-4" />
-              ) : state === 'asc' ? (
-                <ArrowUpIcon className="ml-2 h-4 w-4" />
-              ) : (
-                <CaretSortIcon className="ml-2 h-4 w-4" />
-              )}
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="start">
-            <DropdownMenuItem onClick={() => setState('asc')}>
-              <ArrowUpIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-              Asc
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setState('desc')}>
-              <ArrowDownIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-              Desc
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => setState('hide')}>
-              <EyeNoneIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-              Hide
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        {/* <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="sm" className="h-9 data-[state=open]:bg-accent">
+            <span>Recently Created</span>
+            {state === 'desc' ? (
+              <ArrowDownIcon className="ml-2 h-4 w-4" />
+            ) : state === 'asc' ? (
+              <ArrowUpIcon className="ml-2 h-4 w-4" />
+            ) : (
+              <CaretSortIcon className="ml-2 h-4 w-4" />
+            )}
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="start">
+          <DropdownMenuItem onClick={() => setState('asc')}>
+            <ArrowUpIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Asc
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setState('desc')}>
+            <ArrowDownIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Desc
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={() => setState('hide')}>
+            <EyeNoneIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Hide
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu> */}
       </div>
 
       <div className="grid grid-cols-3 gap-5">
-        {CARDS.map((card) => (
-          <HomeCard
-            key={card.id}
-            id={card.id}
-            name={card.name}
-            content={card.content}
-            type="snippet"
-          />
+        {templates.map((template) => (
+          <HomeCard key={template.id} template={template} />
         ))}
       </div>
     </main>
   )
 }
+
+export default HomePage
