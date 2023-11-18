@@ -18,14 +18,14 @@ import {
 import { signOut, useSession } from 'next-auth/react'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Switch } from '@/components/ui/switch'
-import useSnippyStore from '@/stores/useSnippyStore'
 import { cn } from '@/utils/cn'
 import Link from 'next/link'
+import useGlobalStore from '@/stores/useGlobalStore'
 
 const AccountPopover = () => {
   const [open, setOpen] = useState(false)
   const { data: session } = useSession()
-  const { sidebarCollapsed } = useSnippyStore()
+  const { sidebarCollapsed } = useGlobalStore()
 
   const handleSignOut = async () => {
     await signOut({ redirect: false })

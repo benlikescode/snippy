@@ -32,9 +32,9 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { type ComponentPropsWithoutRef, type FC, useState } from 'react'
 import pluralize from '@/utils/pluralize'
-import useSnippyStore from '@/stores/useSnippyStore'
 import { createWorkspace, type WorkspaceWithInfo } from '@/server/actions/workspace.actions'
 import { toast } from '@/components/ui/use-toast'
+import useGlobalStore from '@/stores/useGlobalStore'
 
 type Props = ComponentPropsWithoutRef<typeof DropdownMenuTrigger> & {
   workspaces: WorkspaceWithInfo[]
@@ -45,7 +45,7 @@ const WorkspaceSwitcher: FC<Props> = ({ workspaces }) => {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [newWorkspaceName, setNewWorkspaceName] = useState('')
   const [selectedWorkspace, setSelectedWorkspace] = useState<WorkspaceWithInfo>(workspaces[0]!)
-  const { sidebarCollapsed } = useSnippyStore()
+  const { sidebarCollapsed } = useGlobalStore()
 
   console.log(workspaces)
 

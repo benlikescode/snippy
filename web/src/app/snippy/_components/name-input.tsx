@@ -1,15 +1,16 @@
+import useSnippyStore from '@/stores/useSnippyStore'
 import { type FC, useState, type KeyboardEvent } from 'react'
 import AutosizeInput from 'react-input-autosize'
 
 const DEFAULT_TEMPLATE_NAME = 'Untitled Snippy'
 
 const NameInput: FC = () => {
-  const [name, setName] = useState(DEFAULT_TEMPLATE_NAME)
   const [isEditing, setIsEditing] = useState(false)
+  const { snippyName, setSnippyName } = useSnippyStore()
 
   const handleSaveName = (target?: HTMLInputElement) => {
-    if (!name) {
-      setName(DEFAULT_TEMPLATE_NAME)
+    if (!snippyName) {
+      setSnippyName(DEFAULT_TEMPLATE_NAME)
     }
 
     setIsEditing(false)
@@ -25,9 +26,9 @@ const NameInput: FC = () => {
   return (
     <AutosizeInput
       type="text"
-      value={name}
+      value={snippyName}
       onBlur={(e) => handleSaveName(e.target)}
-      onChange={(e) => setName(e.target.value)}
+      onChange={(e) => setSnippyName(e.target.value)}
       onClick={() => setIsEditing(true)}
       onKeyDown={(e) => handleKeyDown(e)}
       placeholder={DEFAULT_TEMPLATE_NAME}

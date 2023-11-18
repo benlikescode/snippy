@@ -2,11 +2,12 @@
 
 import { getServerAuthSession } from '@/server/auth'
 import { db } from '@/server/db'
+import type { FileItemType, PromptType } from '@/types'
 
 export const createTemplate = async (
   name: string,
-  prompts: string,
-  files: string,
+  prompts: PromptType[],
+  files: FileItemType[],
   workspaceId: string,
 ) => {
   const session = await getServerAuthSession()

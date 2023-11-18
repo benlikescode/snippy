@@ -18,7 +18,7 @@ const Snippy = () => {
   const [editorValue, setEditorValue] = useState('')
   const [showHeaderBorder, setShowHeaderBorder] = useState(false)
   const { files, openFile, pathToOpenFile, updateItemData } = useFileStore()
-  const { prompts } = useSnippyStore()
+  const { prompts, snippyName } = useSnippyStore()
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     const scrolled = e.currentTarget.scrollTop > 0
@@ -34,17 +34,13 @@ const Snippy = () => {
   }, [openFile])
 
   const handleSaveChanges = async () => {
-    console.log('goated')
-    const res = await createTemplate(
-      'Cool one',
-      JSON.stringify(prompts),
-      JSON.stringify(files),
-      'clp3fq9er000kt3goh5f88rda',
-    )
+    const res = await createTemplate(snippyName, prompts, files, 'clp3fq9er000kt3goh5f88rda')
 
     if (res.error) {
-      toast({ description: res.error.message })
+      return toast({ variant: 'destructive', description: res.error.message })
     }
+
+    toast({ description: 'Saved changes successfully' })
   }
 
   const handleEditorChange = (value: string | undefined) => {

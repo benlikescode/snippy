@@ -8,9 +8,9 @@ import { usePathname, useRouter } from 'next/navigation'
 import AccountPopover from '@/components/sidebar/account-popover'
 import { type FC, useEffect } from 'react'
 import { cn } from '@/utils/cn'
-import useSnippyStore from '@/stores/useSnippyStore'
 import { type User } from 'next-auth'
 import { type WorkspaceWithInfo } from '@/server/actions/workspace.actions'
+import useGlobalStore from '@/stores/useGlobalStore'
 
 type Props = {
   user: User
@@ -21,7 +21,7 @@ const SidebarContent: FC<Props> = ({ user, workspaces }) => {
   const pathname = usePathname()
   const router = useRouter()
 
-  const { sidebarCollapsed, setSidebarCollapsed } = useSnippyStore()
+  const { sidebarCollapsed, setSidebarCollapsed } = useGlobalStore()
 
   useEffect(() => {
     setSidebarCollapsed(pathname.startsWith('/snippy'))
