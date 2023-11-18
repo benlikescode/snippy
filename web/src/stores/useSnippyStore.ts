@@ -4,9 +4,9 @@ import { devtools } from 'zustand/middleware'
 
 type State = {
   snippyName: string
-  setSnippyName: (snippyName: string) => void
-
   prompts: PromptType[]
+  setSnippyName: (snippyName: string) => void
+  setPrompts: (prompts: PromptType[]) => void
   addPrompt: (prompt: PromptType) => void
   removePrompt: (id: string) => void
   updatePrompt: (prompt: PromptType) => void
@@ -15,9 +15,9 @@ type State = {
 const useSnippyStore = create<State>()(
   devtools((set) => ({
     snippyName: '',
+    prompts: [],
     setSnippyName: (snippyName) => set({ snippyName }),
-
-    prompts: [{ id: '48327847284732', prompt: 'Enter name of file', variable: 'name' }],
+    setPrompts: (prompts) => set({ prompts }),
     addPrompt: (prompt) => set(({ prompts }) => ({ prompts: [...prompts, prompt] })),
     removePrompt: (id) => set(({ prompts }) => ({ prompts: prompts.filter((x) => x.id !== id) })),
     updatePrompt: (prompt) =>

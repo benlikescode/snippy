@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useEffect, useState, type UIEvent } from 'react'
+import { useEffect, useState, type UIEvent, type FC } from 'react'
 import NameInput from './name-input'
 import PromptItem from './prompt-item'
 import NewPrompt from './new-prompt'
@@ -11,14 +11,19 @@ import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { cn } from '@/utils/cn'
 import useSnippyStore from '@/stores/useSnippyStore'
 import CodeEditor from '@/app/snippy/_components/code-editor'
-import { createTemplate } from '@/server/actions/template.actions'
+import { createTemplate, updateTemplate } from '@/server/actions/template.actions'
 import { toast } from '@/components/ui/use-toast'
+import { type Template } from '@prisma/client'
+import { type FileItemType, type PromptType } from '@/types'
 
-const Snippy = () => {
-  const [editorValue, setEditorValue] = useState('')
+type Props = {
+  snippy?: Template
+}
+
+const Snippy: FC<Props> = ({ snippy }) => {
   const [showHeaderBorder, setShowHeaderBorder] = useState(false)
-  const { files, openFile, pathToOpenFile, updateItemData } = useFileStore()
-  const { prompts, snippyName } = useSnippyStore()
+  const { files, pathToOpenFile, setFiles } = useFileStore()
+  const { prompts, snippyName, setPrompts, setSnippyName } = useSnippyStore()
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     const scrolled = e.currentTarget.scrollTop > 0
@@ -26,28 +31,31 @@ const Snippy = () => {
   }
 
   useEffect(() => {
-    if (!openFile || openFile.type === 'folder') {
-      return setEditorValue('')
-    }
-
-    setEditorValue(openFile.data.content)
-  }, [openFile])
+    setSnippyName(snippy?.name ?? '')
+    setPrompts((snippy?.prompts as PromptType[]) ?? [])
+    setFiles((snippy?.files as FileItemType[]) ?? [])
+  }, [snippy])
 
   const handleSaveChanges = async () => {
+    if (!snippy) return
+
+    const res = await updateTemplate(snippy.id, snippyName, prompts, files)
+
+    if (res.error) {
+      return toast({ variant: 'destructive', description: res.error.message })
+    }
+
+    toast({ description: res.message })
+  }
+
+  const handleCreateSnippy = async () => {
     const res = await createTemplate(snippyName, prompts, files, 'clp3fq9er000kt3goh5f88rda')
 
     if (res.error) {
       return toast({ variant: 'destructive', description: res.error.message })
     }
 
-    toast({ description: 'Saved changes successfully' })
-  }
-
-  const handleEditorChange = (value: string | undefined) => {
-    if (!value || !openFile?.id) return
-
-    setEditorValue(value)
-    updateItemData(openFile.id, { content: value })
+    toast({ description: res.message })
   }
 
   return (
@@ -80,8 +88,8 @@ const Snippy = () => {
           <Button size="lg" variant="secondary">
             Cancel
           </Button>
-          <Button size="lg" onClick={() => handleSaveChanges()}>
-            Save Changes
+          <Button size="lg" onClick={() => (snippy ? handleSaveChanges() : handleCreateSnippy())}>
+            {snippy ? 'Save Changes' : 'Create Snippy'}
           </Button>
         </div>
       </div>
@@ -101,7 +109,7 @@ const Snippy = () => {
             )}
           </div>
           <div>
-            <CodeEditor value={editorValue} onChange={(value) => handleEditorChange(value)} />
+            <CodeEditor />
           </div>
         </div>
       </div>

@@ -48,3 +48,35 @@ export const createTemplate = async (
     message: 'The template was successfully created',
   }
 }
+
+export const updateTemplate = async (
+  id: string,
+  name: string,
+  prompts: PromptType[],
+  files: FileItemType[],
+) => {
+  const session = await getServerAuthSession()
+
+  if (!session?.user.id) {
+    return {
+      error: {
+        message: 'Unauthorized',
+      },
+    }
+  }
+
+  await db.template.update({
+    where: {
+      id,
+    },
+    data: {
+      name,
+      prompts,
+      files,
+    },
+  })
+
+  return {
+    message: 'The template was successfully updated',
+  }
+}
