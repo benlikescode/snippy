@@ -17,7 +17,7 @@ import { toast } from '@/components/ui/use-toast'
 const Snippy = () => {
   const [editorValue, setEditorValue] = useState('')
   const [showHeaderBorder, setShowHeaderBorder] = useState(false)
-  const { files, openFile, pathToOpenFile } = useFileStore()
+  const { files, openFile, pathToOpenFile, updateItemData } = useFileStore()
   const { prompts } = useSnippyStore()
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
@@ -45,6 +45,13 @@ const Snippy = () => {
     if (res.error) {
       toast({ description: res.error.message })
     }
+  }
+
+  const handleEditorChange = (value: string | undefined) => {
+    if (!value || !openFile?.id) return
+
+    setEditorValue(value)
+    updateItemData(openFile.id, { content: value })
   }
 
   return (
@@ -98,7 +105,7 @@ const Snippy = () => {
             )}
           </div>
           <div>
-            <CodeEditor value={editorValue} />
+            <CodeEditor value={editorValue} onChange={(value) => handleEditorChange(value)} />
           </div>
         </div>
       </div>
