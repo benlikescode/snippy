@@ -1,0 +1,69 @@
+import * as vscode from 'vscode'
+import { PromptResults, Template } from '../types'
+import { buildFolderStructure, getTemplateFolderStructure, queryUsersTemplates } from '../utils'
+
+const addFileTemplate = async (path: vscode.Uri) => {
+  try {
+    const rootPath = path.fsPath
+    const userTemplates = await queryUsersTemplates()
+
+    if (!userTemplates.length) {
+      const choices = ['Create Template', 'Later']
+
+      const selection = await vscode.window.showErrorMessage(`You don't have any templates yet.`, ...choices)
+
+      if (selection === choices[0]) {
+        vscode.env.openExternal(vscode.Uri.parse('https://snippy.app'))
+      }
+
+      return
+    }
+
+    if (userTemplates.length === 1) {
+      return applyTemplate(userTemplates[0], rootPath)
+    }
+
+    // 2+ templates -> show QuickPick
+    const templateOptions = userTemplates.map((template) => ({ ...template, label: template.name }))
+
+    const selectedTemplate = await vscode.window.showQuickPick(templateOptions, {
+      placeHolder: 'Select your template',
+    })
+
+    if (!selectedTemplate) {
+      return
+    }
+
+    applyTemplate(selectedTemplate, rootPath)
+  } catch (error) {
+    vscode.window.showErrorMessage((error as Error).message)
+  }
+}
+
+const applyTemplate = async (template: Template, rootPath: string) => {
+  const { prompts, files } = template
+
+  if (!prompts || !prompts.length) {
+    return
+  }
+
+  const promptResults = {} as PromptResults
+
+  for (const p of prompts) {
+    const { prompt, variable } = p
+
+    const promptResult = await vscode.window.showInputBox({ prompt })
+
+    if (!promptResult) {
+      return
+    }
+
+    promptResults[variable] = promptResult
+  }
+
+  const structure = getTemplateFolderStructure(rootPath, files, promptResults)
+
+  buildFolderStructure(structure)
+}
+
+export default addFileTemplate

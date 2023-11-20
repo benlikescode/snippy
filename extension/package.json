@@ -1,0 +1,98 @@
+{
+  "name": "snippy",
+  "displayName": "Snippy",
+  "description": "Code once, use forever. Speed up development with shortcuts for your most used code snippets and file templates.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.74.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:snippy.addFileTemplate",
+    "onCommand:snippy.addCodeSnippet",
+    "onView:snippy.snippyView"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "views": {
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "snippy.snippyView",
+          "name": "Snippy Code Snippets"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "snippy.addFileTemplate",
+        "title": "Use Snippy Template"
+      },
+      {
+        "command": "snippy.addCodeSnippet",
+        "title": "Use Snippy Snippet"
+      }
+    ],
+    "menus": {
+      "commandPalette": [
+        {
+          "command": "snippy.addFileTemplate",
+          "when": "false"
+        }
+      ],
+      "explorer/context": [
+        {
+          "when": "explorerResourceIsFolder",
+          "command": "snippy.addFileTemplate"
+        }
+      ],
+      "editor/context": [
+        {
+          "when": "editorTextFocus",
+          "command": "snippy.addCodeSnippet"
+        }
+      ]
+    },
+    "keybindings": [
+      {
+        "command": "snippy.addCodeSnippet",
+        "key": "ctrl+alt+s",
+        "when": "editorTextFocus"
+      }
+    ],
+    "configuration": {
+      "title": "Snippy",
+      "properties": {
+        "snippy.authToken": {
+          "type": "string",
+          "default": ""
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "yarn run compile && yarn run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/mocha": "^10.0.2",
+    "@types/node": "18.x",
+    "@types/vscode": "^1.83.0",
+    "@typescript-eslint/eslint-plugin": "^6.7.3",
+    "@typescript-eslint/parser": "^6.7.3",
+    "@vscode/test-electron": "^2.3.4",
+    "eslint": "^8.50.0",
+    "glob": "^10.3.3",
+    "mocha": "^10.2.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "handlebars": "^4.7.8"
+  }
+}
