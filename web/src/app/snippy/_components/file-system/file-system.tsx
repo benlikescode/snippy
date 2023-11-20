@@ -5,13 +5,12 @@ import { type FileItemType } from '@/types'
 import { useEffect, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { FILES } from '@/tests/file-helpers/data'
 import { DocumentPlusIcon, FolderPlusIcon } from '@heroicons/react/24/outline'
 
 const FileSystem = () => {
   const [canDropFile, setCanDropFile] = useState(false)
 
-  const { files, setFiles, createNewFile, createNewFolder } = useFileStore()
+  const { files, createNewFile, createNewFolder } = useFileStore()
 
   const ROOT_FOLDER: FileItemType = {
     id: '',
@@ -21,10 +20,6 @@ const FileSystem = () => {
       files: files,
     },
   }
-
-  useEffect(() => {
-    setFiles(FILES)
-  }, [])
 
   const handleDragOver = (e: DragEvent) => {
     const dt = e?.dataTransfer?.types

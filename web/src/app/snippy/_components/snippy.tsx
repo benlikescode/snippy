@@ -15,6 +15,8 @@ import { createTemplate, updateTemplate } from '@/server/actions/template.action
 import { toast } from '@/components/ui/use-toast'
 import { type Template } from '@prisma/client'
 import { type FileItemType, type PromptType } from '@/types'
+import useGlobalStore from '@/stores/useGlobalStore'
+import { useRouter } from 'next/navigation'
 
 type Props = {
   snippy?: Template
@@ -22,19 +24,27 @@ type Props = {
 
 const Snippy: FC<Props> = ({ snippy }) => {
   const [showHeaderBorder, setShowHeaderBorder] = useState(false)
-  const { files, pathToOpenFile, setFiles } = useFileStore()
+  const { files, pathToOpenFile, setFiles, setOpenFile, setPathToOpenFile } = useFileStore()
   const { prompts, snippyName, setPrompts, setSnippyName } = useSnippyStore()
+  const { activeWorkspace } = useGlobalStore()
+  const router = useRouter()
+
+  useEffect(() => {
+    setDefaultState()
+  }, [snippy])
+
+  const setDefaultState = () => {
+    setSnippyName(snippy?.name ?? '')
+    setPrompts((snippy?.prompts as PromptType[]) ?? [])
+    setFiles(snippy?.files ? [...(snippy?.files as FileItemType[])] : [])
+    setOpenFile(null)
+    setPathToOpenFile([])
+  }
 
   const handleScroll = (e: UIEvent<HTMLDivElement>) => {
     const scrolled = e.currentTarget.scrollTop > 0
     setShowHeaderBorder(scrolled)
   }
-
-  useEffect(() => {
-    setSnippyName(snippy?.name ?? '')
-    setPrompts((snippy?.prompts as PromptType[]) ?? [])
-    setFiles((snippy?.files as FileItemType[]) ?? [])
-  }, [snippy])
 
   const handleSaveChanges = async () => {
     if (!snippy) return
@@ -46,16 +56,20 @@ const Snippy: FC<Props> = ({ snippy }) => {
     }
 
     toast({ description: res.message })
+    router.refresh()
   }
 
   const handleCreateSnippy = async () => {
-    const res = await createTemplate(snippyName, prompts, files, 'clp3fq9er000kt3goh5f88rda')
+    if (!activeWorkspace) return
+
+    const res = await createTemplate(snippyName, prompts, files, activeWorkspace.id)
 
     if (res.error) {
       return toast({ variant: 'destructive', description: res.error.message })
     }
 
     toast({ description: res.message })
+    router.push(`/snippy/${res.id}`)
   }
 
   return (
@@ -85,8 +99,8 @@ const Snippy: FC<Props> = ({ snippy }) => {
         <FileSystem />
 
         <div className="flex h-[76px] items-center justify-between border-t p-4">
-          <Button size="lg" variant="secondary">
-            Cancel
+          <Button size="lg" variant="secondary" onClick={() => setDefaultState()}>
+            Reset
           </Button>
           <Button size="lg" onClick={() => (snippy ? handleSaveChanges() : handleCreateSnippy())}>
             {snippy ? 'Save Changes' : 'Create Snippy'}

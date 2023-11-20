@@ -1,49 +1,38 @@
+'use client'
+
 import HomeCard from '@/components/home-card'
+import SortDropdown from '@/components/sort-dropdown'
 import { Input } from '@/components/ui/input'
-import { db } from '@/server/db'
-import { type Prisma } from '@prisma/client'
+import { getTemplates } from '@/server/actions/template.actions'
+import useGlobalStore from '@/stores/useGlobalStore'
+import { type Template } from '@prisma/client'
+import { useEffect, useState } from 'react'
 
-// const CARDS = [
-//   {
-//     id: '1',
-//     name: 'React Component',
-//     content: `import classNames from 'classNames'`,
-//   },
-//   {
-//     id: '2',
-//     name: 'Button',
-//     content: `import classNames from 'classNames'`,
-//   },
-//   {
-//     id: '3',
-//     name: 'NextJS Component',
-//     content: `import classNames from 'classNames'`,
-//   },
-//   {
-//     id: '4',
-//     name: 'React Component',
-//     content: `import classNames from 'classNames'`,
-//   },
-//   {
-//     id: '5',
-//     name: 'Button',
-//     content: `import classNames from 'classNames'`,
-//   },
-//   {
-//     id: '6',
-//     name: 'NextJS Component',
-//     content: `import classNames from 'classNames'`,
-//   },
-// ] as any[]
+const HomePage = () => {
+  const [templates, setTemplates] = useState<Template[]>([])
+  const [searchQuery, setSearchQuery] = useState('')
+  const { activeWorkspace } = useGlobalStore()
 
-const HomePage = async () => {
-  // const [state, setState] = useState('asc')
+  const filteredTemplates = templates.filter((template) =>
+    template.name.toLowerCase().includes(searchQuery.toLowerCase()),
+  )
 
-  const templates = await db.template.findMany({
-    where: {
-      workspaceId: 'clp3fq9er000kt3goh5f88rda',
-    },
-  })
+  const fetchTemplates = async () => {
+    if (!activeWorkspace) return
+
+    const templates = await getTemplates(activeWorkspace.id)
+
+    const sortedTemplates = templates.sort(
+      (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
+    )
+
+    setTemplates(sortedTemplates)
+  }
+
+  useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    fetchTemplates()
+  }, [activeWorkspace])
 
   return (
     <main className="mx-auto my-16 w-full max-w-screen-lg px-4">
@@ -56,41 +45,15 @@ const HomePage = async () => {
         <Input
           type="search"
           placeholder="Find templates..."
-          className="md:w-[100px] lg:w-[600px]"
+          className="h-[42px] flex-1 rounded-[5px] border border-[#404040] bg-[#26262635] text-[#737373]"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
         />
-        {/* <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="sm" className="h-9 data-[state=open]:bg-accent">
-            <span>Recently Created</span>
-            {state === 'desc' ? (
-              <ArrowDownIcon className="ml-2 h-4 w-4" />
-            ) : state === 'asc' ? (
-              <ArrowUpIcon className="ml-2 h-4 w-4" />
-            ) : (
-              <CaretSortIcon className="ml-2 h-4 w-4" />
-            )}
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="start">
-          <DropdownMenuItem onClick={() => setState('asc')}>
-            <ArrowUpIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Asc
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setState('desc')}>
-            <ArrowDownIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Desc
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setState('hide')}>
-            <EyeNoneIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Hide
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu> */}
+        <SortDropdown templates={templates} setTemplates={setTemplates} />
       </div>
 
       <div className="grid grid-cols-3 gap-5">
-        {templates.map((template) => (
+        {filteredTemplates.map((template) => (
           <HomeCard key={template.id} template={template} />
         ))}
       </div>

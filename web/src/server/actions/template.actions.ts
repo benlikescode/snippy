@@ -34,7 +34,7 @@ export const createTemplate = async (
     }
   }
 
-  await db.template.create({
+  const createdTemplate = await db.template.create({
     data: {
       name,
       prompts,
@@ -46,6 +46,7 @@ export const createTemplate = async (
 
   return {
     message: 'The template was successfully created',
+    id: createdTemplate.id,
   }
 }
 
@@ -79,4 +80,51 @@ export const updateTemplate = async (
   return {
     message: 'The template was successfully updated',
   }
+}
+
+export const getTemplates = async (workspaceId: string) => {
+  return await db.template.findMany({
+    where: {
+      workspaceId,
+    },
+  })
+}
+
+export const deleteTemplate = async (id: string) => {
+  const session = await getServerAuthSession()
+
+  if (!session?.user.id) {
+    return {
+      error: {
+        message: 'Unauthorized',
+      },
+    }
+  }
+
+  const hasPermission = await db.template.findFirst({
+    where: {
+      id,
+      workspace: {
+        user: {
+          some: {
+            id: session.user.id,
+          },
+        },
+      },
+    },
+  })
+
+  if (!hasPermission) {
+    return {
+      error: {
+        message: 'Only members of the workspace can delete templates',
+      },
+    }
+  }
+
+  await db.template.delete({
+    where: {
+      id,
+    },
+  })
 }

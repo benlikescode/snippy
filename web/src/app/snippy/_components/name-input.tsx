@@ -9,9 +9,9 @@ const NameInput: FC = () => {
   const { snippyName, setSnippyName } = useSnippyStore()
 
   const handleSaveName = (target?: HTMLInputElement) => {
-    if (!snippyName) {
-      setSnippyName(DEFAULT_TEMPLATE_NAME)
-    }
+    // if (!snippyName) {
+    //   setSnippyName(DEFAULT_TEMPLATE_NAME)
+    // }
 
     setIsEditing(false)
     target?.blur()
