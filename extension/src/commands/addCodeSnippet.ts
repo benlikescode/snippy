@@ -1,10 +1,10 @@
 import * as vscode from 'vscode'
+import getSnippets from '../api/getSnippets'
 import { Snippet } from '../types'
-import { queryUsersSnippets } from '../utils'
 
 const addCodeSnippet = async () => {
   try {
-    const userSnippets = await queryUsersSnippets()
+    const userSnippets = await getSnippets()
 
     if (!userSnippets.length) {
       const choices = ['Create Snippet', 'Later']

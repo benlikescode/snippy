@@ -12,7 +12,9 @@
   "activationEvents": [
     "onCommand:snippy.addFileTemplate",
     "onCommand:snippy.addCodeSnippet",
-    "onView:snippy.snippyView"
+    "onView:snippy.snippyView",
+    "onStartupFinished",
+    "onCommand:snippy.selectWorkspace"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -33,6 +35,10 @@
       {
         "command": "snippy.addCodeSnippet",
         "title": "Use Snippy Snippet"
+      },
+      {
+        "command": "snippy.selectWorkspace",
+        "title": "Select Workspace"
       }
     ],
     "menus": {

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
+import getWorkspaces from './api/getWorkspaces'
 import { addCodeSnippet, addFileTemplate } from './commands'
-import { Snippet } from './types'
-import { queryUsersSnippets } from './utils'
+import { Snippet, Workspace } from './types'
 
 function escapeHtmlAttribute(value: string) {
   return value.replace(/"/g, '&quot;')
@@ -72,6 +72,8 @@ function insertSnippetInActiveEditor(content: string) {
   }
 }
 
+let statusBarItem: vscode.StatusBarItem | undefined
+
 export const activate = (context: vscode.ExtensionContext) => {
   console.log('Snippy extension is activated!')
 
@@ -112,11 +114,57 @@ export const activate = (context: vscode.ExtensionContext) => {
     },
   })
 
-  const disposable1 = vscode.commands.registerCommand('snippy.addFileTemplate', addFileTemplate)
+  // Create a new status bar item that will be shown to the far right
+  statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left)
+  statusBarItem.command = 'snippy.selectWorkspace'
+  statusBarItem.text = '$(organization) Select Workspace'
+  statusBarItem.tooltip = 'Select a snippy workspace'
+  statusBarItem.show()
+
+  // Fires on status bar click
+  let disposable = vscode.commands.registerCommand('snippy.selectWorkspace', async function () {
+    const workspaces = await getWorkspaces()
+
+    const workspaceOptions = workspaces.map((workspace) => ({ ...workspace, label: workspace.name }))
+
+    const selectedWorkspace = await vscode.window.showQuickPick(workspaceOptions, {
+      placeHolder: 'Select your workspace',
+    })
+
+    if (!selectedWorkspace) {
+      return
+    }
+
+    context.globalState.update('currWorkspace', selectedWorkspace)
+
+    updateStatusBar(selectedWorkspace)
+  })
+
+  context.subscriptions.push(statusBarItem)
+  context.subscriptions.push(disposable)
+
+  const currWorkspace = context.globalState.get('currWorkspace') as Workspace
+  updateStatusBar(currWorkspace)
+
+  const disposable1 = vscode.commands.registerCommand('snippy.addFileTemplate', (path) =>
+    addFileTemplate(path, context)
+  )
   const disposable2 = vscode.commands.registerCommand('snippy.addCodeSnippet', addCodeSnippet)
 
   context.subscriptions.push(disposable1)
   context.subscriptions.push(disposable2)
 }
 
-export const deactivate = () => {}
+const updateStatusBar = (newWorkspace: Workspace) => {
+  if (!statusBarItem || !newWorkspace) return
+
+  // Set the text to the name of the workspace
+  statusBarItem.text = `$(organization) ${newWorkspace.name}`
+  statusBarItem.tooltip = `Change snippy workspace`
+}
+
+export const deactivate = () => {
+  if (statusBarItem) {
+    statusBarItem.dispose()
+  }
+}

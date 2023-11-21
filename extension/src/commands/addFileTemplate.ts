@@ -1,11 +1,12 @@
 import * as vscode from 'vscode'
+import getTemplates from '../api/getTemplates'
 import { PromptResults, Template } from '../types'
-import { buildFolderStructure, getTemplateFolderStructure, queryUsersTemplates } from '../utils'
+import { buildFolderStructure, getTemplateFolderStructure } from '../utils'
 
-const addFileTemplate = async (path: vscode.Uri) => {
+const addFileTemplate = async (path: vscode.Uri, context: vscode.ExtensionContext) => {
   try {
     const rootPath = path.fsPath
-    const userTemplates = await queryUsersTemplates()
+    const userTemplates = await getTemplates(context)
 
     if (!userTemplates.length) {
       const choices = ['Create Template', 'Later']

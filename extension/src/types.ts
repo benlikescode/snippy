@@ -47,6 +47,14 @@ export type Snippet = {
   creatorId: string
 }
 
+export type Workspace = {
+  id: string
+  name: string
+  createdAt: Date
+  updatedAt: Date
+  templates: Template[]
+}
+
 export type PromptResults = {
   [key: string]: string
 }
