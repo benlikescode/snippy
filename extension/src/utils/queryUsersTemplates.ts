@@ -1,18 +1,15 @@
-const queryUsersTemplates = async () => {
-  // TODO - Query users templates from API
-  const templates = [] as any[]
+import fetch from 'node-fetch'
+import { Template } from '../types'
 
-  if (!templates) {
+const queryUsersTemplates = async () => {
+  const res = await fetch('http://localhost:3000/api/templates')
+  const data = await res.json()
+
+  if (!data || !data.templates) {
     throw new Error('Failed to get your templates')
   }
 
-  const parsedTemplates = templates.map((template) => ({
-    ...template,
-    files: JSON.parse(template.files),
-    prompts: JSON.parse(template.prompts),
-  }))
-
-  return parsedTemplates
+  return data.templates as Template[]
 }
 
 export default queryUsersTemplates

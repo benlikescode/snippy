@@ -1,9 +1,9 @@
 import * as Handlebars from 'handlebars'
-import { File, PromptResults, TemplateFolderStructure } from '../types'
+import { FileItem, PromptResults, TemplateFolderStructure } from '../types'
 
 const getTemplateFolderStructure = (
   rootPath: string,
-  files: File[],
+  files: FileItem[],
   promptResults: PromptResults
 ): TemplateFolderStructure[] => {
   // File content & path can have variables that need to be replaced by the prompt results
