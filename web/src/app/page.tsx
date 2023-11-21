@@ -35,27 +35,29 @@ const HomePage = () => {
   }, [activeWorkspace])
 
   return (
-    <main className="mx-auto my-16 w-full max-w-screen-lg px-4">
-      <div>
-        <h2 className="mb-2 text-2xl font-bold">Welcome Back</h2>
-        <p className="text-[#868686]">Speed up component creation & usage.</p>
-      </div>
+    <main className="w-full overflow-y-auto">
+      <div className="mx-auto my-16 max-w-screen-lg px-4">
+        <div>
+          <h2 className="mb-2 text-2xl font-bold">Welcome Back</h2>
+          <p className="text-[#868686]">Speed up component creation & usage.</p>
+        </div>
 
-      <div className="mb-5 mt-9 flex items-center gap-3">
-        <Input
-          type="search"
-          placeholder="Find templates..."
-          className="h-[42px] flex-1 rounded-[5px] border border-[#404040] bg-[#26262635] text-[#737373]"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-        <SortDropdown templates={templates} setTemplates={setTemplates} />
-      </div>
+        <div className="mb-5 mt-9 flex items-center gap-3">
+          <Input
+            type="search"
+            placeholder="Find templates..."
+            className="h-[42px] flex-1 rounded-[5px] border border-[#404040] bg-[#26262635] text-[#737373]"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <SortDropdown templates={templates} setTemplates={setTemplates} />
+        </div>
 
-      <div className="grid grid-cols-3 gap-5">
-        {filteredTemplates.map((template) => (
-          <HomeCard key={template.id} template={template} />
-        ))}
+        <div className="grid grid-cols-3 gap-5">
+          {filteredTemplates.map((template) => (
+            <HomeCard key={template.id} template={template} />
+          ))}
+        </div>
       </div>
     </main>
   )
