@@ -44,22 +44,20 @@ const addFileTemplate = async (path: vscode.Uri, context: vscode.ExtensionContex
 const applyTemplate = async (template: Template, rootPath: string) => {
   const { prompts, files } = template
 
-  if (!prompts || !prompts.length) {
-    return
-  }
-
   const promptResults = {} as PromptResults
 
-  for (const p of prompts) {
-    const { prompt, variable } = p
+  if (prompts && prompts.length) {
+    for (const p of prompts) {
+      const { prompt, variable } = p
 
-    const promptResult = await vscode.window.showInputBox({ prompt })
+      const promptResult = await vscode.window.showInputBox({ prompt })
 
-    if (!promptResult) {
-      return
+      if (!promptResult) {
+        return
+      }
+
+      promptResults[variable] = promptResult
     }
-
-    promptResults[variable] = promptResult
   }
 
   const structure = getTemplateFolderStructure(rootPath, files, promptResults)
