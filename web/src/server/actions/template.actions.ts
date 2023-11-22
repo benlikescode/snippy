@@ -83,9 +83,26 @@ export const updateTemplate = async (
 }
 
 export const getTemplates = async (workspaceId: string) => {
+  const session = await getServerAuthSession()
+
+  if (!session?.user.id) {
+    return {
+      error: {
+        message: 'Unauthorized',
+      },
+    }
+  }
+
   return await db.template.findMany({
     where: {
       workspaceId,
+      workspace: {
+        user: {
+          some: {
+            id: session.user.id,
+          },
+        },
+      },
     },
   })
 }
