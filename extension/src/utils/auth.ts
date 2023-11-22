@@ -12,7 +12,7 @@ export class Auth {
   }
 
   private async setSession() {
-    const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, { createIfNone: false })
+    const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, { createIfNone: true })
 
     if (session) {
       this.session = session
