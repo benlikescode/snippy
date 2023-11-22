@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import getWorkspaces from './api/getWorkspaces'
 import { addCodeSnippet, addFileTemplate } from './commands'
 import { Snippet, Workspace } from './types'
+import { Auth } from './utils/auth'
 
 function escapeHtmlAttribute(value: string) {
   return value.replace(/"/g, '&quot;')
@@ -74,8 +75,37 @@ function insertSnippetInActiveEditor(content: string) {
 
 let statusBarItem: vscode.StatusBarItem | undefined
 
-export const activate = (context: vscode.ExtensionContext) => {
+// const handleAuth = async () => {
+//   // Use VSCode's built-in GitHub authentication
+
+//   const githubSession = await vscode.authentication.getSession('github', ['user:email'])
+
+//   if (!githubSession) {
+//     vscode.window.showErrorMessage('GitHub authentication failed.')
+//     return
+//   }
+//   console.log(githubSession)
+// }
+
+export const activate = async (context: vscode.ExtensionContext) => {
   console.log('Snippy extension is activated!')
+
+  const auth = new Auth()
+  await auth.initialize(context)
+
+  const session = await auth.getSession()
+
+  vscode.window.showInformationMessage(`Logged into GitHub as ${session.account.label}`)
+
+  // const authDisposable = vscode.commands.registerCommand('snippy.getGitHubUser', async () => {
+  //   const session = await auth.getSession()
+
+  //   console.log(session)
+
+  //   vscode.window.showInformationMessage(`Logged into GitHub as ${session.account.label}`)
+  // })
+
+  // context.subscriptions.push(authDisposable)
 
   vscode.window.registerWebviewViewProvider('snippy.snippyView', {
     resolveWebviewView(webviewView) {
@@ -114,7 +144,6 @@ export const activate = (context: vscode.ExtensionContext) => {
     },
   })
 
-  // Create a new status bar item that will be shown to the far right
   statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left)
   statusBarItem.command = 'snippy.selectWorkspace'
   statusBarItem.text = '$(organization) Select Workspace'
@@ -123,7 +152,7 @@ export const activate = (context: vscode.ExtensionContext) => {
 
   // Fires on status bar click
   let disposable = vscode.commands.registerCommand('snippy.selectWorkspace', async function () {
-    const workspaces = await getWorkspaces()
+    const workspaces = await getWorkspaces(session.accessToken)
 
     const workspaceOptions = workspaces.map((workspace) => ({ ...workspace, label: workspace.name }))
 
@@ -146,19 +175,18 @@ export const activate = (context: vscode.ExtensionContext) => {
   const currWorkspace = context.globalState.get('currWorkspace') as Workspace
   updateStatusBar(currWorkspace)
 
-  const disposable1 = vscode.commands.registerCommand('snippy.addFileTemplate', (path) =>
+  const addTemplateDisposable = vscode.commands.registerCommand('snippy.addFileTemplate', (path) =>
     addFileTemplate(path, context)
   )
-  const disposable2 = vscode.commands.registerCommand('snippy.addCodeSnippet', addCodeSnippet)
+  const addSnippetDisposable = vscode.commands.registerCommand('snippy.addCodeSnippet', addCodeSnippet)
 
-  context.subscriptions.push(disposable1)
-  context.subscriptions.push(disposable2)
+  context.subscriptions.push(addTemplateDisposable)
+  context.subscriptions.push(addSnippetDisposable)
 }
 
 const updateStatusBar = (newWorkspace: Workspace) => {
   if (!statusBarItem || !newWorkspace) return
 
-  // Set the text to the name of the workspace
   statusBarItem.text = `$(organization) ${newWorkspace.name}`
   statusBarItem.tooltip = `Change snippy workspace`
 }

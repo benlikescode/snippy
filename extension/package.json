@@ -39,6 +39,10 @@
       {
         "command": "snippy.selectWorkspace",
         "title": "Select Workspace"
+      },
+      {
+        "command": "snippy.getGitHubUser",
+        "title": "Get GitHub User"
       }
     ],
     "menus": {
@@ -100,6 +104,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@octokit/rest": "^20.0.2",
     "handlebars": "^4.7.8",
     "node-fetch": "2.6.7"
   }

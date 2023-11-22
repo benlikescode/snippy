@@ -1,8 +1,13 @@
 import fetch from 'node-fetch'
 import { Workspace } from '../types'
 
-const getWorkspaces = async () => {
-  const res = await fetch('http://localhost:3000/api/workspaces')
+const getWorkspaces = async (accessToken: string) => {
+  const res = await fetch('http://localhost:3000/api/workspaces', {
+    headers: {
+      authorization: accessToken,
+    },
+  })
+
   const data = await res.json()
 
   if (!data || !data.workspaces) {
