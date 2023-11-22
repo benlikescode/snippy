@@ -75,37 +75,11 @@ function insertSnippetInActiveEditor(content: string) {
 
 let statusBarItem: vscode.StatusBarItem | undefined
 
-// const handleAuth = async () => {
-//   // Use VSCode's built-in GitHub authentication
-
-//   const githubSession = await vscode.authentication.getSession('github', ['user:email'])
-
-//   if (!githubSession) {
-//     vscode.window.showErrorMessage('GitHub authentication failed.')
-//     return
-//   }
-//   console.log(githubSession)
-// }
-
 export const activate = async (context: vscode.ExtensionContext) => {
   console.log('Snippy extension is activated!')
 
   const auth = new Auth()
   await auth.initialize(context)
-
-  const session = await auth.getSession()
-
-  vscode.window.showInformationMessage(`Logged into GitHub as ${session.account.label}`)
-
-  // const authDisposable = vscode.commands.registerCommand('snippy.getGitHubUser', async () => {
-  //   const session = await auth.getSession()
-
-  //   console.log(session)
-
-  //   vscode.window.showInformationMessage(`Logged into GitHub as ${session.account.label}`)
-  // })
-
-  // context.subscriptions.push(authDisposable)
 
   vscode.window.registerWebviewViewProvider('snippy.snippyView', {
     resolveWebviewView(webviewView) {
@@ -151,8 +125,8 @@ export const activate = async (context: vscode.ExtensionContext) => {
   statusBarItem.show()
 
   // Fires on status bar click
-  let disposable = vscode.commands.registerCommand('snippy.selectWorkspace', async function () {
-    const workspaces = await getWorkspaces(session.accessToken)
+  const statusBarClickDisposable = vscode.commands.registerCommand('snippy.selectWorkspace', async function () {
+    const workspaces = await getWorkspaces()
 
     const workspaceOptions = workspaces.map((workspace) => ({ ...workspace, label: workspace.name }))
 
@@ -170,7 +144,7 @@ export const activate = async (context: vscode.ExtensionContext) => {
   })
 
   context.subscriptions.push(statusBarItem)
-  context.subscriptions.push(disposable)
+  context.subscriptions.push(statusBarClickDisposable)
 
   const currWorkspace = context.globalState.get('currWorkspace') as Workspace
   updateStatusBar(currWorkspace)
