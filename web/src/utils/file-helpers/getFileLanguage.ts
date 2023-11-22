@@ -2,61 +2,61 @@
 
 export const FILE_LANGUAGES: Record<string, { name: string }> = {
   txt: {
-    name: 'Text',
+    name: 'txt',
   },
   ts: {
-    name: 'Typescript',
+    name: 'typescript',
   },
   tsx: {
-    name: 'TypeScript',
+    name: 'typescript',
   },
   js: {
-    name: 'Javascript',
+    name: 'javascript',
   },
   jsx: {
-    name: 'Javascript',
+    name: 'javascript',
   },
   py: {
-    name: 'Python',
+    name: 'python',
   },
   java: {
-    name: 'Java',
+    name: 'java',
   },
   rb: {
-    name: 'Ruby',
+    name: 'ruby',
   },
   c: {
-    name: 'C',
+    name: 'c',
   },
   cs: {
-    name: 'C#',
+    name: 'cs',
   },
   cpp: {
-    name: 'C++',
+    name: 'cpp',
   },
   html: {
-    name: 'HTML',
+    name: 'html',
   },
   css: {
-    name: 'CSS',
+    name: 'css',
   },
   scss: {
-    name: 'SCSS',
+    name: 'scss',
   },
   yaml: {
-    name: 'YAML',
+    name: 'yaml',
   },
   go: {
-    name: 'Golang',
+    name: 'go',
   },
   json: {
-    name: 'JSON',
+    name: 'json',
   },
   rs: {
-    name: 'Rust',
+    name: 'rs',
   },
   php: {
-    name: 'PHP',
+    name: 'php',
   },
 }
 

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, type FC, useEffect } from 'react'
+import { useState, type FC, useEffect, useRef } from 'react'
 import { Editor, type Monaco, type EditorProps } from '@monaco-editor/react'
 import type * as monaco from 'monaco-editor'
 import useFileStore from '@/stores/useFileStore'
@@ -13,9 +13,14 @@ const EDITOR_OPTIONS = {
 
 const CodeEditor: FC<EditorProps> = () => {
   const [value, setValue] = useState('')
+  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
+  const monacoRef = useRef<Monaco | null>(null)
   const { openFile, updateItemData } = useFileStore()
 
   const handleMount = (editor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) => {
+    editorRef.current = editor
+    monacoRef.current = monaco
+
     const themeData: monaco.editor.IStandaloneThemeData = {
       base: 'vs-dark',
       inherit: true,
@@ -37,8 +42,15 @@ const CodeEditor: FC<EditorProps> = () => {
   }
 
   useEffect(() => {
-    if (!openFile || openFile.type === 'folder') {
+    if (!openFile || openFile.type === 'folder' || !editorRef.current || !monacoRef.current) {
       return setValue('')
+    }
+
+    const model = editorRef.current.getModel()
+    const newLanuage = openFile.data.language
+
+    if (model && newLanuage) {
+      monacoRef.current.editor.setModelLanguage(model, newLanuage)
     }
 
     setValue(openFile.data.content)

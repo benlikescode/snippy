@@ -1,6 +1,7 @@
 import { useToast } from '@/components/ui/use-toast'
 import useFileStore from '@/stores/useFileStore'
 import { type FileItemType } from '@/types'
+import getFileLanguage from '@/utils/file-helpers/getFileLanguage'
 import { type FC, type ChangeEvent, type KeyboardEvent, useEffect, useRef, useState } from 'react'
 
 type Props = {
@@ -27,7 +28,7 @@ const FileItemName: FC<Props> = ({ item, isEditing, setIsEditing }) => {
     renameItem(id, trimName)
     setIsEditing(false)
     setName(trimName)
-    updateItemData(id, { justCreated: false })
+    updateItemData(id, { language: getFileLanguage(trimName), justCreated: false })
   }
 
   const handleKeyDown = (e: KeyboardEvent) => {
