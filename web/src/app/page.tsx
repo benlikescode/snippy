@@ -1,8 +1,10 @@
 'use client'
 
 import HomeCard from '@/components/home-card'
+import HomeCardSkeleton from '@/components/home-card-skeleton'
 import SortDropdown from '@/components/sort-dropdown'
 import { Input } from '@/components/ui/input'
+import { toast } from '@/components/ui/use-toast'
 import { getTemplates } from '@/server/actions/template.actions'
 import useGlobalStore from '@/stores/useGlobalStore'
 import { type Template } from '@prisma/client'
@@ -20,9 +22,13 @@ const HomePage = () => {
   const fetchTemplates = async () => {
     if (!activeWorkspace) return
 
-    const templates = await getTemplates(activeWorkspace.id)
+    const res = await getTemplates(activeWorkspace.id)
 
-    const sortedTemplates = templates.sort(
+    if (res.error) {
+      return toast({ variant: 'destructive', description: res.error.message })
+    }
+
+    const sortedTemplates = res.templates.sort(
       (a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime(),
     )
 
@@ -46,7 +52,7 @@ const HomePage = () => {
           <Input
             type="search"
             placeholder="Find templates..."
-            className="h-[42px] flex-1 rounded-[5px] border border-[#404040] bg-[#26262635] text-[#737373]"
+            className="h-[42px] flex-1 rounded-[5px] border border-[#323232] bg-[#26262635] text-[#737373]"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -54,6 +60,9 @@ const HomePage = () => {
         </div>
 
         <div className="grid grid-cols-3 gap-5">
+          {!filteredTemplates.length &&
+            Array.from({ length: 6 }, (_, idx) => <HomeCardSkeleton key={idx} />)}
+
           {filteredTemplates.map((template) => (
             <HomeCard key={template.id} template={template} />
           ))}

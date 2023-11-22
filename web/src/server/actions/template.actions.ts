@@ -93,7 +93,7 @@ export const getTemplates = async (workspaceId: string) => {
     }
   }
 
-  return await db.template.findMany({
+  const templates = await db.template.findMany({
     where: {
       workspaceId,
       workspace: {
@@ -105,6 +105,8 @@ export const getTemplates = async (workspaceId: string) => {
       },
     },
   })
+
+  return { templates }
 }
 
 export const deleteTemplate = async (id: string) => {
