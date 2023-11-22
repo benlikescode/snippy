@@ -21,14 +21,18 @@ import { Switch } from '@/components/ui/switch'
 import { cn } from '@/utils/cn'
 import Link from 'next/link'
 import useGlobalStore from '@/stores/useGlobalStore'
+import { useRouter } from 'next/navigation'
 
 const AccountPopover = () => {
   const [open, setOpen] = useState(false)
   const { data: session } = useSession()
   const { sidebarCollapsed } = useGlobalStore()
+  const router = useRouter()
 
   const handleSignOut = async () => {
     await signOut({ redirect: false })
+    router.refresh()
+    router.push('/login')
   }
 
   if (!session || !session.user) {
