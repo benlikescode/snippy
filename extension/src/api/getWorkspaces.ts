@@ -1,12 +1,13 @@
 import fetch from 'node-fetch'
 import { Workspace } from '../types'
 import { Auth } from '../utils/auth'
+import { SNIPPY_API_URL } from '../constants'
 
 const getWorkspaces = async () => {
   const auth = new Auth()
   const session = await auth.getSession()
 
-  const res = await fetch('http://localhost:3000/api/workspaces', {
+  const res = await fetch(`${SNIPPY_API_URL}/workspaces`, {
     headers: {
       authorization: session.accessToken,
     },
