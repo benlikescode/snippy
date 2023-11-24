@@ -5,7 +5,7 @@ import { Editor, type Monaco, type EditorProps } from '@monaco-editor/react'
 import type * as monaco from 'monaco-editor'
 import useFileStore from '@/stores/useFileStore'
 
-const EDITOR_OPTIONS = {
+const EDITOR_OPTIONS: monaco.editor.IStandaloneEditorConstructionOptions = {
   minimap: { enabled: false },
   padding: { top: 20 },
   dropIntoEditor: { enabled: false },
@@ -20,6 +20,18 @@ const CodeEditor: FC<EditorProps> = () => {
   const handleMount = (editor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) => {
     editorRef.current = editor
     monacoRef.current = monaco
+
+    monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: true,
+      noSyntaxValidation: true,
+      noSuggestionDiagnostics: true,
+    })
+
+    monaco.languages.typescript.typescriptDefaults.setDiagnosticsOptions({
+      noSemanticValidation: true,
+      noSyntaxValidation: true,
+      noSuggestionDiagnostics: true,
+    })
 
     const themeData: monaco.editor.IStandaloneThemeData = {
       base: 'vs-dark',
