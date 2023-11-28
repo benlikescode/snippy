@@ -47,7 +47,7 @@ const CodeEditor: FC<EditorProps> = () => {
   }
 
   const onChange = (value: string | undefined) => {
-    if (!value || !openFile?.id) return
+    if (value === undefined || !openFile?.id) return
 
     setValue(value)
     updateItemData(openFile.id, { content: value })
