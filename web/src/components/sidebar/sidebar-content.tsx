@@ -23,11 +23,11 @@ const SidebarContent: FC<Props> = ({ user, workspaces }) => {
 
   const { sidebarCollapsed, setSidebarCollapsed } = useGlobalStore()
 
-  useEffect(() => {
-    setSidebarCollapsed(pathname.startsWith('/snippy'))
-  }, [pathname])
+  // useEffect(() => {
+  //   setSidebarCollapsed(pathname.startsWith('/snippy'))
+  // }, [pathname])
 
-  if (pathname === '/login') {
+  if (pathname === '/login' || pathname.startsWith('/snippy')) {
     return null
   }
 
@@ -67,7 +67,7 @@ const SidebarContent: FC<Props> = ({ user, workspaces }) => {
 
           <SidebarItem href="/settings">
             <CogIcon className={cn('mr-3 h-6', sidebarCollapsed && 'mr-0')} />
-            {!sidebarCollapsed && 'Settings & Help'}
+            {!sidebarCollapsed && 'Manage Workspace'}
           </SidebarItem>
         </div>
       </div>

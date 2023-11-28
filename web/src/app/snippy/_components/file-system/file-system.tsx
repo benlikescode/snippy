@@ -5,7 +5,7 @@ import { type FileItemType } from '@/types'
 import { useEffect, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
-import { DocumentPlusIcon, FolderPlusIcon } from '@heroicons/react/24/outline'
+import { DocumentPlusIcon, FolderPlusIcon } from '@heroicons/react/24/solid'
 
 const FileSystem = () => {
   const [canDropFile, setCanDropFile] = useState(false)
@@ -46,10 +46,10 @@ const FileSystem = () => {
           <h2 className="text-[15px] font-semibold">Template Structure</h2>
           <div className="flex items-center gap-1">
             <Button variant="ghost" size="icon" onClick={() => createNewFile()}>
-              <DocumentPlusIcon className="h-[22px] text-[#62656d]" />
+              <DocumentPlusIcon className="h-5 text-[#484848]" />
             </Button>
             <Button variant="ghost" size="icon" onClick={() => createNewFolder()}>
-              <FolderPlusIcon className="h-[22px] text-[#62656d]" />
+              <FolderPlusIcon className="h-5 text-[#484848]" />
             </Button>
           </div>
         </div>

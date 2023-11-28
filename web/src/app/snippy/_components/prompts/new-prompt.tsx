@@ -46,7 +46,10 @@ const NewPrompt = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" className="h-12 w-full rounded-[6px]">
+        <Button
+          variant="secondary"
+          className="h-12 w-full rounded-[10px] border border-[#ffffff09] bg-[#1f1f1f] text-[18px] text-[#989898] hover:bg-[#252525]"
+        >
           Add Prompt
         </Button>
       </DialogTrigger>
@@ -58,21 +61,11 @@ const NewPrompt = () => {
           <div className="space-y-4 py-2 pb-4">
             <div className="space-y-2">
               <Label htmlFor="prompt">Prompt</Label>
-              <Input
-                id="prompt"
-                placeholder="What is the name of this file?"
-                value={prompt}
-                onChange={(e) => setPrompt(e.target.value)}
-              />
+              <Input id="prompt" value={prompt} onChange={(e) => setPrompt(e.target.value)} />
             </div>
             <div className="space-y-2">
               <Label htmlFor="variable">Variable</Label>
-              <Input
-                id="variable"
-                placeholder="$ name"
-                value={variable}
-                onChange={(e) => setVariable(e.target.value)}
-              />
+              <Input id="variable" value={variable} onChange={(e) => setVariable(e.target.value)} />
             </div>
           </div>
         </div>
@@ -80,7 +73,7 @@ const NewPrompt = () => {
           <Button variant="outline" onClick={() => setOpen(false)}>
             Cancel
           </Button>
-          <Button type="submit" onClick={() => addNewPrompt()}>
+          <Button variant="modal" type="submit" onClick={() => addNewPrompt()}>
             Confirm
           </Button>
         </DialogFooter>

@@ -7,7 +7,7 @@ import useFileStore from '@/stores/useFileStore'
 
 const EDITOR_OPTIONS: monaco.editor.IStandaloneEditorConstructionOptions = {
   minimap: { enabled: false },
-  padding: { top: 20 },
+  padding: { top: 12 },
   dropIntoEditor: { enabled: false },
 }
 
@@ -38,7 +38,7 @@ const CodeEditor: FC<EditorProps> = () => {
       inherit: true,
       rules: [],
       colors: {
-        'editor.background': '#070707',
+        'editor.background': '#0c0c0c',
       },
     }
 
@@ -70,7 +70,6 @@ const CodeEditor: FC<EditorProps> = () => {
 
   return (
     <Editor
-      height="100%"
       defaultLanguage="javascript"
       theme="vs-dark"
       onChange={onChange}
