@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DocumentPlusIcon, FolderPlusIcon } from '@heroicons/react/24/solid'
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
 
 const FileSystem = () => {
   const [canDropFile, setCanDropFile] = useState(false)
@@ -45,12 +46,27 @@ const FileSystem = () => {
         <div className="flex h-[63px] items-center justify-between border-b px-[22px] text-[#767676]">
           <h2 className="text-[15px] font-semibold">Template Structure</h2>
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="icon" onClick={() => createNewFile()}>
-              <DocumentPlusIcon className="h-5 text-[#484848]" />
-            </Button>
-            <Button variant="ghost" size="icon" onClick={() => createNewFolder()}>
-              <FolderPlusIcon className="h-5 text-[#484848]" />
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" onClick={() => createNewFile()}>
+                  <DocumentPlusIcon className="h-5 text-[#484848]" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Create new file</p>
+              </TooltipContent>
+            </Tooltip>
+
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" onClick={() => createNewFolder()}>
+                  <FolderPlusIcon className="h-5 text-[#484848]" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Create new folder</p>
+              </TooltipContent>
+            </Tooltip>
           </div>
         </div>
 
