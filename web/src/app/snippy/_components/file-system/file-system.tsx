@@ -2,13 +2,17 @@ import Folder from '@/app/snippy/_components/file-system/folder'
 import { Button } from '@/components/ui/button'
 import useFileStore from '@/stores/useFileStore'
 import { type FileItemType } from '@/types'
-import { useEffect, useState } from 'react'
+import { type FC, useEffect, useState } from 'react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { DocumentPlusIcon, FolderPlusIcon } from '@heroicons/react/24/solid'
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
 
-const FileSystem = () => {
+type Props = {
+  noFiles?: boolean
+}
+
+const FileSystem: FC<Props> = ({ noFiles }) => {
   const [canDropFile, setCanDropFile] = useState(false)
 
   const { files, createNewFile, createNewFolder } = useFileStore()
@@ -71,7 +75,13 @@ const FileSystem = () => {
         </div>
 
         <div className="h-[calc(100%_-_63px)] overflow-y-auto p-2.5">
-          <Folder item={ROOT_FOLDER} canDropFile={canDropFile} isRoot level={-1} />
+          <Folder
+            item={ROOT_FOLDER}
+            canDropFile={canDropFile}
+            isRoot
+            level={-1}
+            noFiles={noFiles}
+          />
         </div>
       </div>
     </DndProvider>

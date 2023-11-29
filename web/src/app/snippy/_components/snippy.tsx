@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import { Button } from '@/components/ui/button'
@@ -19,13 +20,15 @@ import Prompts from './prompts/prompts'
 import TypeSelector from '@/app/snippy/_components/type-selector'
 import Image from 'next/image'
 import Link from 'next/link'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 
 type Props = {
   snippy?: Template
 }
 
 const Snippy: FC<Props> = ({ snippy }) => {
-  const { files, pathToOpenFile, setFiles, setOpenFile, setPathToOpenFile } = useFileStore()
+  const { files, pathToOpenFile, openFile, setFiles, setOpenFile, setPathToOpenFile } =
+    useFileStore()
   const { prompts, snippyName, setPrompts, setSnippyName } = useSnippyStore()
   const { activeWorkspace } = useGlobalStore()
   const router = useRouter()
@@ -55,6 +58,7 @@ const Snippy: FC<Props> = ({ snippy }) => {
     }
 
     toast({ description: res.message })
+    router.refresh()
   }
 
   const handleCreateSnippy = async () => {
@@ -86,7 +90,11 @@ const Snippy: FC<Props> = ({ snippy }) => {
         <div className="flex items-center gap-3">
           <TypeSelector />
 
-          <Button size="lg" onClick={() => (snippy ? handleSaveChanges() : handleCreateSnippy())}>
+          <Button
+            size="lg"
+            onClick={() => (snippy ? handleSaveChanges() : handleCreateSnippy())}
+            className="px-6"
+          >
             {snippy ? 'Save Changes' : 'Create Snippy'}
           </Button>
         </div>
@@ -95,10 +103,10 @@ const Snippy: FC<Props> = ({ snippy }) => {
       <div className="flex h-full">
         <div className="flex w-[460px] shrink-0 flex-col border-r bg-[#070707]">
           <Prompts />
-          <FileSystem />
+          <FileSystem noFiles={snippy?.files ? !(snippy?.files as FileItemType[]).length : true} />
         </div>
 
-        {!!pathToOpenFile.length ? (
+        {openFile && !!pathToOpenFile.length ? (
           <div className="h-full w-full">
             <div className="grid h-full">
               <div className="flex h-12 items-center bg-[#0c0c0c] px-4 text-sm font-medium text-[#bababa]">
@@ -115,15 +123,23 @@ const Snippy: FC<Props> = ({ snippy }) => {
           </div>
         ) : (
           <div className="flex w-full select-none flex-col items-center justify-center space-y-4">
-            <Image
+            <div className="flex h-20 w-20 items-center justify-center rounded-full border border-[#222] bg-[#181818] shadow-lg">
+              <MagnifyingGlassIcon className="h-8 w-8 text-[#737373]" />
+            </div>
+            {/* <Image
               src="/file.png"
               alt=""
               height={112}
               width={92}
               draggable={false}
               className="opacity-25 grayscale"
-            />
-            <p className="text-[#737373]">Open a file to preview it here</p>
+            /> */}
+            {/* <img
+              src="https://ouch-cdn2.icons8.com/js7yEOBvP7k3tW0_whhu8YzhTRl4_xp-oIMqdoQpfQY/rs:fit:368:314/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9zdmcvOTY3/L2U1MTQ5OTRjLTQz/M2MtNGQ1OS1iNTIz/LTdiMjI3ZWNmOGZj/YS5zdmc.png"
+              alt=""
+              className="h-64 opacity-25 grayscale"
+            /> */}
+            <p className=" text-[#737373]">Open a file to preview it here</p>
           </div>
         )}
       </div>
