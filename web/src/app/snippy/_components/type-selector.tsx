@@ -27,9 +27,9 @@ const TypeSelector = () => {
       <DropdownMenuTrigger asChild>
         <Button variant="secondary" size="lg">
           {type === 'Template' ? (
-            <TemplateIcon className="mr-3 h-6" />
+            <TemplateIcon className="mr-2 h-6" />
           ) : (
-            <SnippetIcon className="mr-3 h-6" />
+            <SnippetIcon className="mr-2 h-6" />
           )}
           <span>{type}</span>
           <CaretSortIcon className="ml-3 h-5 w-5" />

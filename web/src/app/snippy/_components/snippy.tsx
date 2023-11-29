@@ -91,7 +91,7 @@ const Snippy: FC<Props> = ({ snippy }) => {
           <Button
             size="lg"
             onClick={() => (snippy ? handleSaveChanges() : handleCreateSnippy())}
-            className="px-6"
+            className="px-5"
           >
             {snippy ? 'Save Changes' : 'Create Snippy'}
           </Button>
