@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 
 import { Button } from '@/components/ui/button'
@@ -18,7 +17,6 @@ import { useRouter } from 'next/navigation'
 import { ChevronLeftIcon } from '@radix-ui/react-icons'
 import Prompts from './prompts/prompts'
 import TypeSelector from '@/app/snippy/_components/type-selector'
-import Image from 'next/image'
 import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 
@@ -126,19 +124,6 @@ const Snippy: FC<Props> = ({ snippy }) => {
             <div className="flex h-20 w-20 items-center justify-center rounded-full border border-[#222] bg-[#181818] shadow-lg">
               <MagnifyingGlassIcon className="h-8 w-8 text-[#737373]" />
             </div>
-            {/* <Image
-              src="/file.png"
-              alt=""
-              height={112}
-              width={92}
-              draggable={false}
-              className="opacity-25 grayscale"
-            /> */}
-            {/* <img
-              src="https://ouch-cdn2.icons8.com/js7yEOBvP7k3tW0_whhu8YzhTRl4_xp-oIMqdoQpfQY/rs:fit:368:314/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9zdmcvOTY3/L2U1MTQ5OTRjLTQz/M2MtNGQ1OS1iNTIz/LTdiMjI3ZWNmOGZj/YS5zdmc.png"
-              alt=""
-              className="h-64 opacity-25 grayscale"
-            /> */}
             <p className=" text-[#737373]">Open a file to preview it here</p>
           </div>
         )}
