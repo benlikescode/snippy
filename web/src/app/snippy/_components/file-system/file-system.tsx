@@ -47,7 +47,7 @@ const FileSystem: FC<Props> = ({ noFiles }) => {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="flex-1 overflow-y-auto border-t bg-[#070707]">
-        <div className="flex h-[63px] items-center justify-between border-b px-[22px] text-[#767676]">
+        <div className="flex h-[64px] items-center justify-between px-[22px] text-[#767676]">
           <h2 className="text-[15px] font-semibold">Template Structure</h2>
           <div className="flex items-center gap-1">
             <Tooltip>
@@ -74,7 +74,7 @@ const FileSystem: FC<Props> = ({ noFiles }) => {
           </div>
         </div>
 
-        <div className="h-[calc(100%_-_63px)] overflow-y-auto p-2.5">
+        <div className="h-[calc(100%_-_64px)] overflow-y-auto p-2.5 pt-0">
           <Folder
             item={ROOT_FOLDER}
             canDropFile={canDropFile}
