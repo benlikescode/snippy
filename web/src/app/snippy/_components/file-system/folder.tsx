@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import FileContextMenu from './file-context-menu'
 import useFileStore from '@/stores/useFileStore'
 import type { FolderType, FileItemType } from '@/types'
@@ -8,12 +9,15 @@ import { useFileDropzone } from '@/hooks'
 import { ChevronDownIcon, ChevronRightIcon } from '@heroicons/react/24/outline'
 import FileSystemItem from './file-system-item'
 import { cn } from '@/utils/cn'
+import { Button } from '@/components/ui/button'
+import Image from 'next/image'
 
 type Props = {
   item: FolderType
   level: number
   canDropFile: boolean
   isRoot?: boolean
+  noFiles?: boolean
 }
 
 type DragItem = {
@@ -21,12 +25,12 @@ type DragItem = {
   type: string
 }
 
-const Folder: FC<Props> = ({ item, level, canDropFile, isRoot = false }) => {
+const Folder: FC<Props> = ({ item, level, canDropFile, noFiles, isRoot = false }) => {
   const [isFolderOpen, setIsFolderOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(item.data.justCreated)
 
-  const { files, fileDropzone, moveItem } = useFileStore()
-  const { getRootProps } = useFileDropzone(item, canDropFile)
+  const { files, fileDropzone, moveItem, createNewFile } = useFileStore()
+  const { getRootProps, open } = useFileDropzone(item, canDropFile)
 
   const [_, drag] = useDrag({
     type: 'folder',
@@ -64,6 +68,31 @@ const Folder: FC<Props> = ({ item, level, canDropFile, isRoot = false }) => {
       )}
     >
       <FileContextMenu item={item} setIsFolderOpen={setIsFolderOpen} setIsEditing={setIsEditing}>
+        {isRoot && noFiles && !files.length && (
+          <div className="absolute inset-0 mx-auto flex h-full w-full max-w-[280px] select-none flex-col items-center justify-center">
+            <Image
+              src="/file.png"
+              alt=""
+              height={112}
+              width={92}
+              draggable={false}
+              className="mb-4 opacity-20 grayscale"
+            />
+
+            <p className="mb-6 font-medium text-[#686868]">Drag and drop files or add manually</p>
+
+            <div className="w-full space-y-2">
+              <Button size="lg" className="w-full" onClick={() => createNewFile()}>
+                Create File
+              </Button>
+
+              <Button size="lg" variant="secondary" className="w-full" onClick={open}>
+                Upload File
+              </Button>
+            </div>
+          </div>
+        )}
+
         {!isRoot && (
           <>
             <div

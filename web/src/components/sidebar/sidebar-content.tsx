@@ -6,7 +6,7 @@ import { CogIcon, CometIcon, CreateIcon, HomeIcon, ShapesIcon } from '@/componen
 import WorkspaceSwitcher from './workspace-switcher'
 import { usePathname, useRouter } from 'next/navigation'
 import AccountPopover from '@/components/sidebar/account-popover'
-import { type FC, useEffect } from 'react'
+import { type FC } from 'react'
 import { cn } from '@/utils/cn'
 import { type User } from 'next-auth'
 import { type WorkspaceWithInfo } from '@/server/actions/workspace.actions'
@@ -21,13 +21,9 @@ const SidebarContent: FC<Props> = ({ user, workspaces }) => {
   const pathname = usePathname()
   const router = useRouter()
 
-  const { sidebarCollapsed, setSidebarCollapsed } = useGlobalStore()
+  const { sidebarCollapsed } = useGlobalStore()
 
-  useEffect(() => {
-    setSidebarCollapsed(pathname.startsWith('/snippy'))
-  }, [pathname])
-
-  if (pathname === '/login') {
+  if (pathname === '/login' || pathname.startsWith('/snippy')) {
     return null
   }
 
@@ -67,7 +63,7 @@ const SidebarContent: FC<Props> = ({ user, workspaces }) => {
 
           <SidebarItem href="/settings">
             <CogIcon className={cn('mr-3 h-6', sidebarCollapsed && 'mr-0')} />
-            {!sidebarCollapsed && 'Settings & Help'}
+            {!sidebarCollapsed && 'Manage Workspace'}
           </SidebarItem>
         </div>
       </div>

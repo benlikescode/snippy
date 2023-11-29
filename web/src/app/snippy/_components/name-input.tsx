@@ -9,10 +9,6 @@ const NameInput: FC = () => {
   const { snippyName, setSnippyName } = useSnippyStore()
 
   const handleSaveName = (target?: HTMLInputElement) => {
-    // if (!snippyName) {
-    //   setSnippyName(DEFAULT_TEMPLATE_NAME)
-    // }
-
     setIsEditing(false)
     target?.blur()
   }
@@ -33,9 +29,9 @@ const NameInput: FC = () => {
       onKeyDown={(e) => handleKeyDown(e)}
       placeholder={DEFAULT_TEMPLATE_NAME}
       inputStyle={{
-        fontSize: 22,
+        fontSize: 18,
         borderRadius: '4px',
-        fontWeight: 'bold',
+        fontWeight: 600,
         color: '#fff',
         background: 'transparent',
         outline: 'none',

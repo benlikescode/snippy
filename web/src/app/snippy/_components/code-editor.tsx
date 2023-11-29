@@ -1,25 +1,28 @@
 'use client'
 
-import { useState, type FC, useEffect, useRef } from 'react'
+import { useState, type FC, useEffect } from 'react'
 import { Editor, type Monaco, type EditorProps } from '@monaco-editor/react'
 import type * as monaco from 'monaco-editor'
 import useFileStore from '@/stores/useFileStore'
 
 const EDITOR_OPTIONS: monaco.editor.IStandaloneEditorConstructionOptions = {
   minimap: { enabled: false },
-  padding: { top: 20 },
+  padding: { top: 12 },
   dropIntoEditor: { enabled: false },
+  fontSize: 16,
+  tabSize: 2,
 }
 
 const CodeEditor: FC<EditorProps> = () => {
   const [value, setValue] = useState('')
-  const editorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null)
-  const monacoRef = useRef<Monaco | null>(null)
+  const [monacoInstance, setMonacoInstance] = useState<typeof monaco>()
+  const [editorInstance, setEditorInstance] = useState<monaco.editor.IStandaloneCodeEditor>()
+
   const { openFile, updateItemData } = useFileStore()
 
   const handleMount = (editor: monaco.editor.IStandaloneCodeEditor, monaco: Monaco) => {
-    editorRef.current = editor
-    monacoRef.current = monaco
+    setMonacoInstance(monaco)
+    setEditorInstance(editor)
 
     monaco.languages.typescript.javascriptDefaults.setDiagnosticsOptions({
       noSemanticValidation: true,
@@ -38,7 +41,7 @@ const CodeEditor: FC<EditorProps> = () => {
       inherit: true,
       rules: [],
       colors: {
-        'editor.background': '#070707',
+        'editor.background': '#0c0c0c',
       },
     }
 
@@ -47,30 +50,29 @@ const CodeEditor: FC<EditorProps> = () => {
   }
 
   const onChange = (value: string | undefined) => {
-    if (!value || !openFile?.id) return
+    if (value === undefined || !openFile?.id) return
 
     setValue(value)
     updateItemData(openFile.id, { content: value })
   }
 
   useEffect(() => {
-    if (!openFile || openFile.type === 'folder' || !editorRef.current || !monacoRef.current) {
+    if (!openFile || openFile.type === 'folder' || !monacoInstance || !editorInstance) {
       return setValue('')
     }
 
-    const model = editorRef.current.getModel()
+    const model = editorInstance.getModel()
     const newLanuage = openFile.data.language
 
     if (model && newLanuage) {
-      monacoRef.current.editor.setModelLanguage(model, newLanuage)
+      monacoInstance.editor.setModelLanguage(model, newLanuage)
     }
 
     setValue(openFile.data.content)
-  }, [openFile])
+  }, [openFile, monacoInstance, editorInstance])
 
   return (
     <Editor
-      height="100%"
       defaultLanguage="javascript"
       theme="vs-dark"
       onChange={onChange}

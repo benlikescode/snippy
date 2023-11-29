@@ -1,13 +1,13 @@
 import { type FC, type ReactNode, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
+  AlertDialog,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog'
 import {
   ContextMenu,
   ContextMenuContent,
@@ -54,7 +54,7 @@ const FileContextMenu: FC<Props> = ({ children, item, setIsFolderOpen, setIsEdit
   }
 
   return (
-    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+    <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <div className="h-full" onContextMenu={(e) => e.preventDefault()}>
         <ContextMenu>
           <ContextMenuTrigger>{children}</ContextMenuTrigger>
@@ -79,22 +79,24 @@ const FileContextMenu: FC<Props> = ({ children, item, setIsFolderOpen, setIsEdit
         </ContextMenu>
       </div>
 
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Delete {item.type === 'file' ? 'File' : 'Folder'}</DialogTitle>
-          <DialogDescription>Are you sure you want to delete {item.data.name}</DialogDescription>
-        </DialogHeader>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Delete {item.type === 'file' ? 'File' : 'Folder'}</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to delete <span className="font-semibold">{item.data.name}</span>?
+          </AlertDialogDescription>
+        </AlertDialogHeader>
         <div></div>
-        <DialogFooter>
+        <AlertDialogFooter>
           <Button variant="outline" onClick={() => setDialogOpen(false)}>
             Cancel
           </Button>
-          <Button type="submit" onClick={() => handleDelete()}>
-            Continue
+          <Button variant="destructive" type="submit" onClick={() => handleDelete()}>
+            Delete
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   )
 }
 

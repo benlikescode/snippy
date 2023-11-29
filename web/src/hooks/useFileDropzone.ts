@@ -129,7 +129,7 @@ export const useFileDropzone = (item: FileItemType, canDropFile: boolean) => {
     [files],
   )
 
-  const { getRootProps } = useDropzone({
+  const dropzone = useDropzone({
     // eslint-disable-next-line @typescript-eslint/no-misused-promises
     onDrop,
     onDragEnter: () => setFileDropzone(item.id),
@@ -140,7 +140,5 @@ export const useFileDropzone = (item: FileItemType, canDropFile: boolean) => {
     noKeyboard: true,
   })
 
-  return {
-    getRootProps,
-  }
+  return { ...dropzone }
 }
