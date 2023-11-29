@@ -76,7 +76,7 @@ const Snippy: FC<Props> = ({ snippy }) => {
 
   return (
     <div className="flex h-full w-full flex-col ">
-      <div className="flex h-[76px] w-full shrink-0 items-center justify-between border-b px-5">
+      <div className="flex h-[70px] w-full shrink-0 items-center justify-between border-b px-5">
         <div className="flex items-center space-x-3">
           <Link href="/" className="h-8 w-8">
             <Button variant="ghost" className="h-full w-full">
