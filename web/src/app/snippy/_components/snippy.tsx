@@ -98,7 +98,7 @@ const Snippy: FC<Props> = ({ snippy }) => {
         </div>
       </div>
 
-      <div className="flex h-full">
+      <div className="flex h-[calc(100%_-_70px)]">
         <div className="flex w-[460px] shrink-0 flex-col border-r bg-[#070707]">
           <Prompts />
           <FileSystem noFiles={snippy?.files ? !(snippy?.files as FileItemType[]).length : true} />
