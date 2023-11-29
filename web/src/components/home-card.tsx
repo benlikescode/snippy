@@ -2,7 +2,7 @@ import { type FileItemType } from '@/types'
 import formatTimeAgo from '@/utils/formatTimeAgo'
 import { type Template } from '@prisma/client'
 import Link from 'next/link'
-import { Fragment, type FC } from 'react'
+import { type FC } from 'react'
 
 type Props = {
   template: Template
@@ -37,15 +37,8 @@ const HomeCard: FC<Props> = ({ template }) => {
   return (
     <Link href={`/snippy/${template.id}`} className="group grid gap-4">
       <div className="h-44 overflow-hidden rounded-[10px] border border-[#323232] bg-[#0D0D0D] pl-4 pt-4 group-hover:border-[#aaa]">
-        <div className="h-full w-full whitespace-pre-line rounded-tl-md border-l border-t border-[#323232] bg-[#171717] p-4 font-mono text-xs font-semibold text-[#a3a3a3]">
-          {getPreviewCode()
-            .split('\n')
-            .map((line, idx) => (
-              <Fragment key={idx}>
-                {line}
-                <br />
-              </Fragment>
-            ))}
+        <div className="h-full w-full rounded-tl-md border-l border-t border-[#323232] bg-[#171717] p-4 font-mono text-xs font-semibold text-[#a3a3a3]">
+          <pre>{getPreviewCode()}</pre>
         </div>
       </div>
 
