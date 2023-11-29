@@ -29,8 +29,8 @@ const Folder: FC<Props> = ({ item, level, canDropFile, noFiles, isRoot = false }
   const [isFolderOpen, setIsFolderOpen] = useState(false)
   const [isEditing, setIsEditing] = useState(item.data.justCreated)
 
-  const { files, fileDropzone, moveItem } = useFileStore()
-  const { getRootProps } = useFileDropzone(item, canDropFile)
+  const { files, fileDropzone, moveItem, createNewFile } = useFileStore()
+  const { getRootProps, open } = useFileDropzone(item, canDropFile)
 
   const [_, drag] = useDrag({
     type: 'folder',
@@ -82,10 +82,11 @@ const Folder: FC<Props> = ({ item, level, canDropFile, noFiles, isRoot = false }
             <p className="mb-6 font-medium text-[#686868]">Drag and drop files or add manually</p>
 
             <div className="w-full space-y-2">
-              <Button size="lg" className="w-full">
+              <Button size="lg" className="w-full" onClick={() => createNewFile()}>
                 Create File
               </Button>
-              <Button size="lg" variant="secondary" className="w-full">
+
+              <Button size="lg" variant="secondary" className="w-full" onClick={open}>
                 Upload File
               </Button>
             </div>
