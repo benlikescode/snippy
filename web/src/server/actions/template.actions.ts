@@ -82,7 +82,7 @@ export const updateTemplate = async (
   }
 }
 
-export const getTemplates = async (workspaceId: string) => {
+export const getTemplates = async (workspaceId: string, page = 1) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
@@ -92,6 +92,9 @@ export const getTemplates = async (workspaceId: string) => {
       },
     }
   }
+
+  const itemsPerPage = 18
+  const offset = (page - 1) * itemsPerPage
 
   const templates = await db.template.findMany({
     where: {
@@ -104,9 +107,14 @@ export const getTemplates = async (workspaceId: string) => {
         },
       },
     },
+    skip: offset,
+    take: itemsPerPage + 1, // get one extra to check for more
+    orderBy: { updatedAt: 'desc' },
   })
 
-  return { templates }
+  const hasMore = templates.length > itemsPerPage
+
+  return { templates: templates.slice(0, itemsPerPage), hasMore }
 }
 
 export const deleteTemplate = async (id: string) => {
