@@ -11,6 +11,7 @@ import { cn } from '@/utils/cn'
 import { type User } from 'next-auth'
 import { type WorkspaceWithInfo } from '@/server/actions/workspace.actions'
 import useGlobalStore from '@/stores/useGlobalStore'
+import WorkspaceSettings from '@/components/workspace-settings'
 
 type Props = {
   user: User
@@ -65,6 +66,8 @@ const SidebarContent: FC<Props> = ({ user, workspaces }) => {
             <CogIcon className={cn('mr-3 h-6', sidebarCollapsed && 'mr-0')} />
             {!sidebarCollapsed && 'Manage Workspace'}
           </SidebarItem>
+
+          <WorkspaceSettings />
         </div>
       </div>
 
