@@ -22,23 +22,29 @@ const HomeCards = () => {
     template.name.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
-  const fetchTemplates = async () => {
+  const fetchTemplates = async (isInitial?: boolean) => {
     if (!activeWorkspace) return
 
-    const res = await getTemplates(activeWorkspace.id, page)
+    const res = await getTemplates(activeWorkspace.id, isInitial ? 1 : page)
 
     if (res.error) {
       return toast({ variant: 'destructive', description: res.error.message })
     }
 
-    setTemplates((prev) => [...prev, ...res.templates])
+    if (isInitial) {
+      setTemplates(res.templates)
+      setPage(2)
+    } else {
+      setTemplates((prev) => [...prev, ...res.templates])
+      setPage((prev) => prev + 1)
+    }
+
     setHasMore(res.hasMore)
-    setPage((prev) => prev + 1)
   }
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    fetchTemplates()
+    fetchTemplates(true)
   }, [activeWorkspace])
 
   return (
