@@ -3,7 +3,7 @@
 import HomeCard from '@/components/home-card'
 import HomeCardSkeleton from '@/components/home-card-skeleton'
 import SortDropdown from '@/components/sort-dropdown'
-import { Input } from '@/components/ui/input'
+import { Searchbar } from '@/components/ui/searchbar'
 import { toast } from '@/components/ui/use-toast'
 import { getTemplates } from '@/server/actions/template.actions'
 import useGlobalStore from '@/stores/useGlobalStore'
@@ -44,13 +44,12 @@ const HomeCards = () => {
   return (
     <>
       <div className="mb-5 mt-9 flex items-center gap-3">
-        <Input
-          type="search"
+        <Searchbar
           placeholder="Find templates..."
-          className="h-[42px] flex-1 rounded-[5px] border border-[#323232] bg-[#26262635] text-[#737373]"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
+
         <SortDropdown templates={templates} setTemplates={setTemplates} />
       </div>
 
@@ -72,6 +71,7 @@ const HomeCards = () => {
           </div>
         }
         scrollableTarget="main"
+        style={{ overflow: 'visible' }} // override default
         className="grid grid-cols-3 gap-5"
       >
         {!filteredTemplates.length &&
