@@ -1,5 +1,7 @@
 import HomeCards from '@/components/home-cards'
+import { funFacts } from '@/constants/funFacts'
 import { getServerAuthSession } from '@/server/auth'
+import { LightBulbIcon } from '@heroicons/react/24/solid'
 import { redirect } from 'next/navigation'
 
 const HomePage = async () => {
@@ -21,12 +23,21 @@ const HomePage = async () => {
     return `${greeting} ${name}`
   }
 
+  const getRandomFact = () => {
+    return funFacts[Math.floor(Math.random() * funFacts.length)]
+  }
+
   return (
     <main id="main" className="w-full overflow-y-auto">
       <div className="mx-auto my-16 max-w-screen-lg px-4">
         <div>
-          <h2 className="mb-2 text-2xl font-bold">{getGreeting()}</h2>
-          <p className="text-[#868686]">Speed up component creation & usage.</p>
+          <h2 className="mb-2 text-2xl font-medium">{getGreeting()}</h2>
+          <div className="flex items-center space-x-2">
+            <div className="flex h-[22px] w-[22px] items-center justify-center rounded-[5px] bg-[#282828]">
+              <LightBulbIcon className="h-[14px] w-[14px] text-[#737373]" />
+            </div>
+            <p className="text-[15px] font-medium text-[#868686]">{getRandomFact()}</p>
+          </div>
         </div>
 
         <HomeCards />
