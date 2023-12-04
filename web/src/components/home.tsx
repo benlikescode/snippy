@@ -70,7 +70,7 @@ const Home: FC<Props> = ({ username, randomFact }) => {
 
   return (
     <main id="main" className="w-full overflow-y-auto">
-      <div className="mx-auto flex h-full max-w-screen-lg flex-col px-4 py-16">
+      <div className="mx-auto flex min-h-full max-w-screen-lg flex-col px-4 py-16">
         <div>
           <h2 className="mb-2 text-2xl font-medium">{getGreeting()}</h2>
           <div className="flex items-center space-x-2">
