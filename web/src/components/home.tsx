@@ -11,7 +11,8 @@ import useGlobalStore from '@/stores/useGlobalStore'
 import { type Template } from '@prisma/client'
 import { type FC, useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { LightBulbIcon } from '@heroicons/react/24/solid'
+import { LightBulbIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import { Button } from '@/components/ui/button'
 
 type Props = {
   username?: string | null
@@ -69,7 +70,7 @@ const Home: FC<Props> = ({ username, randomFact }) => {
 
   return (
     <main id="main" className="w-full overflow-y-auto">
-      <div className="mx-auto my-16 max-w-screen-lg px-4">
+      <div className="mx-auto flex h-full max-w-screen-lg flex-col px-4 py-16">
         <div>
           <h2 className="mb-2 text-2xl font-medium">{getGreeting()}</h2>
           <div className="flex items-center space-x-2">
@@ -90,34 +91,52 @@ const Home: FC<Props> = ({ username, randomFact }) => {
           <SortDropdown templates={templates} setTemplates={setTemplates} />
         </div>
 
-        <InfiniteScroll
-          dataLength={templates.length}
-          next={() => fetchTemplates()}
-          hasMore={hasMore}
-          loader={
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '100%',
-                padding: '1rem',
-              }}
-            >
-              loading...
-            </div>
-          }
-          scrollableTarget="main"
-          style={{ overflow: 'visible' }} // override default
-          className="grid grid-cols-3 gap-5"
-        >
-          {!filteredTemplates.length &&
-            Array.from({ length: 6 }, (_, idx) => <HomeCardSkeleton key={idx} />)}
+        {!!templates.length ? (
+          <InfiniteScroll
+            dataLength={templates.length}
+            next={() => fetchTemplates()}
+            hasMore={hasMore}
+            loader={
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '100%',
+                  padding: '1rem',
+                }}
+              >
+                loading...
+              </div>
+            }
+            scrollableTarget="main"
+            style={{ overflow: 'visible' }} // override default
+            className="grid grid-cols-3 gap-5"
+          >
+            {!filteredTemplates.length &&
+              Array.from({ length: 6 }, (_, idx) => <HomeCardSkeleton key={idx} />)}
 
-          {filteredTemplates.map((template) => (
-            <HomeCard key={template.id} template={template} />
-          ))}
-        </InfiniteScroll>
+            {filteredTemplates.map((template) => (
+              <HomeCard key={template.id} template={template} />
+            ))}
+          </InfiniteScroll>
+        ) : (
+          <div className="flex w-full flex-1 select-none flex-col items-center justify-center space-y-4 rounded-md border border-dashed bg-[#121212]">
+            <div className="flex h-20 w-20 items-center justify-center rounded-full border border-[#222] bg-[#181818] shadow-lg">
+              <MagnifyingGlassIcon className="h-8 w-8 text-[#737373]" />
+            </div>
+            <p className=" text-[#737373]">{`You do not have any snippy's yet`}</p>
+            <div className="space-y-2">
+              <Button size="lg" className="w-full">
+                Create Template
+              </Button>
+
+              <Button size="lg" variant="secondary" className="w-full">
+                Create Snippets
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </main>
   )
