@@ -71,7 +71,7 @@ const Home: FC<Props> = ({ username, randomFact }) => {
   return (
     <main id="main" className="w-full overflow-y-auto">
       <div className="mx-auto flex min-h-full max-w-screen-lg flex-col px-4 py-16">
-        <div>
+        <div className="mb-9">
           <h2 className="mb-2 text-2xl font-medium">{getGreeting()}</h2>
           <div className="flex items-center space-x-2">
             <div className="flex h-[22px] w-[22px] items-center justify-center rounded-[5px] bg-[#282828]">
@@ -81,45 +81,46 @@ const Home: FC<Props> = ({ username, randomFact }) => {
           </div>
         </div>
 
-        <div className="mb-5 mt-9 flex items-center gap-3">
-          <Searchbar
-            placeholder="Find templates..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-
-          <SortDropdown templates={templates} setTemplates={setTemplates} />
-        </div>
-
         {!!templates.length ? (
-          <InfiniteScroll
-            dataLength={templates.length}
-            next={() => fetchTemplates()}
-            hasMore={hasMore}
-            loader={
-              <div
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '100%',
-                  padding: '1rem',
-                }}
-              >
-                loading...
-              </div>
-            }
-            scrollableTarget="main"
-            style={{ overflow: 'visible' }} // override default
-            className="grid grid-cols-3 gap-5"
-          >
-            {!filteredTemplates.length &&
-              Array.from({ length: 6 }, (_, idx) => <HomeCardSkeleton key={idx} />)}
+          <>
+            <div className="mb-5 flex items-center gap-3">
+              <Searchbar
+                placeholder="Find templates..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
 
-            {filteredTemplates.map((template) => (
-              <HomeCard key={template.id} template={template} />
-            ))}
-          </InfiniteScroll>
+              <SortDropdown templates={templates} setTemplates={setTemplates} />
+            </div>
+            <InfiniteScroll
+              dataLength={templates.length}
+              next={() => fetchTemplates()}
+              hasMore={hasMore}
+              loader={
+                <div
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    width: '100%',
+                    padding: '1rem',
+                  }}
+                >
+                  loading...
+                </div>
+              }
+              scrollableTarget="main"
+              style={{ overflow: 'visible' }} // override default
+              className="grid grid-cols-3 gap-5"
+            >
+              {!filteredTemplates.length &&
+                Array.from({ length: 6 }, (_, idx) => <HomeCardSkeleton key={idx} />)}
+
+              {filteredTemplates.map((template) => (
+                <HomeCard key={template.id} template={template} />
+              ))}
+            </InfiniteScroll>
+          </>
         ) : (
           <div className="flex w-full flex-1 select-none flex-col items-center justify-center space-y-4 rounded-md border border-dashed bg-[#121212]">
             <div className="flex h-20 w-20 items-center justify-center rounded-full border border-[#222] bg-[#181818] shadow-lg">
