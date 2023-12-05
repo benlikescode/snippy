@@ -30,7 +30,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { type ComponentPropsWithoutRef, type FC, useState, useEffect } from 'react'
+import { type ComponentPropsWithoutRef, type FC, useState, useEffect, type FormEvent } from 'react'
 import pluralize from '@/utils/pluralize'
 import { createWorkspace, type WorkspaceWithInfo } from '@/server/actions/workspace.actions'
 import { toast } from '@/components/ui/use-toast'
@@ -62,7 +62,9 @@ const WorkspaceSwitcher: FC<Props> = ({ workspaces }) => {
       .slice(0, 2)
   }
 
-  const createNewWorkspace = async () => {
+  const createNewWorkspace = async (e: FormEvent) => {
+    e.preventDefault()
+
     const res = await createWorkspace(newWorkspaceName)
 
     if (res.error) {
@@ -167,7 +169,7 @@ const WorkspaceSwitcher: FC<Props> = ({ workspaces }) => {
             Organize your templates and collaborate with others.
           </DialogDescription>
         </DialogHeader>
-        <div>
+        <form onSubmit={createNewWorkspace}>
           <div className="space-y-4 py-2 pb-4">
             <div className="space-y-2">
               <Label htmlFor="name">Name</Label>
@@ -178,15 +180,14 @@ const WorkspaceSwitcher: FC<Props> = ({ workspaces }) => {
               />
             </div>
           </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setDialogOpen(false)}>
-            Cancel
-          </Button>
-          <Button type="submit" onClick={createNewWorkspace}>
-            Create
-          </Button>
-        </DialogFooter>
+
+          <DialogFooter>
+            <Button variant="outline" type="button" onClick={() => setDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button type="submit">Create</Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   )

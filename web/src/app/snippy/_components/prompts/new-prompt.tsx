@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { type FormEvent, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -24,7 +24,9 @@ const NewPrompt = () => {
   const { prompts, addPrompt } = useSnippyStore()
   const { toast } = useToast()
 
-  const addNewPrompt = () => {
+  const addNewPrompt = (e: FormEvent) => {
+    e.preventDefault()
+
     if (!prompt || !variable) {
       return toast({ description: 'Missing required values' })
     }
@@ -57,7 +59,7 @@ const NewPrompt = () => {
         <DialogHeader>
           <DialogTitle>New Prompt</DialogTitle>
         </DialogHeader>
-        <div>
+        <form onSubmit={addNewPrompt}>
           <div className="space-y-4 py-2 pb-4">
             <div className="space-y-2">
               <Label htmlFor="prompt">Prompt</Label>
@@ -68,15 +70,16 @@ const NewPrompt = () => {
               <Input id="variable" value={variable} onChange={(e) => setVariable(e.target.value)} />
             </div>
           </div>
-        </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
-          <Button variant="modal" type="submit" onClick={() => addNewPrompt()}>
-            Confirm
-          </Button>
-        </DialogFooter>
+
+          <DialogFooter>
+            <Button variant="outline" type="button" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button variant="modal" type="submit">
+              Confirm
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   )

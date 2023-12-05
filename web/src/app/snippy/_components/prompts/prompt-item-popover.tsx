@@ -15,7 +15,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { type FC, useState } from 'react'
+import { type FC, useState, type FormEvent } from 'react'
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'
 import { useToast } from '@/components/ui/use-toast'
 import useSnippyStore from '@/stores/useSnippyStore'
@@ -34,7 +34,9 @@ const PromptItemPopover: FC<Props> = ({ promptItem }) => {
   const { prompts, updatePrompt, removePrompt } = useSnippyStore()
   const { toast } = useToast()
 
-  const editPrompt = () => {
+  const editPrompt = (e: FormEvent) => {
+    e.preventDefault()
+
     if (!prompt || !variable) {
       return toast({ description: 'Missing required values' })
     }
@@ -69,7 +71,7 @@ const PromptItemPopover: FC<Props> = ({ promptItem }) => {
           <DialogHeader>
             <DialogTitle>Edit Prompt</DialogTitle>
           </DialogHeader>
-          <div>
+          <form onSubmit={editPrompt}>
             <div className="space-y-4 py-2 pb-4">
               <div className="space-y-2">
                 <Label htmlFor="prompt">Prompt</Label>
@@ -84,15 +86,16 @@ const PromptItemPopover: FC<Props> = ({ promptItem }) => {
                 />
               </div>
             </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-            <Button variant="modal" type="submit" onClick={() => editPrompt()}>
-              Update
-            </Button>
-          </DialogFooter>
+
+            <DialogFooter>
+              <Button variant="outline" type="button" onClick={() => setOpen(false)}>
+                Cancel
+              </Button>
+              <Button variant="modal" type="submit">
+                Update
+              </Button>
+            </DialogFooter>
+          </form>
         </DialogContent>
       </Dialog>
     </>
