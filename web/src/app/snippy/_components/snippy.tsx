@@ -12,7 +12,6 @@ import { createTemplate, updateTemplate } from '@/server/actions/template.action
 import { toast } from '@/components/ui/use-toast'
 import { type Template } from '@prisma/client'
 import { type FileItemType, type PromptType } from '@/types'
-import useGlobalStore from '@/stores/useGlobalStore'
 import { useRouter } from 'next/navigation'
 import { ChevronLeftIcon } from '@radix-ui/react-icons'
 import Prompts from './prompts/prompts'
@@ -28,7 +27,6 @@ const Snippy: FC<Props> = ({ snippy }) => {
   const { files, pathToOpenFile, openFile, setFiles, setOpenFile, setPathToOpenFile } =
     useFileStore()
   const { prompts, snippyName, setPrompts, setSnippyName } = useSnippyStore()
-  const { activeWorkspace } = useGlobalStore()
   const router = useRouter()
 
   useEffect(() => {
@@ -47,29 +45,27 @@ const Snippy: FC<Props> = ({ snippy }) => {
   }
 
   const handleSaveChanges = async () => {
-    if (!snippy) return
+    try {
+      if (!snippy) return
 
-    const res = await updateTemplate(snippy.id, snippyName, prompts, files)
+      const res = await updateTemplate(snippy.id, snippyName, prompts, files)
 
-    if (res.error) {
-      return toast({ variant: 'destructive', description: res.error.message })
+      toast({ description: res.message })
+      router.refresh()
+    } catch (err) {
+      toast({ variant: 'destructive', description: (err as Error).message })
     }
-
-    toast({ description: res.message })
-    router.refresh()
   }
 
   const handleCreateSnippy = async () => {
-    if (!activeWorkspace) return
+    try {
+      const res = await createTemplate(snippyName, prompts, files)
 
-    const res = await createTemplate(snippyName, prompts, files, activeWorkspace.id)
-
-    if (res.error) {
-      return toast({ variant: 'destructive', description: res.error.message })
+      toast({ description: res.message })
+      router.replace(`/snippy/${res.id}`)
+    } catch (err) {
+      toast({ variant: 'destructive', description: (err as Error).message })
     }
-
-    toast({ description: res.message })
-    router.replace(`/snippy/${res.id}`)
   }
 
   return (

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
 'use client'
 
 import HomeCard from '@/components/home-card'
@@ -7,9 +6,8 @@ import SortDropdown from '@/components/sort-dropdown'
 import { Searchbar } from '@/components/ui/searchbar'
 import { toast } from '@/components/ui/use-toast'
 import { getTemplates } from '@/server/actions/template.actions'
-import useGlobalStore from '@/stores/useGlobalStore'
 import { type Template } from '@prisma/client'
-import { type FC, useEffect, useState } from 'react'
+import { type FC, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { LightBulbIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { Button } from '@/components/ui/button'
@@ -17,41 +15,29 @@ import { Button } from '@/components/ui/button'
 type Props = {
   username?: string | null
   randomFact?: string
+  initialTemplates: Template[]
 }
 
-const Home: FC<Props> = ({ username, randomFact }) => {
-  const [templates, setTemplates] = useState<Template[]>([])
+const Home: FC<Props> = ({ username, randomFact, initialTemplates }) => {
+  const [templates, setTemplates] = useState<Template[]>(initialTemplates)
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
-  const { activeWorkspace } = useGlobalStore()
 
   const filteredTemplates = templates.filter((template) =>
     template.name.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
-  useEffect(() => {
-    fetchTemplates(true)
-  }, [activeWorkspace])
+  const fetchTemplates = async () => {
+    try {
+      const res = await getTemplates(page)
 
-  const fetchTemplates = async (isInitial?: boolean) => {
-    if (!activeWorkspace) return
-
-    const res = await getTemplates(activeWorkspace.id, isInitial ? 1 : page)
-
-    if (res.error) {
-      return toast({ variant: 'destructive', description: res.error.message })
-    }
-
-    if (isInitial) {
-      setTemplates(res.templates)
-      setPage(2)
-    } else {
       setTemplates((prev) => [...prev, ...res.templates])
       setPage((prev) => prev + 1)
+      setHasMore(res.hasMore)
+    } catch (err) {
+      toast({ variant: 'destructive', description: (err as Error).message })
     }
-
-    setHasMore(res.hasMore)
   }
 
   const getGreeting = () => {

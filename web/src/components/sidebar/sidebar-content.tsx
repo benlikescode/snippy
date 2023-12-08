@@ -9,16 +9,17 @@ import AccountPopover from '@/components/sidebar/account-popover'
 import { type FC } from 'react'
 import { cn } from '@/utils/cn'
 import { type User } from 'next-auth'
-import { type WorkspaceWithInfo } from '@/server/actions/workspace.actions'
 import useGlobalStore from '@/stores/useGlobalStore'
 import WorkspaceSettings from '@/components/workspace-settings'
+import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
 
 type Props = {
   user: User
+  activeWorkspace: WorkspaceWithInfo
   workspaces: WorkspaceWithInfo[]
 }
 
-const SidebarContent: FC<Props> = ({ user, workspaces }) => {
+const SidebarContent: FC<Props> = ({ user, activeWorkspace, workspaces }) => {
   const pathname = usePathname()
   const router = useRouter()
 
@@ -35,7 +36,7 @@ const SidebarContent: FC<Props> = ({ user, workspaces }) => {
         sidebarCollapsed && 'w-[74px]',
       )}
     >
-      <WorkspaceSwitcher workspaces={workspaces} />
+      <WorkspaceSwitcher activeWorkspace={activeWorkspace} workspaces={workspaces} />
 
       <div className={cn('overflow-y-auto p-4', sidebarCollapsed && 'p-3')}>
         <Button
@@ -71,7 +72,7 @@ const SidebarContent: FC<Props> = ({ user, workspaces }) => {
         </div>
       </div>
 
-      <AccountPopover />
+      <AccountPopover user={user} />
     </div>
   )
 }

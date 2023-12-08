@@ -30,27 +30,21 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { type ComponentPropsWithoutRef, type FC, useState, useEffect, type FormEvent } from 'react'
+import { type ComponentPropsWithoutRef, type FC, useState, type FormEvent } from 'react'
 import pluralize from '@/utils/pluralize'
-import { createWorkspace, type WorkspaceWithInfo } from '@/server/actions/workspace.actions'
+import { createWorkspace } from '@/server/actions/workspace.actions'
 import { toast } from '@/components/ui/use-toast'
-import useGlobalStore from '@/stores/useGlobalStore'
+import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
 
 type Props = ComponentPropsWithoutRef<typeof DropdownMenuTrigger> & {
+  activeWorkspace: WorkspaceWithInfo
   workspaces: WorkspaceWithInfo[]
 }
 
-const WorkspaceSwitcher: FC<Props> = ({ workspaces }) => {
+const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, workspaces }) => {
   const [open, setOpen] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [newWorkspaceName, setNewWorkspaceName] = useState('')
-  const { sidebarCollapsed, activeWorkspace, setActiveWorkspace } = useGlobalStore()
-
-  useEffect(() => {
-    if (!workspaces[0]) return
-
-    setActiveWorkspace(workspaces[0])
-  }, [])
 
   const getAcronym = (str: string) => {
     if (!str) return ''
@@ -65,13 +59,12 @@ const WorkspaceSwitcher: FC<Props> = ({ workspaces }) => {
   const createNewWorkspace = async (e: FormEvent) => {
     e.preventDefault()
 
-    const res = await createWorkspace(newWorkspaceName)
-
-    if (res.error) {
-      return toast({ description: res.error.message })
+    try {
+      await createWorkspace(newWorkspaceName)
+      setDialogOpen(false)
+    } catch (err) {
+      toast({ variant: 'destructive', description: (err as Error).message })
     }
-
-    setDialogOpen(false)
   }
 
   if (!activeWorkspace) {
@@ -85,28 +78,23 @@ const WorkspaceSwitcher: FC<Props> = ({ workspaces }) => {
           <div
             aria-expanded={true}
             aria-label="Select a team"
-            className={cn(
-              'flex cursor-pointer items-center border-b p-4 hover:bg-stone-900',
-              sidebarCollapsed && 'justify-center p-3',
-            )}
+            className="flex cursor-pointer items-center border-b p-4 hover:bg-stone-900"
           >
             <div className="flex h-11 w-11 items-center justify-center rounded-md bg-[#2c3036] font-semibold">
               {getAcronym(activeWorkspace.name)}
             </div>
 
-            <div className={cn('ml-3', sidebarCollapsed && 'hidden')}>
+            <div className="ml-3">
               <div>{activeWorkspace.name}</div>
               <div className="text-left text-sm text-[#5a626c]">
-                {pluralize('member', activeWorkspace._count.user)}
+                {pluralize('member', activeWorkspace._count.members)}
               </div>
             </div>
 
-            <CaretSortIcon
-              className={cn('ml-auto h-6 w-6 shrink-0 opacity-50', sidebarCollapsed && 'hidden')}
-            />
+            <CaretSortIcon className="ml-auto h-6 w-6 shrink-0 opacity-50" />
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="p-0" align="start" alignOffset={sidebarCollapsed ? 12 : 16}>
+        <DropdownMenuContent className="p-0" align="start" alignOffset={16}>
           <Command>
             <CommandList>
               <CommandInput placeholder="Find workspace..." />
@@ -117,7 +105,7 @@ const WorkspaceSwitcher: FC<Props> = ({ workspaces }) => {
                   <CommandItem
                     key={workspace.id}
                     onSelect={() => {
-                      setActiveWorkspace(workspace)
+                      // setActiveWorkspace(workspace)
                       setOpen(false)
                     }}
                     className="mb-1 last:mb-0"

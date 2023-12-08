@@ -6,26 +6,29 @@ import {
   DropdownMenuTrigger,
   DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
-import { useState } from 'react'
+import { type FC, useState } from 'react'
 import {
   CaretSortIcon,
   ChatBubbleIcon,
   ExitIcon,
   MoonIcon,
   PersonIcon,
-  SunIcon,
 } from '@radix-ui/react-icons'
-import { signOut, useSession } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Switch } from '@/components/ui/switch'
 import { cn } from '@/utils/cn'
 import Link from 'next/link'
 import useGlobalStore from '@/stores/useGlobalStore'
 import { useRouter } from 'next/navigation'
+import { type User } from 'next-auth'
 
-const AccountPopover = () => {
+type Props = {
+  user: User
+}
+
+const AccountPopover: FC<Props> = ({ user }) => {
   const [open, setOpen] = useState(false)
-  const { data: session } = useSession()
   const { sidebarCollapsed } = useGlobalStore()
   const router = useRouter()
 
@@ -35,7 +38,7 @@ const AccountPopover = () => {
     router.push('/login')
   }
 
-  if (!session || !session.user) {
+  if (!user?.id) {
     return (
       <div className="border-t p-4">
         <Link
@@ -60,12 +63,12 @@ const AccountPopover = () => {
           )}
         >
           <Avatar>
-            <AvatarImage src={session.user.image ?? ''} />
+            <AvatarImage src={user.image ?? ''} />
           </Avatar>
 
           <div className={cn('ml-3', sidebarCollapsed && 'hidden')}>
-            <div>{session.user.name}</div>
-            <div className="text-left text-sm text-[#5a626c]">{session.user.email}</div>
+            <div>{user.name}</div>
+            <div className="text-left text-sm text-[#5a626c]">{user.email}</div>
           </div>
           <CaretSortIcon
             className={cn('ml-auto h-6 w-6 shrink-0 opacity-50', sidebarCollapsed && 'hidden')}
@@ -79,12 +82,12 @@ const AccountPopover = () => {
       >
         <div className="flex items-center  p-4">
           <Avatar>
-            <AvatarImage src={session.user.image ?? ''} />
+            <AvatarImage src={user.image ?? ''} />
           </Avatar>
 
           <div className="ml-3">
-            <div>{session.user.name}</div>
-            <div className="text-left text-sm text-[#5a626c]">{session.user.email}</div>
+            <div>{user.name}</div>
+            <div className="text-left text-sm text-[#5a626c]">{user.email}</div>
           </div>
         </div>
 
