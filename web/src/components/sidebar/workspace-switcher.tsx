@@ -32,7 +32,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { type ComponentPropsWithoutRef, type FC, useState, type FormEvent } from 'react'
 import pluralize from '@/utils/pluralize'
-import { createWorkspace } from '@/server/actions/workspace.actions'
+import { changeWorkspace, createWorkspace } from '@/server/actions/workspace.actions'
 import { toast } from '@/components/ui/use-toast'
 import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
 
@@ -65,6 +65,12 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, workspaces }) => {
     } catch (err) {
       toast({ variant: 'destructive', description: (err as Error).message })
     }
+  }
+
+  const handleChangeWorkspace = async (workspaceId: string) => {
+    await changeWorkspace(workspaceId)
+
+    setOpen(false)
   }
 
   if (!activeWorkspace) {
@@ -104,10 +110,7 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, workspaces }) => {
                 {workspaces.map((workspace) => (
                   <CommandItem
                     key={workspace.id}
-                    onSelect={() => {
-                      // setActiveWorkspace(workspace)
-                      setOpen(false)
-                    }}
+                    onSelect={() => handleChangeWorkspace(workspace.id)}
                     className="mb-1 last:mb-0"
                   >
                     <Avatar className="mr-2 h-6 w-6">

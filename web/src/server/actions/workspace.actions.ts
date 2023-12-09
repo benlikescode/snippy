@@ -2,6 +2,7 @@
 
 import { getServerAuthSession } from '@/server/auth'
 import { db } from '@/server/db'
+import { revalidatePath } from 'next/cache'
 
 export const createWorkspace = async (name: string) => {
   const session = await getServerAuthSession()
@@ -41,4 +42,36 @@ export const createWorkspace = async (name: string) => {
   return {
     message: 'The workspace was successfully created',
   }
+}
+
+export const changeWorkspace = async (workspaceId: string) => {
+  const session = await getServerAuthSession()
+
+  if (!session?.user.id) {
+    throw new Error('Unauthorized')
+  }
+
+  await db.$transaction([
+    db.workspaceMember.updateMany({
+      where: {
+        userId: session.user.id,
+        isActive: true,
+      },
+      data: {
+        isActive: false,
+      },
+    }),
+
+    db.workspaceMember.updateMany({
+      where: {
+        userId: session.user.id,
+        workspaceId,
+      },
+      data: {
+        isActive: true,
+      },
+    }),
+  ])
+
+  revalidatePath('/')
 }

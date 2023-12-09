@@ -12,15 +12,12 @@ const Sidebar = async () => {
   const workspaces = await getWorkspaces(session.user.id)
 
   const activeWorkspace = workspaces.find((workspace) =>
-    workspace.members.find((member) => member.userId === session.user.id),
+    workspace.members.find((member) => member.userId === session.user.id && member.isActive),
   )
 
   if (!activeWorkspace) {
     return null
   }
-
-  // const activeWorkspace = workspaces.find(workspace => workspace.activeMembers.find(member => member.id === session.user.id))
-  // const activeWorkspace = await getActiveWorkspace(session.user.id)
 
   return (
     <SidebarContent user={session.user} activeWorkspace={activeWorkspace} workspaces={workspaces} />
@@ -44,16 +41,5 @@ const getWorkspaces = async (userId: string) => {
     },
   })
 }
-
-// const getActiveWorkspace = async (userId: string) => {
-//   return db.user.findUnique({
-//     where: {
-//       id: userId,
-//     },
-//     select: {
-//       activeWorkspace: true,
-//     },
-//   })
-// }
 
 export default Sidebar

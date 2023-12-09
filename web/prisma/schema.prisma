@@ -70,13 +70,14 @@ enum RoleTypes {
 }
 
 model WorkspaceMember {
-    id          String    @id @default(cuid())
     user        User      @relation(fields: [userId], references: [id])
     userId      String
     workspace   Workspace @relation(fields: [workspaceId], references: [id])
     workspaceId String
     isActive    Boolean
     role        RoleTypes
+
+    @@id([userId, workspaceId])
 }
 
 model Template {

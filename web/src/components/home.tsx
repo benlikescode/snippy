@@ -7,7 +7,7 @@ import { Searchbar } from '@/components/ui/searchbar'
 import { toast } from '@/components/ui/use-toast'
 import { getTemplates } from '@/server/actions/template.actions'
 import { type Template } from '@prisma/client'
-import { type FC, useState } from 'react'
+import { type FC, useState, useEffect } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { LightBulbIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { Button } from '@/components/ui/button'
@@ -27,6 +27,10 @@ const Home: FC<Props> = ({ username, randomFact, initialTemplates }) => {
   const filteredTemplates = templates.filter((template) =>
     template.name.toLowerCase().includes(searchQuery.toLowerCase()),
   )
+
+  useEffect(() => {
+    setTemplates(initialTemplates)
+  }, [initialTemplates])
 
   const fetchTemplates = async () => {
     try {
