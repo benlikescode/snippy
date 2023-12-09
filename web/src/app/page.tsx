@@ -13,21 +13,7 @@ const HomePage = async () => {
     return funFacts[Math.floor(Math.random() * funFacts.length)]
   }
 
-  const templates = await getTemplates()
-
-  return (
-    <Home username={session.user.name} randomFact={getRandomFact()} initialTemplates={templates} />
-  )
-}
-
-export const getTemplates = async () => {
-  const session = await getServerAuthSession()
-
-  if (!session?.user.id) {
-    throw new Error('Unauthorized')
-  }
-
-  return await db.template.findMany({
+  const templates = await db.template.findMany({
     where: {
       workspace: {
         members: {
@@ -41,6 +27,10 @@ export const getTemplates = async () => {
     take: 18,
     orderBy: { updatedAt: 'desc' },
   })
+
+  return (
+    <Home username={session.user.name} randomFact={getRandomFact()} initialTemplates={templates} />
+  )
 }
 
 export default HomePage
