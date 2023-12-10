@@ -1,61 +1,91 @@
 'use server'
+
 import { getServerAuthSession } from '@/server/auth'
 import { db } from '@/server/db'
-
-export type WorkspaceWithInfo = Awaited<ReturnType<typeof getWorkspaces>>[number]
-
-export const getWorkspaces = async (userId: string) => {
-  return db.workspace.findMany({
-    where: {
-      user: {
-        some: {
-          id: userId,
-        },
-      },
-    },
-    include: {
-      _count: true,
-    },
-  })
-}
+import { revalidatePath } from 'next/cache'
 
 export const createWorkspace = async (name: string) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
-    return {
-      error: {
-        message: 'Unauthorized',
-      },
-    }
+    throw new Error('Unauthorized')
   }
 
   const alreadyExists = await db.workspace.findFirst({
     where: {
       name,
+      members: {
+        some: {
+          userId: session.user.id,
+        },
+      },
     },
   })
 
   if (alreadyExists) {
-    return {
-      error: {
-        message: 'A workspace already exists with that name',
-      },
-    }
+    throw new Error('A workspace already exists with that name')
   }
 
-  await db.workspace.create({
-    data: {
-      user: {
-        connect: {
-          id: session.user.id,
+  await db.$transaction([
+    db.workspaceMember.updateMany({
+      where: {
+        userId: session.user.id,
+        isActive: true,
+      },
+      data: {
+        isActive: false,
+      },
+    }),
+
+    db.workspace.create({
+      data: {
+        name,
+        members: {
+          create: {
+            isActive: true,
+            role: 'OWNER',
+            userId: session.user.id,
+          },
         },
       },
-      name,
-    },
-  })
+    }),
+  ])
+
+  revalidatePath('/')
 
   return {
     message: 'The workspace was successfully created',
   }
+}
+
+export const changeWorkspace = async (workspaceId: string) => {
+  const session = await getServerAuthSession()
+
+  if (!session?.user.id) {
+    throw new Error('Unauthorized')
+  }
+
+  await db.$transaction([
+    db.workspaceMember.updateMany({
+      where: {
+        userId: session.user.id,
+        isActive: true,
+      },
+      data: {
+        isActive: false,
+      },
+    }),
+
+    db.workspaceMember.updateMany({
+      where: {
+        userId: session.user.id,
+        workspaceId,
+      },
+      data: {
+        isActive: true,
+      },
+    }),
+  ])
+
+  revalidatePath('/')
 }

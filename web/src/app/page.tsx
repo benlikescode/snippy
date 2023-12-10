@@ -1,5 +1,5 @@
 import Home from '@/components/home'
-import { funFacts } from '@/constants/funFacts'
+import { getTemplates } from '@/server/actions/template.actions'
 import { getServerAuthSession } from '@/server/auth'
 import { redirect } from 'next/navigation'
 
@@ -8,11 +8,9 @@ const HomePage = async () => {
 
   if (!session?.user) return redirect('/login')
 
-  const getRandomFact = () => {
-    return funFacts[Math.floor(Math.random() * funFacts.length)]
-  }
+  const templates = await getTemplates()
 
-  return <Home username={session.user.name} randomFact={getRandomFact()} />
+  return <Home initialTemplates={templates} />
 }
 
 export default HomePage

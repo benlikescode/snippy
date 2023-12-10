@@ -34,11 +34,13 @@ export const GET = async (req: NextRequest) => {
     where: {
       workspace: {
         id: workspaceId,
-        user: {
+        members: {
           some: {
-            accounts: {
-              some: {
-                providerAccountId: accountId.toString(),
+            user: {
+              accounts: {
+                some: {
+                  providerAccountId: accountId.toString(),
+                },
               },
             },
           },

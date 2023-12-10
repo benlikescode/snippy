@@ -30,27 +30,28 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { type ComponentPropsWithoutRef, type FC, useState, useEffect, type FormEvent } from 'react'
+import { type ComponentPropsWithoutRef, type FC, useState, type FormEvent, useEffect } from 'react'
 import pluralize from '@/utils/pluralize'
-import { createWorkspace, type WorkspaceWithInfo } from '@/server/actions/workspace.actions'
+import { changeWorkspace, createWorkspace } from '@/server/actions/workspace.actions'
 import { toast } from '@/components/ui/use-toast'
-import useGlobalStore from '@/stores/useGlobalStore'
+import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
 
 type Props = ComponentPropsWithoutRef<typeof DropdownMenuTrigger> & {
-  workspaces: WorkspaceWithInfo[]
+  activeWorkspace: WorkspaceWithInfo
+  initialWorkspaces: WorkspaceWithInfo[]
 }
 
-const WorkspaceSwitcher: FC<Props> = ({ workspaces }) => {
+const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) => {
+  const [workspace, setWorkspace] = useState(activeWorkspace)
+  const [workspaces, setWorkspaces] = useState(initialWorkspaces)
   const [open, setOpen] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [newWorkspaceName, setNewWorkspaceName] = useState('')
-  const { sidebarCollapsed, activeWorkspace, setActiveWorkspace } = useGlobalStore()
 
   useEffect(() => {
-    if (!workspaces[0]) return
-
-    setActiveWorkspace(workspaces[0])
-  }, [])
+    setWorkspace(activeWorkspace)
+    setWorkspaces(workspaces)
+  }, [activeWorkspace, workspaces])
 
   const getAcronym = (str: string) => {
     if (!str) return ''
@@ -65,16 +66,28 @@ const WorkspaceSwitcher: FC<Props> = ({ workspaces }) => {
   const createNewWorkspace = async (e: FormEvent) => {
     e.preventDefault()
 
-    const res = await createWorkspace(newWorkspaceName)
+    try {
+      await createWorkspace(newWorkspaceName)
 
-    if (res.error) {
-      return toast({ description: res.error.message })
+      setDialogOpen(false)
+    } catch (err) {
+      toast({ variant: 'destructive', description: (err as Error).message })
     }
-
-    setDialogOpen(false)
   }
 
-  if (!activeWorkspace) {
+  const handleChangeWorkspace = async (newWorkspace: WorkspaceWithInfo) => {
+    try {
+      setWorkspace(newWorkspace)
+
+      await changeWorkspace(newWorkspace.id)
+
+      setOpen(false)
+    } catch (err) {
+      toast({ variant: 'destructive', description: (err as Error).message })
+    }
+  }
+
+  if (!workspace) {
     return <div></div>
   }
 
@@ -85,58 +98,50 @@ const WorkspaceSwitcher: FC<Props> = ({ workspaces }) => {
           <div
             aria-expanded={true}
             aria-label="Select a team"
-            className={cn(
-              'flex cursor-pointer items-center border-b p-4 hover:bg-stone-900',
-              sidebarCollapsed && 'justify-center p-3',
-            )}
+            className="flex cursor-pointer items-center border-b p-4 hover:bg-stone-900"
           >
             <div className="flex h-11 w-11 items-center justify-center rounded-md bg-[#2c3036] font-semibold">
-              {getAcronym(activeWorkspace.name)}
+              {getAcronym(workspace.name)}
             </div>
 
-            <div className={cn('ml-3', sidebarCollapsed && 'hidden')}>
-              <div>{activeWorkspace.name}</div>
+            <div className="ml-3">
+              <div>{workspace.name}</div>
               <div className="text-left text-sm text-[#5a626c]">
-                {pluralize('member', activeWorkspace._count.user)}
+                {pluralize('member', workspace._count.members)}
               </div>
             </div>
 
-            <CaretSortIcon
-              className={cn('ml-auto h-6 w-6 shrink-0 opacity-50', sidebarCollapsed && 'hidden')}
-            />
+            <CaretSortIcon className="ml-auto h-6 w-6 shrink-0 opacity-50" />
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="p-0" align="start" alignOffset={sidebarCollapsed ? 12 : 16}>
+        <DropdownMenuContent className="p-0" align="start" alignOffset={16}>
           <Command>
             <CommandList>
               <CommandInput placeholder="Find workspace..." />
               <CommandEmpty>No workspace found.</CommandEmpty>
 
               <CommandGroup heading="Personal">
-                {workspaces.map((workspace) => (
+                {workspaces.map((currWorkspace) => (
                   <CommandItem
-                    key={workspace.id}
-                    onSelect={() => {
-                      setActiveWorkspace(workspace)
-                      setOpen(false)
-                    }}
+                    key={currWorkspace.id}
+                    onSelect={() => handleChangeWorkspace(currWorkspace)}
                     className="mb-1 last:mb-0"
                   >
                     <Avatar className="mr-2 h-6 w-6">
                       <AvatarImage
-                        src={`https://avatar.vercel.sh/${workspace.id}.png`}
-                        alt={workspace.name ?? ''}
+                        src={`https://avatar.vercel.sh/${currWorkspace.id}.png`}
+                        alt={currWorkspace.name ?? ''}
                         className="grayscale"
                       />
                       <AvatarFallback>SC</AvatarFallback>
                     </Avatar>
 
-                    {workspace.name}
+                    {currWorkspace.name}
 
                     <CheckIcon
                       className={cn(
                         'ml-auto h-4 w-4',
-                        activeWorkspace.id === workspace.id ? 'opacity-100' : 'opacity-0',
+                        workspace.id === currWorkspace.id ? 'opacity-100' : 'opacity-0',
                       )}
                     />
                   </CommandItem>

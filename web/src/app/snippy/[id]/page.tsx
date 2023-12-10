@@ -19,9 +19,9 @@ const SnippyPage: FC<Props> = async ({ params: { id } }) => {
     where: {
       id,
       workspace: {
-        user: {
+        members: {
           some: {
-            id: session.user.id,
+            userId: session.user.id,
           },
         },
       },

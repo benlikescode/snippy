@@ -1,6 +1,6 @@
 import SidebarContent from '@/components/sidebar/sidebar-content'
-import { getWorkspaces } from '@/server/actions/workspace.actions'
 import { getServerAuthSession } from '@/server/auth'
+import { db } from '@/server/db'
 
 const Sidebar = async () => {
   const session = await getServerAuthSession()
@@ -11,7 +11,39 @@ const Sidebar = async () => {
 
   const workspaces = await getWorkspaces(session.user.id)
 
-  return <SidebarContent user={session.user} workspaces={workspaces} />
+  const activeWorkspace = workspaces.find((workspace) =>
+    workspace.members.find((member) => member.userId === session.user.id && member.isActive),
+  )
+
+  if (!activeWorkspace) {
+    return null
+  }
+
+  return (
+    <SidebarContent
+      user={session.user}
+      activeWorkspace={activeWorkspace}
+      initialWorkspaces={workspaces}
+    />
+  )
+}
+
+export type WorkspaceWithInfo = Awaited<ReturnType<typeof getWorkspaces>>[number]
+
+const getWorkspaces = async (userId: string) => {
+  return db.workspace.findMany({
+    where: {
+      members: {
+        some: {
+          userId,
+        },
+      },
+    },
+    include: {
+      _count: true,
+      members: true,
+    },
+  })
 }
 
 export default Sidebar

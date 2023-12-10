@@ -3,21 +3,17 @@
 import { getServerAuthSession } from '@/server/auth'
 import { db } from '@/server/db'
 import type { FileItemType, PromptType } from '@/types'
+import { revalidatePath } from 'next/cache'
 
 export const createTemplate = async (
   name: string,
   prompts: PromptType[],
   files: FileItemType[],
-  workspaceId: string,
 ) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
-    return {
-      error: {
-        message: 'Unauthorized',
-      },
-    }
+    throw new Error('Unauthorized')
   }
 
   const alreadyExists = await db.template.findFirst({
@@ -27,11 +23,18 @@ export const createTemplate = async (
   })
 
   if (alreadyExists) {
-    return {
-      error: {
-        message: 'A template already exists with that name',
-      },
-    }
+    throw new Error('A template already exists with that name')
+  }
+
+  const activeWorkspace = await db.workspaceMember.findFirst({
+    where: {
+      userId: session.user.id,
+      isActive: true,
+    },
+  })
+
+  if (!activeWorkspace?.workspaceId) {
+    throw new Error('Could not link new template to workspace')
   }
 
   const createdTemplate = await db.template.create({
@@ -39,10 +42,12 @@ export const createTemplate = async (
       name,
       prompts,
       files,
-      workspaceId,
+      workspaceId: activeWorkspace.workspaceId,
       creatorId: session.user.id,
     },
   })
+
+  revalidatePath('/')
 
   return {
     message: 'The template was successfully created',
@@ -59,11 +64,7 @@ export const updateTemplate = async (
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
-    return {
-      error: {
-        message: 'Unauthorized',
-      },
-    }
+    throw new Error('Unauthorized')
   }
 
   await db.template.update({
@@ -82,15 +83,11 @@ export const updateTemplate = async (
   }
 }
 
-export const getTemplates = async (workspaceId: string, page = 1) => {
+export const getTemplates = async (page = 1) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
-    return {
-      error: {
-        message: 'Unauthorized',
-      },
-    }
+    throw new Error('Unauthorized')
   }
 
   const itemsPerPage = 18
@@ -98,11 +95,11 @@ export const getTemplates = async (workspaceId: string, page = 1) => {
 
   const templates = await db.template.findMany({
     where: {
-      workspaceId,
       workspace: {
-        user: {
+        members: {
           some: {
-            id: session.user.id,
+            isActive: true,
+            userId: session.user.id,
           },
         },
       },
@@ -121,20 +118,16 @@ export const deleteTemplate = async (id: string) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
-    return {
-      error: {
-        message: 'Unauthorized',
-      },
-    }
+    throw new Error('Unauthorized')
   }
 
   const hasPermission = await db.template.findFirst({
     where: {
       id,
       workspace: {
-        user: {
+        members: {
           some: {
-            id: session.user.id,
+            userId: session.user.id,
           },
         },
       },
@@ -142,11 +135,7 @@ export const deleteTemplate = async (id: string) => {
   })
 
   if (!hasPermission) {
-    return {
-      error: {
-        message: 'Only members of the workspace can delete templates',
-      },
-    }
+    throw new Error('Only members of the workspace can delete templates')
   }
 
   await db.template.delete({
@@ -154,4 +143,6 @@ export const deleteTemplate = async (id: string) => {
       id,
     },
   })
+
+  revalidatePath('/')
 }

@@ -12,7 +12,6 @@ import { useState } from 'react'
 import { DialogTrigger } from '@radix-ui/react-dialog'
 import { PlusIcon } from '@heroicons/react/24/outline'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
-import useGlobalStore from '@/stores/useGlobalStore'
 
 const MEMBERS = [
   {
@@ -30,8 +29,6 @@ const MEMBERS = [
 const WorkspaceSettings = () => {
   const [open, setOpen] = useState(false)
   const [name, setName] = useState('')
-
-  const { activeWorkspace } = useGlobalStore()
 
   const updateSettings = () => {
     console.log('updated settings')
@@ -57,12 +54,7 @@ const WorkspaceSettings = () => {
             <Label htmlFor="variable" className="text-[#737373]">
               Name
             </Label>
-            <Input
-              id="name"
-              placeholder={activeWorkspace?.name}
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-            />
+            <Input id="name" value={name} onChange={(e) => setName(e.target.value)} />
           </div>
 
           <div className="space-y-4 px-6">
