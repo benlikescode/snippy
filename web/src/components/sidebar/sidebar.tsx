@@ -20,7 +20,11 @@ const Sidebar = async () => {
   }
 
   return (
-    <SidebarContent user={session.user} activeWorkspace={activeWorkspace} workspaces={workspaces} />
+    <SidebarContent
+      user={session.user}
+      activeWorkspace={activeWorkspace}
+      initialWorkspaces={workspaces}
+    />
   )
 }
 

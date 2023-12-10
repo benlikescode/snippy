@@ -3,6 +3,7 @@
 import { getServerAuthSession } from '@/server/auth'
 import { db } from '@/server/db'
 import type { FileItemType, PromptType } from '@/types'
+import { revalidatePath } from 'next/cache'
 
 export const createTemplate = async (
   name: string,
@@ -45,6 +46,8 @@ export const createTemplate = async (
       creatorId: session.user.id,
     },
   })
+
+  revalidatePath('/')
 
   return {
     message: 'The template was successfully created',
@@ -140,4 +143,6 @@ export const deleteTemplate = async (id: string) => {
       id,
     },
   })
+
+  revalidatePath('/')
 }

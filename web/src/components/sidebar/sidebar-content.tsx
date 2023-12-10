@@ -14,10 +14,10 @@ import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
 type Props = {
   user: User
   activeWorkspace: WorkspaceWithInfo
-  workspaces: WorkspaceWithInfo[]
+  initialWorkspaces: WorkspaceWithInfo[]
 }
 
-const SidebarContent: FC<Props> = ({ user, activeWorkspace, workspaces }) => {
+const SidebarContent: FC<Props> = ({ user, activeWorkspace, initialWorkspaces }) => {
   const pathname = usePathname()
   const router = useRouter()
 
@@ -27,7 +27,7 @@ const SidebarContent: FC<Props> = ({ user, activeWorkspace, workspaces }) => {
 
   return (
     <div className="grid h-screen w-[300px] flex-shrink-0 grid-rows-sidebar border-r">
-      <WorkspaceSwitcher activeWorkspace={activeWorkspace} workspaces={workspaces} />
+      <WorkspaceSwitcher activeWorkspace={activeWorkspace} initialWorkspaces={initialWorkspaces} />
 
       <div className="overflow-y-auto p-4">
         <Button

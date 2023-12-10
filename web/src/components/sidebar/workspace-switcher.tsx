@@ -30,7 +30,7 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { type ComponentPropsWithoutRef, type FC, useState, type FormEvent } from 'react'
+import { type ComponentPropsWithoutRef, type FC, useState, type FormEvent, useEffect } from 'react'
 import pluralize from '@/utils/pluralize'
 import { changeWorkspace, createWorkspace } from '@/server/actions/workspace.actions'
 import { toast } from '@/components/ui/use-toast'
@@ -38,13 +38,20 @@ import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
 
 type Props = ComponentPropsWithoutRef<typeof DropdownMenuTrigger> & {
   activeWorkspace: WorkspaceWithInfo
-  workspaces: WorkspaceWithInfo[]
+  initialWorkspaces: WorkspaceWithInfo[]
 }
 
-const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, workspaces }) => {
+const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) => {
+  const [workspace, setWorkspace] = useState(activeWorkspace)
+  const [workspaces, setWorkspaces] = useState(initialWorkspaces)
   const [open, setOpen] = useState(false)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [newWorkspaceName, setNewWorkspaceName] = useState('')
+
+  useEffect(() => {
+    setWorkspace(activeWorkspace)
+    setWorkspaces(workspaces)
+  }, [activeWorkspace, workspaces])
 
   const getAcronym = (str: string) => {
     if (!str) return ''
@@ -61,19 +68,26 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, workspaces }) => {
 
     try {
       await createWorkspace(newWorkspaceName)
+
       setDialogOpen(false)
     } catch (err) {
       toast({ variant: 'destructive', description: (err as Error).message })
     }
   }
 
-  const handleChangeWorkspace = async (workspaceId: string) => {
-    await changeWorkspace(workspaceId)
+  const handleChangeWorkspace = async (newWorkspace: WorkspaceWithInfo) => {
+    try {
+      setWorkspace(newWorkspace)
 
-    setOpen(false)
+      await changeWorkspace(newWorkspace.id)
+
+      setOpen(false)
+    } catch (err) {
+      toast({ variant: 'destructive', description: (err as Error).message })
+    }
   }
 
-  if (!activeWorkspace) {
+  if (!workspace) {
     return <div></div>
   }
 
@@ -87,13 +101,13 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, workspaces }) => {
             className="flex cursor-pointer items-center border-b p-4 hover:bg-stone-900"
           >
             <div className="flex h-11 w-11 items-center justify-center rounded-md bg-[#2c3036] font-semibold">
-              {getAcronym(activeWorkspace.name)}
+              {getAcronym(workspace.name)}
             </div>
 
             <div className="ml-3">
-              <div>{activeWorkspace.name}</div>
+              <div>{workspace.name}</div>
               <div className="text-left text-sm text-[#5a626c]">
-                {pluralize('member', activeWorkspace._count.members)}
+                {pluralize('member', workspace._count.members)}
               </div>
             </div>
 
@@ -107,27 +121,27 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, workspaces }) => {
               <CommandEmpty>No workspace found.</CommandEmpty>
 
               <CommandGroup heading="Personal">
-                {workspaces.map((workspace) => (
+                {workspaces.map((currWorkspace) => (
                   <CommandItem
-                    key={workspace.id}
-                    onSelect={() => handleChangeWorkspace(workspace.id)}
+                    key={currWorkspace.id}
+                    onSelect={() => handleChangeWorkspace(currWorkspace)}
                     className="mb-1 last:mb-0"
                   >
                     <Avatar className="mr-2 h-6 w-6">
                       <AvatarImage
-                        src={`https://avatar.vercel.sh/${workspace.id}.png`}
-                        alt={workspace.name ?? ''}
+                        src={`https://avatar.vercel.sh/${currWorkspace.id}.png`}
+                        alt={currWorkspace.name ?? ''}
                         className="grayscale"
                       />
                       <AvatarFallback>SC</AvatarFallback>
                     </Avatar>
 
-                    {workspace.name}
+                    {currWorkspace.name}
 
                     <CheckIcon
                       className={cn(
                         'ml-auto h-4 w-4',
-                        activeWorkspace.id === workspace.id ? 'opacity-100' : 'opacity-0',
+                        workspace.id === currWorkspace.id ? 'opacity-100' : 'opacity-0',
                       )}
                     />
                   </CommandItem>

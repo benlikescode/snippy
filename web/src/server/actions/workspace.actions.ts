@@ -26,18 +26,32 @@ export const createWorkspace = async (name: string) => {
     throw new Error('A workspace already exists with that name')
   }
 
-  await db.workspace.create({
-    data: {
-      name,
-      members: {
-        create: {
-          isActive: true,
-          role: 'OWNER',
-          userId: session.user.id,
+  await db.$transaction([
+    db.workspaceMember.updateMany({
+      where: {
+        userId: session.user.id,
+        isActive: true,
+      },
+      data: {
+        isActive: false,
+      },
+    }),
+
+    db.workspace.create({
+      data: {
+        name,
+        members: {
+          create: {
+            isActive: true,
+            role: 'OWNER',
+            userId: session.user.id,
+          },
         },
       },
-    },
-  })
+    }),
+  ])
+
+  revalidatePath('/')
 
   return {
     message: 'The workspace was successfully created',

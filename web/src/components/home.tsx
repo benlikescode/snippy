@@ -9,19 +9,17 @@ import { getTemplates } from '@/server/actions/template.actions'
 import { type Template } from '@prisma/client'
 import { type FC, useState, useEffect } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { LightBulbIcon, MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
 import { Button } from '@/components/ui/button'
 
 type Props = {
-  username?: string | null
-  randomFact?: string
-  initialTemplates: Template[]
+  initialTemplates: { templates: Template[]; hasMore: boolean }
 }
 
-const Home: FC<Props> = ({ username, randomFact, initialTemplates }) => {
-  const [templates, setTemplates] = useState<Template[]>(initialTemplates)
+const Home: FC<Props> = ({ initialTemplates }) => {
+  const [templates, setTemplates] = useState<Template[]>(initialTemplates.templates)
   const [page, setPage] = useState(1)
-  const [hasMore, setHasMore] = useState(true)
+  const [hasMore, setHasMore] = useState(initialTemplates.hasMore)
   const [searchQuery, setSearchQuery] = useState('')
 
   const filteredTemplates = templates.filter((template) =>
@@ -29,7 +27,8 @@ const Home: FC<Props> = ({ username, randomFact, initialTemplates }) => {
   )
 
   useEffect(() => {
-    setTemplates(initialTemplates)
+    setTemplates(initialTemplates.templates)
+    setHasMore(initialTemplates.hasMore)
   }, [initialTemplates])
 
   const fetchTemplates = async () => {
@@ -44,31 +43,11 @@ const Home: FC<Props> = ({ username, randomFact, initialTemplates }) => {
     }
   }
 
-  const getGreeting = () => {
-    const currentHour = new Date().getHours()
-    const greeting =
-      currentHour < 12 ? 'Good morning' : currentHour < 18 ? 'Good afternoon' : 'Good evening'
-
-    if (!username) {
-      return greeting
-    }
-
-    const name = username.split(' ')[0]
-
-    return `${greeting} ${name}`
-  }
-
   return (
     <main id="main" className="w-full overflow-y-auto">
       <div className="mx-auto flex min-h-full max-w-screen-lg flex-col px-4 py-16">
         <div className="mb-9">
-          <h2 className="mb-2 text-2xl font-medium">{getGreeting()}</h2>
-          <div className="flex items-center space-x-2">
-            <div className="flex h-[22px] w-[22px] items-center justify-center rounded-[5px] bg-[#282828]">
-              <LightBulbIcon className="h-[14px] w-[14px] text-[#737373]" />
-            </div>
-            <p className="text-[15px] font-medium text-[#868686]">{randomFact}</p>
-          </div>
+          <h2 className="text-2xl font-semibold">{`Your Snippy's`}</h2>
         </div>
 
         {!!templates.length ? (
@@ -112,7 +91,7 @@ const Home: FC<Props> = ({ username, randomFact, initialTemplates }) => {
             </InfiniteScroll>
           </>
         ) : (
-          <div className="flex w-full flex-1 select-none flex-col items-center justify-center space-y-4 rounded-md border border-dashed bg-[#121212]">
+          <div className="flex max-h-[550px] w-full flex-1 select-none flex-col items-center justify-center space-y-4 rounded-md border border-dashed bg-[#121212]">
             <div className="flex h-20 w-20 items-center justify-center rounded-full border border-[#222] bg-[#181818] shadow-lg">
               <MagnifyingGlassIcon className="h-8 w-8 text-[#737373]" />
             </div>
