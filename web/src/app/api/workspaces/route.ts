@@ -24,11 +24,13 @@ export const GET = async () => {
 
   const workspaces = await db.workspace.findMany({
     where: {
-      user: {
+      members: {
         some: {
-          accounts: {
-            some: {
-              providerAccountId: accountId.toString(),
+          user: {
+            accounts: {
+              some: {
+                providerAccountId: accountId.toString(),
+              },
             },
           },
         },
