@@ -47,7 +47,7 @@ const Home: FC<Props> = ({ initialTemplates }) => {
     <main id="main" className="w-full overflow-y-auto">
       <div className="mx-auto flex min-h-full max-w-screen-lg flex-col px-4 py-16">
         <div className="mb-9">
-          <h2 className="text-2xl font-semibold">{`Your Snippy's`}</h2>
+          <h2 className="text-2xl font-semibold">Your Snippys</h2>
         </div>
 
         {!!templates.length ? (
