@@ -4,7 +4,6 @@ import GitHubProvider from 'next-auth/providers/github'
 import { env } from '@/env.mjs'
 import { db } from '@/server/db'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
-import { type Workspace } from '@prisma/client'
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
@@ -16,7 +15,12 @@ declare module 'next-auth' {
   interface Session extends DefaultSession {
     user: DefaultSession['user'] & {
       id: string
+      installedExtension: boolean
     }
+  }
+
+  interface User {
+    installedExtension: boolean
   }
 }
 
@@ -39,9 +43,11 @@ export const authOptions: NextAuthOptions = {
   },
   events: {
     createUser: async ({ user }) => {
+      const workspaceName = user.name ? `${user.name}'s Workspace` : 'Default Workspace'
+
       await db.workspace.create({
         data: {
-          name: 'Default Workspace',
+          name: workspaceName,
           members: {
             create: {
               isActive: true,
@@ -49,6 +55,7 @@ export const authOptions: NextAuthOptions = {
               userId: user.id,
             },
           },
+          isDefault: true,
         },
       })
     },

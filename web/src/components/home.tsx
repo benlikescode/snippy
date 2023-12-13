@@ -9,14 +9,16 @@ import { getTemplates } from '@/server/actions/template.actions'
 import { type Template } from '@prisma/client'
 import { type FC, useState, useEffect } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import { MagnifyingGlassIcon, LightBulbIcon } from '@heroicons/react/24/solid'
 import { Button } from '@/components/ui/button'
+import Link from 'next/link'
 
 type Props = {
   initialTemplates: { templates: Template[]; hasMore: boolean }
+  randomFact: string
 }
 
-const Home: FC<Props> = ({ initialTemplates }) => {
+const Home: FC<Props> = ({ initialTemplates, randomFact }) => {
   const [templates, setTemplates] = useState<Template[]>(initialTemplates.templates)
   const [page, setPage] = useState(1)
   const [hasMore, setHasMore] = useState(initialTemplates.hasMore)
@@ -47,7 +49,13 @@ const Home: FC<Props> = ({ initialTemplates }) => {
     <main id="main" className="w-full overflow-y-auto">
       <div className="mx-auto flex min-h-full max-w-screen-lg flex-col px-4 py-16">
         <div className="mb-9">
-          <h2 className="text-2xl font-semibold">Your Snippys</h2>
+          <h2 className="mb-2 text-2xl font-semibold">Your Snippys</h2>
+          <div className="flex items-center space-x-2">
+            <div className="flex h-[22px] w-[22px] items-center justify-center rounded-[5px] bg-[#282828]">
+              <LightBulbIcon className="h-[14px] w-[14px] text-[#737373]" />
+            </div>
+            <p className="text-[15px] font-medium text-[#868686]">{randomFact}</p>
+          </div>
         </div>
 
         {!!templates.length ? (
@@ -91,19 +99,17 @@ const Home: FC<Props> = ({ initialTemplates }) => {
             </InfiniteScroll>
           </>
         ) : (
-          <div className="flex max-h-[550px] w-full flex-1 select-none flex-col items-center justify-center space-y-4 rounded-md border border-dashed bg-[#121212]">
-            <div className="flex h-20 w-20 items-center justify-center rounded-full border border-[#222] bg-[#181818] shadow-lg">
-              <MagnifyingGlassIcon className="h-8 w-8 text-[#737373]" />
-            </div>
-            <p className=" text-[#737373]">{`You do not have any snippy's yet`}</p>
-            <div className="space-y-2">
-              <Button size="lg" className="w-full">
-                Create Template
-              </Button>
-
-              <Button size="lg" variant="secondary" className="w-full">
-                Create Snippets
-              </Button>
+          <div className="flex max-h-[550px] w-full flex-1 select-none items-center justify-center rounded-md border border-dashed bg-[#121212]">
+            <div className="flex flex-col items-center justify-center space-y-4">
+              <div className="flex h-20 w-20 items-center justify-center rounded-full border border-[#222] bg-[#181818] shadow-lg">
+                <MagnifyingGlassIcon className="h-8 w-8 text-[#737373]" />
+              </div>
+              <p className=" text-[#737373]">{`This workspace does not have any snippys.`}</p>
+              <Link href="/snippy/new?firstSnippy=1">
+                <Button size="lg" className="px-6">
+                  Create First Snippy
+                </Button>
+              </Link>
             </div>
           </div>
         )}

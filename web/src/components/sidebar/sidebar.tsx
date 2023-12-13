@@ -12,7 +12,7 @@ const Sidebar = async () => {
   const workspaces = await getWorkspaces(session.user.id)
 
   const activeWorkspace = workspaces.find((workspace) =>
-    workspace.members.find((member) => member.userId === session.user.id && member.isActive),
+    workspace.members.find((member) => member.user.id === session.user.id && member.isActive),
   )
 
   if (!activeWorkspace) {
@@ -41,7 +41,13 @@ const getWorkspaces = async (userId: string) => {
     },
     include: {
       _count: true,
-      members: true,
+      members: {
+        select: {
+          user: true,
+          role: true,
+          isActive: true,
+        },
+      },
     },
   })
 }

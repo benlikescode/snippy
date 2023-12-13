@@ -38,5 +38,19 @@ export const GET = async () => {
     },
   })
 
+  // Assume user has extension installed
+  await db.user.updateMany({
+    where: {
+      accounts: {
+        some: {
+          providerAccountId: accountId.toString(),
+        },
+      },
+    },
+    data: {
+      installedExtension: true,
+    },
+  })
+
   return Response.json({ workspaces })
 }

@@ -1,9 +1,6 @@
 'use client'
 
-import { CaretSortIcon, CheckIcon, PlusCircledIcon } from '@radix-ui/react-icons'
-
 import { cn } from '@/utils/cn'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -35,6 +32,8 @@ import pluralize from '@/utils/pluralize'
 import { changeWorkspace, createWorkspace } from '@/server/actions/workspace.actions'
 import { toast } from '@/components/ui/use-toast'
 import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
+import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid'
+import { PlusIcon } from '@heroicons/react/24/outline'
 
 type Props = ComponentPropsWithoutRef<typeof DropdownMenuTrigger> & {
   activeWorkspace: WorkspaceWithInfo
@@ -50,8 +49,8 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) =>
 
   useEffect(() => {
     setWorkspace(activeWorkspace)
-    setWorkspaces(workspaces)
-  }, [activeWorkspace, workspaces])
+    setWorkspaces(initialWorkspaces)
+  }, [activeWorkspace, initialWorkspaces])
 
   const getAcronym = (str: string) => {
     if (!str) return ''
@@ -97,55 +96,57 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) =>
         <DropdownMenuTrigger asChild>
           <div
             aria-expanded={true}
-            aria-label="Select a team"
-            className="flex cursor-pointer items-center border-b p-4 hover:bg-stone-900"
+            aria-label="Select a workspace"
+            className="flex cursor-pointer items-center justify-between border-b p-4 hover:bg-stone-900"
           >
-            <div className="flex h-11 w-11 items-center justify-center rounded-md bg-[#2c3036] font-semibold">
-              {getAcronym(workspace.name)}
-            </div>
+            <div className="flex items-center">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-[#2c3036] font-semibold">
+                {getAcronym(workspace.name)}
+              </div>
 
-            <div className="ml-3">
-              <div>{workspace.name}</div>
-              <div className="text-left text-sm text-[#5a626c]">
-                {pluralize('member', workspace._count.members)}
+              <div className="ml-3 grid">
+                <div className="truncate">{workspace.name}</div>
+
+                <div className="text-sm text-[#5a626c]">
+                  {pluralize('member', workspace._count.members)}
+                </div>
               </div>
             </div>
 
-            <CaretSortIcon className="ml-auto h-6 w-6 shrink-0 opacity-50" />
+            <ChevronUpDownIcon className="ml-2 h-6 w-6 shrink-0 opacity-50" />
           </div>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="p-0" align="start" alignOffset={16}>
+        <DropdownMenuContent className="w-[300px] p-0" align="start" alignOffset={16}>
           <Command>
             <CommandList>
               <CommandInput placeholder="Find workspace..." />
               <CommandEmpty>No workspace found.</CommandEmpty>
 
-              <CommandGroup heading="Personal">
-                {workspaces.map((currWorkspace) => (
-                  <CommandItem
-                    key={currWorkspace.id}
-                    onSelect={() => handleChangeWorkspace(currWorkspace)}
-                    className="mb-1 last:mb-0"
-                  >
-                    <Avatar className="mr-2 h-6 w-6">
-                      <AvatarImage
-                        src={`https://avatar.vercel.sh/${currWorkspace.id}.png`}
-                        alt={currWorkspace.name ?? ''}
-                        className="grayscale"
+              <CommandGroup heading="Personal" className="space-y-1">
+                <div className="space-y-1">
+                  {workspaces.map((currWorkspace) => (
+                    <CommandItem
+                      key={currWorkspace.id}
+                      onSelect={() => handleChangeWorkspace(currWorkspace)}
+                      className="flex items-center justify-between"
+                    >
+                      <div className="flex min-w-0 items-center">
+                        <div className="mr-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[#2c3036] font-semibold">
+                          {getAcronym(currWorkspace.name)}
+                        </div>
+
+                        <span className="block truncate">{currWorkspace.name}</span>
+                      </div>
+
+                      <CheckIcon
+                        className={cn(
+                          'ml-4 h-4 w-4 shrink-0',
+                          workspace.id === currWorkspace.id ? 'opacity-100' : 'opacity-0',
+                        )}
                       />
-                      <AvatarFallback>SC</AvatarFallback>
-                    </Avatar>
-
-                    {currWorkspace.name}
-
-                    <CheckIcon
-                      className={cn(
-                        'ml-auto h-4 w-4',
-                        workspace.id === currWorkspace.id ? 'opacity-100' : 'opacity-0',
-                      )}
-                    />
-                  </CommandItem>
-                ))}
+                    </CommandItem>
+                  ))}
+                </div>
               </CommandGroup>
             </CommandList>
             <CommandSeparator />
@@ -158,7 +159,9 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) =>
                       setDialogOpen(true)
                     }}
                   >
-                    <PlusCircledIcon className="mr-2 h-5 w-5" />
+                    <div className="mr-2 flex h-8 w-8 shrink-0 items-center justify-center bg-transparent">
+                      <PlusIcon className="h-[18px]" />
+                    </div>
                     Create Workspace
                   </CommandItem>
                 </DialogTrigger>
