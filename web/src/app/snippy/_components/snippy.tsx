@@ -100,7 +100,7 @@ const Snippy: FC<Props> = ({ snippy }) => {
           <FileSystem noFiles={snippy?.files ? !(snippy?.files as FileItemType[]).length : true} />
         </div>
 
-        {openFile && !!pathToOpenFile.length ? (
+        {openFile?.data.name && !!pathToOpenFile.length ? (
           <div className="h-full w-full">
             <div className="grid h-full">
               <div className="flex h-12 items-center bg-[#0c0c0c] px-4 text-sm font-medium text-[#bababa]">
