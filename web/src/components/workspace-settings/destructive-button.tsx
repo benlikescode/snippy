@@ -46,7 +46,7 @@ const DestructiveButton: FC<Props> = ({ workspace, closeModal }) => {
     try {
       await deleteWorkspace(workspace.id)
 
-      setOpen(false)
+      closeModal()
       router.refresh()
     } catch (err) {
       toast({ variant: 'destructive', description: (err as Error).message })
