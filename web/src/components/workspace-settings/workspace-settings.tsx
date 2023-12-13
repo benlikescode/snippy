@@ -19,6 +19,7 @@ import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
 import { XMarkIcon } from '@heroicons/react/24/solid'
 import MemberItem from '@/components/workspace-settings/member-item'
 import DestructiveButton from '@/components/workspace-settings/destructive-button'
+import SidebarItem from '@/components/sidebar/sidebar-item'
 
 type Props = {
   workspace: WorkspaceWithInfo
@@ -94,13 +95,10 @@ const WorkspaceSettings: FC<Props> = ({ workspace }) => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button
-          variant="secondary"
-          className="flex h-12 w-full select-none justify-start rounded-lg  bg-[#1f1f1f] text-[#989898] hover:bg-[#252525]"
-        >
+        <SidebarItem>
           <CogIcon className="mr-3 h-6" />
           Workspace Settings
-        </Button>
+        </SidebarItem>
       </DialogTrigger>
       <DialogContent className="gap-0 p-0" noCloseIcon>
         <DialogHeader className="p-6">

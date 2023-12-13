@@ -1,20 +1,21 @@
 'use client'
 
 import { cn } from '@/utils/cn'
-import Link, { type LinkProps } from 'next/link'
+import Link from 'next/link'
 import type { FC, ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
 
 type Props = {
   children: ReactNode
-} & LinkProps
+  href?: string
+}
 
 const SidebarItem: FC<Props> = ({ children, href, ...rest }) => {
   const pathname = usePathname()
 
   return (
     <Link
-      href={href}
+      href={href ?? pathname}
       draggable={false}
       {...rest}
       className={cn(

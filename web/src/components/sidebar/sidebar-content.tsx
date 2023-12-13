@@ -51,11 +51,6 @@ const SidebarContent: FC<Props> = ({ user, activeWorkspace, initialWorkspaces })
               Community
             </SidebarItem>
 
-            <SidebarItem href="/settings">
-              <CogIcon className="mr-3 h-6" />
-              Workspace Settings
-            </SidebarItem>
-
             <WorkspaceSettings workspace={activeWorkspace} />
           </nav>
         </div>
