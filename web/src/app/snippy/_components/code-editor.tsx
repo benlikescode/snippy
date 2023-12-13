@@ -69,7 +69,7 @@ const CodeEditor: FC<EditorProps> = () => {
     }
 
     setValue(openFile.data.content)
-  }, [openFile, monacoInstance, editorInstance])
+  }, [openFile, openFile?.data, monacoInstance, editorInstance])
 
   return (
     <Editor
