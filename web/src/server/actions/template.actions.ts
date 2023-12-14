@@ -114,33 +114,42 @@ export const getTemplates = async (page = 1) => {
   return { templates: templates.slice(0, itemsPerPage), hasMore }
 }
 
-export const deleteTemplate = async (id: string) => {
+export const deleteTemplate = async (templateId: string) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
     throw new Error('Unauthorized')
   }
 
+  // Owners can delete all, members can only delete ones they create
   const hasPermission = await db.template.findFirst({
     where: {
-      id,
-      workspace: {
-        members: {
-          some: {
-            userId: session.user.id,
+      id: templateId,
+      OR: [
+        {
+          creatorId: session.user.id,
+        },
+        {
+          workspace: {
+            members: {
+              some: {
+                userId: session.user.id,
+                role: 'OWNER',
+              },
+            },
           },
         },
-      },
+      ],
     },
   })
 
   if (!hasPermission) {
-    throw new Error('Only members of the workspace can delete templates')
+    throw new Error('You must be an owner to delete this template')
   }
 
   await db.template.delete({
     where: {
-      id,
+      id: templateId,
     },
   })
 
