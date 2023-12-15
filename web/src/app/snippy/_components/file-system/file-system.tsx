@@ -2,11 +2,10 @@ import Folder from '@/app/snippy/_components/file-system/folder'
 import { Button } from '@/components/ui/button'
 import useFileStore from '@/stores/useFileStore'
 import { type FileItemType } from '@/types'
-import { type FC, useEffect, useState } from 'react'
-import { DndProvider } from 'react-dnd'
-import { HTML5Backend } from 'react-dnd-html5-backend'
+import { type FC, type UIEvent, useEffect, useState } from 'react'
 import { DocumentPlusIcon, FolderPlusIcon } from '@heroicons/react/24/solid'
 import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
+import { cn } from '@/utils/cn'
 
 type Props = {
   noFiles?: boolean
@@ -14,6 +13,7 @@ type Props = {
 
 const FileSystem: FC<Props> = ({ noFiles }) => {
   const [canDropFile, setCanDropFile] = useState(false)
+  const [showSeparator, setShowSeparator] = useState(false)
 
   const { files, createNewFile, createNewFolder } = useFileStore()
 
@@ -36,6 +36,10 @@ const FileSystem: FC<Props> = ({ noFiles }) => {
     setCanDropFile(true)
   }
 
+  const handleScroll = (e: UIEvent<HTMLDivElement>) => {
+    setShowSeparator(e.currentTarget.scrollTop > 0)
+  }
+
   useEffect(() => {
     document.addEventListener('dragover', handleDragOver)
 
@@ -45,36 +49,41 @@ const FileSystem: FC<Props> = ({ noFiles }) => {
   }, [])
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <div className="flex-1 overflow-y-auto border-t bg-[#070707]">
-        <div className="flex h-[64px] items-center justify-between px-[22px] text-[#767676]">
-          <h2 className="text-[15px] font-semibold">Template Structure</h2>
-          <div className="flex items-center gap-1">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" onClick={() => createNewFile()}>
-                  <DocumentPlusIcon className="h-5 text-[#484848]" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Create new file</p>
-              </TooltipContent>
-            </Tooltip>
+    <div className="flex-1 overflow-y-auto border-t bg-[#070707]">
+      <div
+        className={cn(
+          'flex h-[64px] items-center justify-between border-b border-transparent px-[22px] text-[#767676]',
+          showSeparator && 'border-border',
+        )}
+      >
+        <h2 className="text-[15px] font-semibold">Template Structure</h2>
+        <div className="flex items-center gap-1">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" onClick={() => createNewFile()}>
+                <DocumentPlusIcon className="h-5 text-[#484848]" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Create new file</p>
+            </TooltipContent>
+          </Tooltip>
 
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" onClick={() => createNewFolder()}>
-                  <FolderPlusIcon className="h-5 text-[#484848]" />
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Create new folder</p>
-              </TooltipContent>
-            </Tooltip>
-          </div>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button variant="ghost" size="icon" onClick={() => createNewFolder()}>
+                <FolderPlusIcon className="h-5 text-[#484848]" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Create new folder</p>
+            </TooltipContent>
+          </Tooltip>
         </div>
+      </div>
 
-        <div className="h-[calc(100%_-_64px)] overflow-y-auto p-2.5 pt-0">
+      <div className="h-[calc(100%_-_64px)] overflow-y-auto" onScroll={handleScroll}>
+        <div className="h-full min-h-full p-2.5 pt-0">
           <Folder
             item={ROOT_FOLDER}
             canDropFile={canDropFile}
@@ -84,7 +93,7 @@ const FileSystem: FC<Props> = ({ noFiles }) => {
           />
         </div>
       </div>
-    </DndProvider>
+    </div>
   )
 }
 
