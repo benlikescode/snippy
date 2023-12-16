@@ -44,6 +44,7 @@ export const createTemplate = async (
       files,
       workspaceId: activeWorkspace.workspaceId,
       creatorId: session.user.id,
+      updatedById: session.user.id,
     },
   })
 
@@ -56,10 +57,12 @@ export const createTemplate = async (
 }
 
 export const updateTemplate = async (
-  id: string,
+  templateId: string,
   name: string,
   prompts: PromptType[],
   files: FileItemType[],
+  updatedAtLocal: Date,
+  forceSave = false,
 ) => {
   const session = await getServerAuthSession()
 
@@ -67,14 +70,47 @@ export const updateTemplate = async (
     throw new Error('Unauthorized')
   }
 
+  const template = await db.template.findFirst({
+    where: {
+      id: templateId,
+    },
+    include: {
+      workspace: {
+        include: {
+          members: true,
+        },
+      },
+      updatedBy: true,
+    },
+  })
+
+  if (!template) {
+    throw new Error('Failed to find the template you are trying to update')
+  }
+
+  if (!template.workspace.members.some((member) => member.userId === session.user.id)) {
+    throw new Error('Only members of the workspace can update this template')
+  }
+
+  const updateMadeUpstream = template.updatedAt.getTime() > updatedAtLocal.getTime()
+  const updateNotMadeByUser = template.updatedById !== session.user.id
+
+  if (updateMadeUpstream && updateNotMadeByUser && !forceSave) {
+    return {
+      hasEditConflict: true,
+      lastUpdatedBy: template.updatedBy,
+    }
+  }
+
   await db.template.update({
     where: {
-      id,
+      id: templateId,
     },
     data: {
       name,
       prompts,
       files,
+      updatedById: session.user.id,
     },
   })
 

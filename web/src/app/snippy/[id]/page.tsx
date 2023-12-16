@@ -13,24 +13,38 @@ const SnippyPage: FC<Props> = async ({ params: { id } }) => {
 
   const session = await getServerAuthSession()
 
-  if (!session?.user) return redirect('/login')
+  if (!session?.user) {
+    return redirect('/login')
+  }
 
-  const snippy = await db.template.findFirst({
+  const snippy = await getTemplate(id, session.user.id)
+
+  if (!snippy) {
+    return notFound()
+  }
+
+  return <Snippy snippy={snippy} />
+}
+
+export type TemplateWithInfo = Awaited<ReturnType<typeof getTemplate>>
+
+const getTemplate = async (templateId: string, userId: string) => {
+  return db.template.findFirst({
     where: {
-      id,
+      id: templateId,
       workspace: {
         members: {
           some: {
-            userId: session.user.id,
+            userId,
           },
         },
       },
     },
+    include: {
+      updatedBy: true,
+      creator: true,
+    },
   })
-
-  if (!snippy) return notFound()
-
-  return <Snippy snippy={snippy} />
 }
 
 export default SnippyPage

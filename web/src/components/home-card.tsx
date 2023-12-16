@@ -108,7 +108,7 @@ const HomeCard: FC<Props> = ({ template }) => {
 
       <div className="grid gap-1">
         <p className="text-sm">{template.name}</p>
-        <p className="text-xs text-[#737373]">Edited {formatTimeAgo(template.updatedAt)}</p>
+        <p className="text-xs text-[#737373]">Edited {formatTimeAgo(template.updatedAt, 'long')}</p>
       </div>
     </div>
   )
