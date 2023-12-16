@@ -50,8 +50,8 @@ const DialogContent = React.forwardRef<
     >
       {children}
       {!noCloseIcon && (
-        <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
-          <Cross2Icon className="h-4 w-4" />
+        <DialogPrimitive.Close className="absolute right-5 top-5 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
+          <Cross2Icon className="h-[18px] w-[18px]" />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>
       )}
@@ -67,7 +67,7 @@ DialogHeader.displayName = 'DialogHeader'
 
 const DialogFooter = ({ className, ...props }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn('flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3', className)}
+    className={cn('mt-5 flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-3', className)}
     {...props}
   />
 )
