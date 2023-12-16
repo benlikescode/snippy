@@ -176,8 +176,8 @@ const Snippy: FC<Props> = ({ snippy }) => {
 
           {openFile?.data.name && !!pathToOpenFile.length ? (
             <div className="h-full w-full">
-              <div className="grid h-full">
-                <div className="flex h-12 items-center bg-[#0c0c0c] px-4 text-sm font-medium text-[#bababa]">
+              <div className="grid h-full grid-rows-[48px_auto]">
+                <div className="flex items-center bg-[#0c0c0c] px-4 text-sm font-medium text-[#bababa]">
                   {pathToOpenFile.map((str, idx) => (
                     <div key={idx} className="flex items-center">
                       {idx !== 0 && (

@@ -4,6 +4,7 @@ import { useState, type FC, useEffect } from 'react'
 import { Editor, type Monaco, type EditorProps } from '@monaco-editor/react'
 import type * as monaco from 'monaco-editor'
 import useFileStore from '@/stores/useFileStore'
+import Spinner from '@/components/spinner'
 
 const EDITOR_OPTIONS: monaco.editor.IStandaloneEditorConstructionOptions = {
   minimap: { enabled: false },
@@ -79,6 +80,7 @@ const CodeEditor: FC<EditorProps> = () => {
       onMount={handleMount}
       options={EDITOR_OPTIONS}
       value={value}
+      loading={<Spinner />}
     />
   )
 }
