@@ -64,10 +64,10 @@ const HomeCard: FC<Props> = ({ template }) => {
 
   return (
     <div className="group grid gap-4">
-      <div className="relative h-44 w-full rounded-[10px] border border-[#323232] bg-[#0D0D0D] group-hover:border-[#aaa]">
-        <Link href={`/snippy/${template.id}`} className="rounded-[10px]">
+      <div className="relative h-44 w-full overflow-hidden rounded-[10px] border border-[#323232] bg-[#0D0D0D] focus-within:shadow-[0_0_0_1px_#aaa] group-hover:border-[#aaa]">
+        <Link href={`/snippy/${template.id}`}>
           <div className="h-full pl-4 pt-4">
-            <div className="h-full w-full rounded-br-[10px] rounded-tl-md border-l border-t border-[#323232] bg-[#171717] p-4 font-mono text-xs font-semibold text-[#a3a3a3]">
+            <div className="h-full rounded-br-[10px] rounded-tl-md border-l border-t border-[#323232] bg-[#171717] p-4 font-mono text-xs font-semibold text-[#a3a3a3]">
               <pre>{getPreviewCode()}</pre>
             </div>
           </div>
