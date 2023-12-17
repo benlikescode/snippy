@@ -5,13 +5,13 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import { Button } from '@/components/ui/button'
-import { DropdownMenuGroup } from '@radix-ui/react-dropdown-menu'
 import { type Template } from '@prisma/client'
 
 const SORT_OPTIONS = [
