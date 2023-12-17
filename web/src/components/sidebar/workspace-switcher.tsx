@@ -32,8 +32,7 @@ import pluralize from '@/utils/pluralize'
 import { changeWorkspace, createWorkspace } from '@/server/actions/workspace.actions'
 import { toast } from '@/components/ui/use-toast'
 import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid'
-import { PlusIcon } from '@heroicons/react/24/outline'
+import { CheckIcon, ChevronUpDownIcon, PlusIcon } from '@heroicons/react/24/solid'
 
 type Props = ComponentPropsWithoutRef<typeof DropdownMenuTrigger> & {
   activeWorkspace: WorkspaceWithInfo
@@ -97,7 +96,7 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) =>
           <div
             aria-expanded={true}
             aria-label="Select a workspace"
-            className="flex cursor-pointer items-center justify-between border-b p-4 hover:bg-stone-900"
+            className="flex cursor-pointer items-center justify-between border-b p-4 hover:bg-[#151515]"
           >
             <div className="flex items-center">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-[#2c3036] font-semibold">
@@ -107,7 +106,7 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) =>
               <div className="ml-3 grid">
                 <div className="truncate">{workspace.name}</div>
 
-                <div className="text-sm text-[#5a626c]">
+                <div className="text-sm text-[#737373]">
                   {pluralize('member', workspace._count.members)}
                 </div>
               </div>
@@ -119,11 +118,11 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) =>
         <DropdownMenuContent className="w-[300px] p-0" align="start" alignOffset={16}>
           <Command>
             <CommandList>
-              <CommandInput placeholder="Find workspace..." />
+              <CommandInput placeholder="Find workspace..." autoFocus />
               <CommandEmpty>No workspace found.</CommandEmpty>
 
-              <CommandGroup heading="Personal" className="space-y-1">
-                <div className="space-y-1">
+              <CommandGroup>
+                <div className="space-y-2">
                   {workspaces.map((currWorkspace) => (
                     <CommandItem
                       key={currWorkspace.id}
@@ -131,11 +130,17 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) =>
                       className="flex items-center justify-between"
                     >
                       <div className="flex min-w-0 items-center">
-                        <div className="mr-2 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-[#2c3036] font-semibold">
+                        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-[rgba(255,_255,_255,_0.15)] font-medium">
                           {getAcronym(currWorkspace.name)}
                         </div>
 
-                        <span className="block truncate">{currWorkspace.name}</span>
+                        <div className="ml-3 grid">
+                          <div className="truncate ">{currWorkspace.name}</div>
+
+                          <div className="text-[13px] text-[#a5a5a5]">
+                            {pluralize('member', currWorkspace._count.members)}
+                          </div>
+                        </div>
                       </div>
 
                       <CheckIcon
@@ -159,10 +164,10 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) =>
                       setDialogOpen(true)
                     }}
                   >
-                    <div className="mr-2 flex h-8 w-8 shrink-0 items-center justify-center bg-transparent">
-                      <PlusIcon className="h-[18px]" />
+                    <div className="mr-1 flex h-7 w-7 shrink-0 items-center justify-center">
+                      <PlusIcon className="h-[18px] opacity-50" />
                     </div>
-                    Create Workspace
+                    <span className="text-muted-foreground">Create Workspace</span>
                   </CommandItem>
                 </DialogTrigger>
               </CommandGroup>

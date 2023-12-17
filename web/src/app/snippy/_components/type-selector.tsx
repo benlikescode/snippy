@@ -1,21 +1,22 @@
-import promptItem from '@/app/snippy/_components/prompts/prompt-item'
 import { Button } from '@/components/ui/button'
-import { EllipsisVerticalIcon } from '@heroicons/react/24/solid'
 import {
   DropdownMenu,
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
 import { CaretSortIcon } from '@radix-ui/react-icons'
 import { useState } from 'react'
 import { TemplateIcon, SnippetIcon } from '@/components/icons'
 import { cn } from '@/utils/cn'
+import { useSearchParams } from 'next/navigation'
 
 type SnippyTypes = 'Template' | 'Snippets'
 
 const TypeSelector = () => {
+  const searchParams = useSearchParams()
+
+  const [open, setOpen] = useState(!!searchParams.get('firstSnippy'))
   const [type, setType] = useState<SnippyTypes>('Template')
 
   const handleChangeType = (newType: 'Template' | 'Snippets') => {
@@ -23,7 +24,7 @@ const TypeSelector = () => {
   }
 
   return (
-    <DropdownMenu>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <Button variant="secondary" size="lg">
           {type === 'Template' ? (
@@ -35,42 +36,57 @@ const TypeSelector = () => {
           <CaretSortIcon className="ml-3 h-5 w-5" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <div className="flex rounded-md bg-[#181818] shadow-[0px_4px_4px_0px_rgba(0,_0,_0,_0.25)]">
-          <DropdownMenuItem
+      <DropdownMenuContent
+        align="end"
+        className="flex rounded-md p-0 shadow-[0px_4px_4px_0px_rgba(0,_0,_0,_0.25)]"
+      >
+        <DropdownMenuItem
+          className={cn(
+            'flex w-56 flex-col items-center rounded-br-none rounded-tr-none border-r p-6 text-[18px] focus:bg-inherit focus:text-inherit',
+          )}
+        >
+          <div className="flex items-center">
+            <TemplateIcon className="mr-2 h-[26px] text-[#585858]" />
+            Template
+          </div>
+
+          <p className="mt-2 text-center text-sm text-[#676767]">
+            Group commonly used files/folders
+          </p>
+
+          <Button
+            variant={type === 'Template' ? 'default' : 'secondary'}
+            size="lg"
             onClick={() => handleChangeType('Template')}
-            className={cn(
-              'flex w-56 cursor-pointer flex-col items-center p-8 text-[18px] ',
-              type === 'Template' && 'bg-[#222222]',
-            )}
+            className="mt-5 w-full"
           >
-            <div className="flex items-center">
-              <TemplateIcon className="mr-2 h-[26px] text-[#585858]" />
-              Template
-            </div>
+            Current
+          </Button>
+        </DropdownMenuItem>
 
-            <p className="mt-3 text-center text-sm text-[#676767]">
-              Group commonly used files/folders
-            </p>
-          </DropdownMenuItem>
+        <DropdownMenuItem
+          className={cn(
+            'flex w-56 flex-col items-center rounded-bl-none rounded-tl-none p-6 text-[18px] focus:bg-inherit focus:text-inherit',
+          )}
+        >
+          <div className="flex items-center">
+            <SnippetIcon className="mr-2 h-[26px] text-[#585858]" />
+            Snippets
+          </div>
 
-          <DropdownMenuItem
+          <p className="mt-2 text-center text-sm text-[#676767]">
+            Group commonly used code snippets
+          </p>
+
+          <Button
+            variant={type === 'Snippets' ? 'default' : 'secondary'}
+            size="lg"
             onClick={() => handleChangeType('Snippets')}
-            className={cn(
-              'flex w-56 cursor-pointer flex-col items-center p-8 text-[18px] ',
-              type === 'Snippets' && 'bg-[#222222]',
-            )}
+            className="mt-5 w-full"
           >
-            <div className="flex items-center">
-              <SnippetIcon className="mr-2 h-[26px] text-[#585858]" />
-              Snippets
-            </div>
-
-            <p className="mt-3 text-center text-sm text-[#676767]">
-              Group commonly used code snippets
-            </p>
-          </DropdownMenuItem>
-        </div>
+            Switch
+          </Button>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

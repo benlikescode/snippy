@@ -4,19 +4,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu'
 import { type FC, useState } from 'react'
-import {
-  CaretSortIcon,
-  ChatBubbleIcon,
-  ExitIcon,
-  MoonIcon,
-  PersonIcon,
-} from '@radix-ui/react-icons'
+import { CaretSortIcon, ExitIcon } from '@radix-ui/react-icons'
 import { signOut } from 'next-auth/react'
 import { Avatar, AvatarImage } from '@/components/ui/avatar'
-import { Switch } from '@/components/ui/switch'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { type User } from 'next-auth'
@@ -54,7 +46,7 @@ const AccountPopover: FC<Props> = ({ user }) => {
         <div
           aria-expanded={open}
           aria-label="Account options"
-          className="flex cursor-pointer items-center border-t p-4 hover:bg-stone-900"
+          className="flex cursor-pointer items-center border-t p-4 hover:bg-[#151515]"
         >
           <Avatar>
             <AvatarImage src={user.image ?? ''} />
@@ -67,8 +59,8 @@ const AccountPopover: FC<Props> = ({ user }) => {
           <CaretSortIcon className="ml-auto h-6 w-6 shrink-0 opacity-50" />
         </div>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-[250px] p-0" align="start" alignOffset={16}>
-        <div className="flex items-center  p-4">
+      <DropdownMenuContent className="w-[300px] p-0" align="start" alignOffset={16}>
+        <div className="flex items-center border-b p-4">
           <Avatar>
             <AvatarImage src={user.image ?? ''} />
           </Avatar>
@@ -79,35 +71,14 @@ const AccountPopover: FC<Props> = ({ user }) => {
           </div>
         </div>
 
-        <DropdownMenuSeparator />
-
-        <div className="flex cursor-pointer items-center justify-between px-4 py-2 text-[#B0B0B0] hover:bg-[#222]">
-          <div className="flex items-center">
-            <MoonIcon className="mr-3 h-4 w-4 shrink-0 text-[#737373]" />
-            Dark Mode
+        <div className="p-1">
+          <div
+            className="flex cursor-pointer select-none items-center rounded-sm p-2 text-sm text-red-400 hover:bg-[rgba(255,_255,_255,_0.08)]"
+            onClick={handleSignOut}
+          >
+            <ExitIcon className="mr-3 h-4 w-4 shrink-0 text-red-400" />
+            Logout
           </div>
-
-          <Switch />
-        </div>
-
-        <div className="flex cursor-pointer items-center px-4 py-2 text-[#B0B0B0] hover:bg-[#222]">
-          <PersonIcon className="mr-3 h-4 w-4 shrink-0 text-[#737373]" />
-          Account
-        </div>
-
-        <div className="flex cursor-pointer items-center px-4 py-2 text-[#B0B0B0] hover:bg-[#222]">
-          <ChatBubbleIcon className="mr-3 h-4 w-4 shrink-0 text-[#737373]" />
-          Support
-        </div>
-
-        <DropdownMenuSeparator />
-
-        <div
-          className="flex cursor-pointer items-center px-4 py-2 text-[#B0B0B0] hover:bg-[#222]"
-          onClick={handleSignOut}
-        >
-          <ExitIcon className="mr-3 h-4 w-4 shrink-0 text-[#737373]" />
-          Logout
         </div>
       </DropdownMenuContent>
     </DropdownMenu>
