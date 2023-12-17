@@ -1,2 +1,2 @@
-export { default as addCodeSnippet } from './addCodeSnippet'
-export { default as addFileTemplate } from './addFileTemplate'
+export { addCodeSnippet } from './addCodeSnippet'
+export { addFileTemplate } from './addFileTemplate'

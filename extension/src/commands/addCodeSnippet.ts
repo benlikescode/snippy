@@ -1,9 +1,23 @@
 import * as vscode from 'vscode'
-import getSnippets from '../api/getSnippets'
+import { getSnippets } from '../api'
 import { Snippet } from '../types'
 import { SNIPPY_SITE_URL } from '../constants'
 
-const addCodeSnippet = async () => {
+const insertSnippet = async (snippet: Snippet) => {
+  const activeEditor = vscode.window.activeTextEditor
+
+  if (!activeEditor) {
+    return
+  }
+
+  const cursorPos = activeEditor.selection.active
+
+  activeEditor.edit((editBuilder) => {
+    editBuilder.insert(cursorPos, snippet.content)
+  })
+}
+
+export const addCodeSnippet = async () => {
   try {
     const userSnippets = await getSnippets()
 
@@ -39,19 +53,3 @@ const addCodeSnippet = async () => {
     vscode.window.showErrorMessage((error as Error).message)
   }
 }
-
-const insertSnippet = async (snippet: Snippet) => {
-  const activeEditor = vscode.window.activeTextEditor
-
-  if (!activeEditor) {
-    return
-  }
-
-  const cursorPos = activeEditor.selection.active
-
-  activeEditor.edit((editBuilder) => {
-    editBuilder.insert(cursorPos, snippet.content)
-  })
-}
-
-export default addCodeSnippet

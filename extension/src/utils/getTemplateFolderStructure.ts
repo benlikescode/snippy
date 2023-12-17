@@ -1,7 +1,7 @@
 import * as Handlebars from 'handlebars'
 import { FileItem, PromptResults, TemplateFolderStructure } from '../types'
 
-const getTemplateFolderStructure = (
+export const getTemplateFolderStructure = (
   rootPath: string,
   files: FileItem[],
   promptResults: PromptResults
@@ -33,5 +33,3 @@ const getTemplateFolderStructure = (
     }
   })
 }
-
-export default getTemplateFolderStructure

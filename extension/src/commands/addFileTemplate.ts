@@ -1,10 +1,34 @@
 import * as vscode from 'vscode'
-import getTemplates from '../api/getTemplates'
+import { getTemplates } from '../api'
 import { PromptResults, Template } from '../types'
 import { buildFolderStructure, getTemplateFolderStructure } from '../utils'
 import { SNIPPY_SITE_URL } from '../constants'
 
-const addFileTemplate = async (path: vscode.Uri, context: vscode.ExtensionContext) => {
+const applyTemplate = async (template: Template, rootPath: string) => {
+  const { prompts, files } = template
+
+  const promptResults = {} as PromptResults
+
+  if (prompts && prompts.length) {
+    for (const p of prompts) {
+      const { prompt, variable } = p
+
+      const promptResult = await vscode.window.showInputBox({ prompt })
+
+      if (!promptResult) {
+        return
+      }
+
+      promptResults[variable] = promptResult
+    }
+  }
+
+  const structure = getTemplateFolderStructure(rootPath, files, promptResults)
+
+  buildFolderStructure(structure)
+}
+
+export const addFileTemplate = async (path: vscode.Uri, context: vscode.ExtensionContext) => {
   try {
     const rootPath = path.fsPath
     const userTemplates = await getTemplates(context)
@@ -41,29 +65,3 @@ const addFileTemplate = async (path: vscode.Uri, context: vscode.ExtensionContex
     vscode.window.showErrorMessage((error as Error).message)
   }
 }
-
-const applyTemplate = async (template: Template, rootPath: string) => {
-  const { prompts, files } = template
-
-  const promptResults = {} as PromptResults
-
-  if (prompts && prompts.length) {
-    for (const p of prompts) {
-      const { prompt, variable } = p
-
-      const promptResult = await vscode.window.showInputBox({ prompt })
-
-      if (!promptResult) {
-        return
-      }
-
-      promptResults[variable] = promptResult
-    }
-  }
-
-  const structure = getTemplateFolderStructure(rootPath, files, promptResults)
-
-  buildFolderStructure(structure)
-}
-
-export default addFileTemplate

@@ -1,2 +1,6 @@
-export { default as buildFolderStructure } from './buildFolderStructure'
-export { default as getTemplateFolderStructure } from './getTemplateFolderStructure'
+export { addSnippetToEditor } from './addSnippetToEditor'
+export { Auth } from './auth'
+export { buildFolderStructure } from './buildFolderStructure'
+export { getTemplateFolderStructure } from './getTemplateFolderStructure'
+export { getWebviewContent } from './getWebviewContent'
+export { registerWebview } from './registerWebview'

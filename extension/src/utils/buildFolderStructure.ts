@@ -1,12 +1,6 @@
 import * as vscode from 'vscode'
 import { TemplateFolderStructure } from '../types'
 
-const buildFolderStructure = async (folderStructure: TemplateFolderStructure[]) => {
-  for (const fileItem of folderStructure) {
-    await createFileInVSCode(fileItem)
-  }
-}
-
 const createFileInVSCode = async (fileItem: TemplateFolderStructure) => {
   if (!fileItem) {
     return
@@ -22,4 +16,8 @@ const createFileInVSCode = async (fileItem: TemplateFolderStructure) => {
   await vscode.workspace.fs.writeFile(vscode.Uri.file(path), new TextEncoder().encode(content))
 }
 
-export default buildFolderStructure
+export const buildFolderStructure = async (folderStructure: TemplateFolderStructure[]) => {
+  for (const fileItem of folderStructure) {
+    await createFileInVSCode(fileItem)
+  }
+}

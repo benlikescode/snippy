@@ -1,7 +1,7 @@
 import fetch from 'node-fetch'
 import { Snippet } from '../types'
 
-const getSnippets = async () => {
+export const getSnippets = async () => {
   const res = await fetch('http://localhost:3000/api/snippets')
   const data = await res.json()
 
@@ -11,5 +11,3 @@ const getSnippets = async () => {
 
   return data.snippets as Snippet[]
 }
-
-export default getSnippets

@@ -1,9 +1,9 @@
 import fetch from 'node-fetch'
 import { Workspace } from '../types'
-import { Auth } from '../utils/auth'
+import { Auth } from '../utils'
 import { SNIPPY_API_URL } from '../constants'
 
-const getWorkspaces = async () => {
+export const getWorkspaces = async () => {
   const auth = new Auth()
   const session = await auth.getSession()
 
@@ -21,5 +21,3 @@ const getWorkspaces = async () => {
 
   return data.workspaces as Workspace[]
 }
-
-export default getWorkspaces
