@@ -2,7 +2,7 @@
 
 import SidebarItem from '@/components/sidebar/sidebar-item'
 import { Button } from '../ui/button'
-import { CogIcon, CreateIcon, HomeIcon, ShapesIcon } from '@/components/icons'
+import { CreateIcon, HomeIcon, ShapesIcon } from '@/components/icons'
 import WorkspaceSwitcher from './workspace-switcher'
 import { usePathname, useRouter } from 'next/navigation'
 import AccountPopover from '@/components/sidebar/account-popover'
