@@ -4,6 +4,7 @@ import { cn } from '@/utils/cn'
 import Link from 'next/link'
 import type { FC, ReactNode } from 'react'
 import { usePathname } from 'next/navigation'
+import { Button } from '@/components/ui/button'
 
 type Props = {
   children: ReactNode
@@ -13,9 +14,20 @@ type Props = {
 const SidebarItem: FC<Props> = ({ children, href, ...rest }) => {
   const pathname = usePathname()
 
+  if (!href) {
+    return (
+      <Button
+        className="flex h-10 select-none items-center justify-start rounded-md bg-transparent px-3 font-medium text-[#7B8188] hover:bg-transparent"
+        {...rest}
+      >
+        {children}
+      </Button>
+    )
+  }
+
   return (
     <Link
-      href={href ?? pathname}
+      href={href}
       draggable={false}
       {...rest}
       className={cn(
