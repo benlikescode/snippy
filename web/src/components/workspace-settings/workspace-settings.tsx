@@ -4,13 +4,13 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from '@/components/ui/dialog'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useState, type FC, type KeyboardEvent } from 'react'
-import { DialogTrigger } from '@radix-ui/react-dialog'
 import { toast } from '@/components/ui/use-toast'
 import { addMembersToWorkspace, updateWorkspace } from '@/server/actions/workspace.actions'
 import { useRouter } from 'next/navigation'
@@ -133,7 +133,7 @@ const WorkspaceSettings: FC<Props> = ({ workspace }) => {
               </div>
             </div>
 
-            <DialogFooter className="mt-10 rounded-bl-lg rounded-br-lg border-t border-[#181818] bg-[#0d0d0d] px-6 py-5">
+            <DialogFooter className="mt-10 rounded-bl-lg rounded-br-lg bg-[#0c0c0c] px-6 py-5">
               <Button variant="secondary" onClick={() => setOpen(false)}>
                 Cancel
               </Button>
@@ -170,7 +170,7 @@ const WorkspaceSettings: FC<Props> = ({ workspace }) => {
               )}
             </div>
 
-            <div className="space-y-1 overflow-y-auto border-t border-[#181818] px-6 pt-6">
+            <div className="space-y-1 overflow-y-auto border-t border-[#181818] px-4 pt-6">
               {sortMembers(workspace.members).map((member) => (
                 <MemberItem
                   key={member.user.id}
@@ -181,7 +181,7 @@ const WorkspaceSettings: FC<Props> = ({ workspace }) => {
               ))}
             </div>
 
-            <DialogFooter className="mt-10 rounded-bl-lg rounded-br-lg border-t border-[#181818] bg-[#0d0d0d] px-6 py-5">
+            <DialogFooter className="mt-10 rounded-bl-lg rounded-br-lg  bg-[#0c0c0c] px-6 py-5">
               <Button variant="secondary" onClick={() => setOpen(false)}>
                 Cancel
               </Button>
