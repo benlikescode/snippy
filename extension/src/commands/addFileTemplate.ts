@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import getTemplates from '../api/getTemplates'
 import { PromptResults, Template } from '../types'
 import { buildFolderStructure, getTemplateFolderStructure } from '../utils'
+import { SNIPPY_SITE_URL } from '../constants'
 
 const addFileTemplate = async (path: vscode.Uri, context: vscode.ExtensionContext) => {
   try {
@@ -11,10 +12,10 @@ const addFileTemplate = async (path: vscode.Uri, context: vscode.ExtensionContex
     if (!userTemplates.length) {
       const choices = ['Create Template', 'Later']
 
-      const selection = await vscode.window.showErrorMessage(`You don't have any templates yet.`, ...choices)
+      const selection = await vscode.window.showErrorMessage('This workspace has no templates.', ...choices)
 
       if (selection === choices[0]) {
-        vscode.env.openExternal(vscode.Uri.parse('https://snippy.app'))
+        vscode.env.openExternal(vscode.Uri.parse(SNIPPY_SITE_URL))
       }
 
       return

@@ -1,6 +1,7 @@
 import * as vscode from 'vscode'
 import getSnippets from '../api/getSnippets'
 import { Snippet } from '../types'
+import { SNIPPY_SITE_URL } from '../constants'
 
 const addCodeSnippet = async () => {
   try {
@@ -9,10 +10,10 @@ const addCodeSnippet = async () => {
     if (!userSnippets.length) {
       const choices = ['Create Snippet', 'Later']
 
-      const selection = await vscode.window.showErrorMessage(`You don't have any snippets yet.`, ...choices)
+      const selection = await vscode.window.showErrorMessage('This workspace has no snippets.', ...choices)
 
       if (selection === choices[0]) {
-        vscode.env.openExternal(vscode.Uri.parse('https://snippy.app'))
+        vscode.env.openExternal(vscode.Uri.parse(SNIPPY_SITE_URL))
       }
 
       return
