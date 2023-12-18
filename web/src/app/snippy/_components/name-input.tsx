@@ -1,10 +1,13 @@
 import useSnippyStore from '@/stores/useSnippyStore'
-import { type FC, useState, type KeyboardEvent } from 'react'
+import { cn } from '@/utils/cn'
+import { type FC, useState, type KeyboardEvent, type InputHTMLAttributes } from 'react'
 import AutosizeInput from 'react-input-autosize'
 
 const DEFAULT_TEMPLATE_NAME = 'Untitled Snippy'
 
-const NameInput: FC = () => {
+type Props = InputHTMLAttributes<HTMLInputElement>
+
+const NameInput: FC<Props> = ({ className, ...props }) => {
   const [isEditing, setIsEditing] = useState(false)
   const { snippyName, setSnippyName } = useSnippyStore()
 
@@ -25,7 +28,7 @@ const NameInput: FC = () => {
       value={snippyName}
       onBlur={(e) => handleSaveName(e.target)}
       onChange={(e) => setSnippyName(e.target.value)}
-      onClick={() => setIsEditing(true)}
+      onFocus={() => setIsEditing(true)}
       onKeyDown={(e) => handleKeyDown(e)}
       placeholder={DEFAULT_TEMPLATE_NAME}
       inputStyle={{
@@ -37,7 +40,11 @@ const NameInput: FC = () => {
         outline: 'none',
         maxWidth: '100%',
       }}
-      className="max-w-[390px] rounded-sm px-1 focus-within:ring-1 focus-within:ring-border hover:ring-1 hover:ring-border [&>input]:placeholder:text-[#464646]"
+      className={cn(
+        'max-w-[390px] rounded-sm px-1 focus-within:ring-1 focus-within:ring-border hover:ring-1 hover:ring-border [&>input]:placeholder:text-[#464646]',
+        className,
+      )}
+      {...props}
     />
   )
 }

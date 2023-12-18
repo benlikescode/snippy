@@ -92,12 +92,16 @@ const Snippy: FC<Props> = ({ snippy }) => {
 
   const handleCreateSnippy = async () => {
     try {
+      setIsSaving(true)
+
       const res = await createTemplate(snippyName, prompts, files)
 
       toast({ description: res.message })
       router.replace(`/snippy/${res.id}`)
     } catch (err) {
       toast({ variant: 'destructive', description: (err as Error).message })
+    } finally {
+      setIsSaving(false)
     }
   }
 
@@ -119,7 +123,7 @@ const Snippy: FC<Props> = ({ snippy }) => {
               </Button>
             </Link>
 
-            <NameInput />
+            <NameInput autoFocus={!snippy} />
           </div>
 
           <div className="flex items-center gap-5">
