@@ -119,7 +119,7 @@ export const updateTemplate = async (
   }
 }
 
-export const getTemplates = async (page = 1) => {
+export const getTemplates = async (page = 1, query = '') => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
@@ -138,6 +138,9 @@ export const getTemplates = async (page = 1) => {
             userId: session.user.id,
           },
         },
+      },
+      name: {
+        contains: query,
       },
     },
     skip: offset,

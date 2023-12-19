@@ -9,12 +9,13 @@ const Spinner: FC<Props> = ({ className, position = 'default', ...props }) => {
   return (
     <div
       className={cn(
-        'h-5 w-5',
+        'h-5 w-5 fill-[#dcdcdc]',
         position === 'absolute' && 'absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2',
+        className,
       )}
     >
       <svg
-        className={cn('animate-spin fill-[#dcdcdc]', className)}
+        className="animate-spin"
         viewBox="0 0 44 44"
         xmlns="http://www.w3.org/2000/svg"
         {...props}
