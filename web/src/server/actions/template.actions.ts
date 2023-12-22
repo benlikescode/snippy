@@ -12,6 +12,7 @@ import {
   templateIdSchema,
   type GetTemplates,
   getTemplatesSchema,
+  MAX_SNIPPYS_PER_WORKSPACE,
 } from '@/validations/template.validations'
 import { revalidatePath } from 'next/cache'
 
@@ -24,25 +25,37 @@ export const createTemplate = async (params: CreateTemplate) => {
 
   const { name, prompts, files } = validateInput(params, createTemplateSchema)
 
-  const alreadyExists = await db.template.findFirst({
-    where: {
-      name,
-    },
-  })
-
-  if (alreadyExists) {
-    throw new Error('A template already exists with that name')
-  }
-
   const activeWorkspace = await db.workspaceMember.findFirst({
     where: {
       userId: session.user.id,
       isActive: true,
     },
+    include: {
+      workspace: {
+        include: {
+          _count: true,
+        },
+      },
+    },
   })
 
   if (!activeWorkspace?.workspaceId) {
     throw new Error('Could not link new template to workspace')
+  }
+
+  const isDuplicateName = await db.template.findFirst({
+    where: {
+      workspaceId: activeWorkspace.workspaceId,
+      name,
+    },
+  })
+
+  if (isDuplicateName) {
+    throw new Error('A template already exists with that name')
+  }
+
+  if (activeWorkspace.workspace._count.templates >= MAX_SNIPPYS_PER_WORKSPACE) {
+    throw new Error('You have reached the limit for snippys in this workspace')
   }
 
   const createdTemplate = await db.template.create({

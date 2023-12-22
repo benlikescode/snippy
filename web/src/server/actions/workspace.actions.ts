@@ -14,6 +14,8 @@ import {
   removeWorkspaceMemberSchema,
   type UpdateWorkspace,
   updateWorkspaceSchema,
+  MAX_WORKSPACES_PER_ACCOUNT,
+  MAX_MEMBERS_PER_WORKSPACE,
 } from '@/validations/workspace.validations'
 import { RoleTypes } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
@@ -26,6 +28,12 @@ export const createWorkspace = async (params: CreateWorkspace) => {
   }
 
   const { name } = validateInput(params, createWorkspaceSchema)
+
+  const numWorkspaces = await db.workspace.count()
+
+  if (numWorkspaces >= MAX_WORKSPACES_PER_ACCOUNT) {
+    throw new Error('You have reached the maximum amount of workspaces for this account')
+  }
 
   const alreadyExists = await db.workspace.findFirst({
     where: {
@@ -203,7 +211,7 @@ export const addMembersToWorkspace = async (params: AddWorkspaceMembers) => {
 
   const { workspaceId, emails } = validateInput(params, addWorkspaceMembersSchema)
 
-  const isMember = await db.workspace.findFirst({
+  const workspace = await db.workspace.findFirst({
     where: {
       id: workspaceId,
       members: {
@@ -212,9 +220,12 @@ export const addMembersToWorkspace = async (params: AddWorkspaceMembers) => {
         },
       },
     },
+    include: {
+      _count: true,
+    },
   })
 
-  if (!isMember) {
+  if (!workspace) {
     throw new Error('Must be a member of the workspace to invite people')
   }
 
@@ -237,6 +248,14 @@ export const addMembersToWorkspace = async (params: AddWorkspaceMembers) => {
     isActive: false,
     role: RoleTypes.MEMBER,
   }))
+
+  const currentMemberCount = workspace._count.members
+
+  if (newMembers.length + currentMemberCount > MAX_MEMBERS_PER_WORKSPACE) {
+    throw new Error(
+      `Can not invite all members since this workspace already has ${currentMemberCount} / ${MAX_MEMBERS_PER_WORKSPACE} allowed members`,
+    )
+  }
 
   await db.workspaceMember.createMany({
     data: newMembers,

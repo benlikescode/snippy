@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+export const MAX_SNIPPYS_PER_WORKSPACE = 150
+
 const PROMPT_MAX_LENGTH = 250
 const PROMPT_VARIABLE_MAX_LENGTH = 50
 const FILE_NAME_MAX_LENGTH = 100
