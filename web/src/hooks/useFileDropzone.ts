@@ -106,8 +106,8 @@ export const useFileDropzone = (item: FileItemType, canDropFile: boolean) => {
       }
 
       // Validate individual file sizes
-      if (acceptedFiles.some((file) => file.size > 1000 * 50)) {
-        return toast({ description: 'Files must not exceed 50 KB in size' })
+      if (acceptedFiles.some((file) => file.size > 1000 * 20)) {
+        return toast({ description: 'Files must not exceed 20 KB in size' })
       }
 
       const folderStructure = await buildFolderStructure(acceptedFiles)

@@ -64,8 +64,12 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) =>
   const createNewWorkspace = async (e: FormEvent) => {
     e.preventDefault()
 
+    if (!newWorkspaceName) {
+      return toast({ variant: 'destructive', description: 'Workspace name can not be empty' })
+    }
+
     try {
-      await createWorkspace(newWorkspaceName)
+      await createWorkspace({ name: newWorkspaceName })
 
       setDialogOpen(false)
     } catch (err) {
@@ -77,7 +81,7 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) =>
     try {
       setWorkspace(newWorkspace)
 
-      await changeWorkspace(newWorkspace.id)
+      await changeWorkspace({ workspaceId: newWorkspace.id })
 
       setOpen(false)
     } catch (err) {

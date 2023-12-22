@@ -2,14 +2,30 @@
 
 import { getServerAuthSession } from '@/server/auth'
 import { db } from '@/server/db'
+import validateInput from '@/utils/validateInput'
+import {
+  type CreateWorkspace,
+  createWorkspaceSchema,
+  workspaceIdSchema,
+  type WorkspaceId,
+  type AddWorkspaceMembers,
+  addWorkspaceMembersSchema,
+  type RemoveWorkspaceMember,
+  removeWorkspaceMemberSchema,
+  type UpdateWorkspace,
+  updateWorkspaceSchema,
+} from '@/validations/workspace.validations'
+import { RoleTypes } from '@prisma/client'
 import { revalidatePath } from 'next/cache'
 
-export const createWorkspace = async (name: string) => {
+export const createWorkspace = async (params: CreateWorkspace) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
     throw new Error('Unauthorized')
   }
+
+  const { name } = validateInput(params, createWorkspaceSchema)
 
   const alreadyExists = await db.workspace.findFirst({
     where: {
@@ -58,12 +74,38 @@ export const createWorkspace = async (name: string) => {
   }
 }
 
-export const changeWorkspace = async (workspaceId: string) => {
+export const updateWorkspace = async (params: UpdateWorkspace) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
     throw new Error('Unauthorized')
   }
+
+  const { workspaceId, name } = validateInput(params, updateWorkspaceSchema)
+
+  await db.workspace.update({
+    where: {
+      id: workspaceId,
+      members: {
+        some: {
+          userId: session.user.id,
+        },
+      },
+    },
+    data: {
+      name,
+    },
+  })
+}
+
+export const changeWorkspace = async (params: WorkspaceId) => {
+  const session = await getServerAuthSession()
+
+  if (!session?.user.id) {
+    throw new Error('Unauthorized')
+  }
+
+  const { workspaceId } = validateInput(params, workspaceIdSchema)
 
   await db.$transaction([
     db.workspaceMember.updateMany({
@@ -90,12 +132,14 @@ export const changeWorkspace = async (workspaceId: string) => {
   revalidatePath('/')
 }
 
-export const deleteWorkspace = async (workspaceId: string) => {
+export const deleteWorkspace = async (params: WorkspaceId) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
     throw new Error('Unauthorized')
   }
+
+  const { workspaceId } = validateInput(params, workspaceIdSchema)
 
   const workspace = await db.workspace.findFirst({
     where: {
@@ -150,20 +194,14 @@ export const deleteWorkspace = async (workspaceId: string) => {
   })
 }
 
-export const addMembersToWorkspace = async (workspaceId: string, emails: string[]) => {
-  if (!workspaceId) {
-    throw new Error('Missing workspace id')
-  }
-
-  if (!emails?.length) {
-    throw new Error('No emails were selected to invite')
-  }
-
+export const addMembersToWorkspace = async (params: AddWorkspaceMembers) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
     throw new Error('Unauthorized')
   }
+
+  const { workspaceId, emails } = validateInput(params, addWorkspaceMembersSchema)
 
   const isMember = await db.workspace.findFirst({
     where: {
@@ -185,37 +223,35 @@ export const addMembersToWorkspace = async (workspaceId: string, emails: string[
       email: {
         in: emails,
       },
-    },
-  })
-
-  await db.workspace.update({
-    where: {
-      id: workspaceId,
-    },
-    data: {
-      members: {
-        createMany: {
-          data: users.map((user) => ({
-            isActive: false,
-            role: 'MEMBER',
-            userId: user.id,
-          })),
+      workspaces: {
+        none: {
+          workspaceId,
         },
       },
     },
   })
+
+  const newMembers = users.map((user) => ({
+    userId: user.id,
+    workspaceId,
+    isActive: false,
+    role: RoleTypes.MEMBER,
+  }))
+
+  await db.workspaceMember.createMany({
+    data: newMembers,
+    skipDuplicates: true,
+  })
 }
 
-export const leaveWorkspace = async (workspaceId: string) => {
-  if (!workspaceId) {
-    throw new Error('Missing workspace id')
-  }
-
+export const leaveWorkspace = async (params: WorkspaceId) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
     throw new Error('Unauthorized')
   }
+
+  const { workspaceId } = validateInput(params, workspaceIdSchema)
 
   const isThisUserAMember = await db.workspace.findFirst({
     where: {
@@ -257,20 +293,14 @@ export const leaveWorkspace = async (workspaceId: string) => {
   })
 }
 
-export const removeMemberFromWorkspace = async (workspaceId: string, memberId: string) => {
-  if (!workspaceId) {
-    throw new Error('Missing workspace id')
-  }
-
-  if (!memberId) {
-    throw new Error('Missing member id')
-  }
-
+export const removeMemberFromWorkspace = async (params: RemoveWorkspaceMember) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
     throw new Error('Unauthorized')
   }
+
+  const { workspaceId, memberId } = validateInput(params, removeWorkspaceMemberSchema)
 
   const isWorkspaceOwner = await db.workspace.findFirst({
     where: {
@@ -313,20 +343,5 @@ export const removeMemberFromWorkspace = async (workspaceId: string, memberId: s
         isActive: true,
       },
     })
-  })
-}
-
-export const updateWorkspace = async (workspaceId: string, newName: string) => {
-  if (!newName) {
-    throw new Error('Missing workspace name')
-  }
-
-  await db.workspace.update({
-    where: {
-      id: workspaceId,
-    },
-    data: {
-      name: newName,
-    },
   })
 }

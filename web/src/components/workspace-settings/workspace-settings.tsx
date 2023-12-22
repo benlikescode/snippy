@@ -10,7 +10,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useState, type FC, type KeyboardEvent } from 'react'
+import { useState, type FC, type KeyboardEvent, useMemo } from 'react'
 import { toast } from '@/components/ui/use-toast'
 import { addMembersToWorkspace, updateWorkspace } from '@/server/actions/workspace.actions'
 import { useRouter } from 'next/navigation'
@@ -21,21 +21,27 @@ import MemberItem from '@/components/workspace-settings/member-item'
 import DestructiveButton from '@/components/workspace-settings/destructive-button'
 import SidebarItem from '@/components/sidebar/sidebar-item'
 
+const EMAIL_REGEX = /\S+@\S+\.\S+/
+
 type Props = {
   workspace: WorkspaceWithInfo
 }
 
 const WorkspaceSettings: FC<Props> = ({ workspace }) => {
   const [open, setOpen] = useState(false)
-  const [workspaceName, setWorkspaceName] = useState(workspace.name)
+  const [workspaceName, setWorkspaceName] = useState('')
   const [inviteEmail, setInviteEmail] = useState('')
   const [emailsToInvite, setEmailsToInvite] = useState<string[]>([])
 
   const router = useRouter()
 
   const handleUpdateWorkspace = async () => {
+    if (!workspaceName) {
+      return toast({ variant: 'destructive', description: 'Workspace name can not be empty' })
+    }
+
     try {
-      await updateWorkspace(workspace.id, workspaceName)
+      await updateWorkspace({ workspaceId: workspace.id, name: workspaceName })
 
       setOpen(false)
       router.refresh()
@@ -45,17 +51,16 @@ const WorkspaceSettings: FC<Props> = ({ workspace }) => {
   }
 
   const handleInvite = async () => {
-    if (!emailsToInvite.length) {
-      return toast({
-        variant: 'destructive',
-        description: 'You have not selected any emails to invite',
-      })
+    if (!emailsToInvite.includes(inviteEmail)) {
+      emailsToInvite.push(inviteEmail)
     }
 
     try {
-      await addMembersToWorkspace(workspace.id, emailsToInvite)
+      await addMembersToWorkspace({ workspaceId: workspace.id, emails: emailsToInvite })
 
+      setInviteEmail('')
       setEmailsToInvite([])
+
       router.refresh()
     } catch (err) {
       toast({ variant: 'destructive', description: (err as Error).message })
@@ -64,7 +69,6 @@ const WorkspaceSettings: FC<Props> = ({ workspace }) => {
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter' && inviteEmail && !emailsToInvite.includes(inviteEmail)) {
-      console.log('fired')
       setInviteEmail('')
       setEmailsToInvite((prev) => [...prev, inviteEmail])
     }
@@ -91,6 +95,25 @@ const WorkspaceSettings: FC<Props> = ({ workspace }) => {
 
     return members.sort(sortComparator)
   }
+
+  const isInviteButtonDisabled = useMemo(() => {
+    let isInviteBtnDisabled = !EMAIL_REGEX.test(inviteEmail)
+
+    if (!!emailsToInvite.length && !inviteEmail) {
+      isInviteBtnDisabled = false
+    }
+
+    if (workspace.members.some((member) => member.user.email === inviteEmail)) {
+      isInviteBtnDisabled = true
+
+      toast({
+        variant: 'destructive',
+        description: `${inviteEmail} is already a member of the workspace`,
+      })
+    }
+
+    return isInviteBtnDisabled
+  }, [inviteEmail, emailsToInvite, workspace.members])
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -121,7 +144,7 @@ const WorkspaceSettings: FC<Props> = ({ workspace }) => {
                 </Label>
                 <Input
                   id="workspace-name"
-                  value={workspaceName}
+                  defaultValue={workspace.name}
                   onChange={(e) => setWorkspaceName(e.target.value)}
                 />
               </div>
@@ -147,7 +170,7 @@ const WorkspaceSettings: FC<Props> = ({ workspace }) => {
             <div className="p-6">
               <Input
                 id="invite"
-                placeholder="Invite people by email"
+                placeholder="Invite by email"
                 value={inviteEmail}
                 onChange={(e) => setInviteEmail(e.target.value)}
                 onKeyDown={handleKeyDown}
@@ -185,7 +208,11 @@ const WorkspaceSettings: FC<Props> = ({ workspace }) => {
               <Button variant="secondary" onClick={() => setOpen(false)}>
                 Cancel
               </Button>
-              <Button variant="modal" onClick={() => handleInvite()}>
+              <Button
+                variant="modal"
+                onClick={() => handleInvite()}
+                disabled={isInviteButtonDisabled}
+              >
                 Invite
               </Button>
             </DialogFooter>

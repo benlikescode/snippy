@@ -44,7 +44,7 @@ const DestructiveButton: FC<Props> = ({ workspace, closeModal }) => {
 
   const handleDeleteWorkspace = async () => {
     try {
-      await deleteWorkspace(workspace.id)
+      await deleteWorkspace({ workspaceId: workspace.id })
 
       closeModal()
       router.refresh()
@@ -55,7 +55,7 @@ const DestructiveButton: FC<Props> = ({ workspace, closeModal }) => {
 
   const handleLeave = async () => {
     try {
-      await leaveWorkspace(workspace.id)
+      await leaveWorkspace({ workspaceId: workspace.id })
 
       closeModal()
       router.refresh()
