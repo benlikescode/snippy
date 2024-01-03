@@ -1,11 +1,12 @@
 import { z } from 'zod'
 
 export const MAX_SNIPPYS_PER_WORKSPACE = 150
+export const MAX_FILES_PER_TEMPLATE = 20
+export const MAX_FILE_SIZE = 20000
 
 const PROMPT_MAX_LENGTH = 250
 const PROMPT_VARIABLE_MAX_LENGTH = 50
 const FILE_NAME_MAX_LENGTH = 100
-const FILE_CONTENT_MAX_LENGTH = 20000
 
 export const promptSchema = z.object({
   id: z.string(),
@@ -30,9 +31,7 @@ const fileSchema = z.object({
       .string()
       .min(1)
       .max(FILE_NAME_MAX_LENGTH, `File names must be at most ${FILE_NAME_MAX_LENGTH} characters`),
-    content: z
-      .string()
-      .max(FILE_CONTENT_MAX_LENGTH, `At least one of the files is too large in size`),
+    content: z.string().max(MAX_FILE_SIZE, `At least one of the files is too large in size`),
     language: z.string(),
     justCreated: z.boolean().optional(),
   }),
