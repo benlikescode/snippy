@@ -65,14 +65,14 @@ const Snippy: FC<Props> = ({ snippy }) => {
     try {
       setIsSaving(true)
 
-      const res = await updateTemplate(
-        snippy.id,
-        snippyName,
+      const res = await updateTemplate({
+        id: snippy.id,
+        name: snippyName,
         prompts,
         files,
-        snippy.updatedAt,
+        updatedAtLocal: snippy.updatedAt,
         forceSave,
-      )
+      })
 
       if (res.hasEditConflict) {
         setConflictDialogOpen(true)
@@ -91,10 +91,14 @@ const Snippy: FC<Props> = ({ snippy }) => {
   }
 
   const handleCreateSnippy = async () => {
+    if (!snippyName) {
+      return toast({ variant: 'destructive', description: 'Name can not be blank' })
+    }
+
     try {
       setIsSaving(true)
 
-      const res = await createTemplate(snippyName, prompts, files)
+      const res = await createTemplate({ name: snippyName, prompts, files })
 
       toast({ description: res.message })
       router.replace(`/snippy/${res.id}`)

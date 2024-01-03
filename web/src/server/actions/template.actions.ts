@@ -2,39 +2,60 @@
 
 import { getServerAuthSession } from '@/server/auth'
 import { db } from '@/server/db'
-import type { FileItemType, PromptType } from '@/types'
+import validateInput from '@/utils/validateInput'
+import {
+  type CreateTemplate,
+  type UpdateTemplate,
+  createTemplateSchema,
+  updateTemplateSchema,
+  type TemplateId,
+  templateIdSchema,
+  type GetTemplates,
+  getTemplatesSchema,
+  MAX_SNIPPYS_PER_WORKSPACE,
+} from '@/validations/template.validations'
 import { revalidatePath } from 'next/cache'
 
-export const createTemplate = async (
-  name: string,
-  prompts: PromptType[],
-  files: FileItemType[],
-) => {
+export const createTemplate = async (params: CreateTemplate) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
     throw new Error('Unauthorized')
   }
 
-  const alreadyExists = await db.template.findFirst({
-    where: {
-      name,
-    },
-  })
-
-  if (alreadyExists) {
-    throw new Error('A template already exists with that name')
-  }
+  const { name, prompts, files } = validateInput(params, createTemplateSchema)
 
   const activeWorkspace = await db.workspaceMember.findFirst({
     where: {
       userId: session.user.id,
       isActive: true,
     },
+    include: {
+      workspace: {
+        include: {
+          _count: true,
+        },
+      },
+    },
   })
 
   if (!activeWorkspace?.workspaceId) {
     throw new Error('Could not link new template to workspace')
+  }
+
+  const isDuplicateName = await db.template.findFirst({
+    where: {
+      workspaceId: activeWorkspace.workspaceId,
+      name,
+    },
+  })
+
+  if (isDuplicateName) {
+    throw new Error('A template already exists with that name')
+  }
+
+  if (activeWorkspace.workspace._count.templates >= MAX_SNIPPYS_PER_WORKSPACE) {
+    throw new Error('You have reached the limit for snippys in this workspace')
   }
 
   const createdTemplate = await db.template.create({
@@ -56,23 +77,21 @@ export const createTemplate = async (
   }
 }
 
-export const updateTemplate = async (
-  templateId: string,
-  name: string,
-  prompts: PromptType[],
-  files: FileItemType[],
-  updatedAtLocal: Date,
-  forceSave = false,
-) => {
+export const updateTemplate = async (params: UpdateTemplate) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
     throw new Error('Unauthorized')
   }
 
+  const { id, name, prompts, files, updatedAtLocal, forceSave } = validateInput(
+    params,
+    updateTemplateSchema,
+  )
+
   const template = await db.template.findFirst({
     where: {
-      id: templateId,
+      id,
     },
     include: {
       workspace: {
@@ -104,7 +123,7 @@ export const updateTemplate = async (
 
   await db.template.update({
     where: {
-      id: templateId,
+      id,
     },
     data: {
       name,
@@ -119,12 +138,14 @@ export const updateTemplate = async (
   }
 }
 
-export const getTemplates = async (page = 1, query = '') => {
+export const getTemplates = async (params: GetTemplates) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
     throw new Error('Unauthorized')
   }
+
+  const { page, query } = validateInput(params, getTemplatesSchema)
 
   const itemsPerPage = 18
   const offset = (page - 1) * itemsPerPage
@@ -153,12 +174,14 @@ export const getTemplates = async (page = 1, query = '') => {
   return { templates: templates.slice(0, itemsPerPage), hasMore }
 }
 
-export const deleteTemplate = async (templateId: string) => {
+export const deleteTemplate = async (params: TemplateId) => {
   const session = await getServerAuthSession()
 
   if (!session?.user.id) {
     throw new Error('Unauthorized')
   }
+
+  const { templateId } = validateInput(params, templateIdSchema)
 
   // Owners can delete all, members can only delete ones they create
   const hasPermission = await db.template.findFirst({

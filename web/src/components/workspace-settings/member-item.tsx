@@ -26,7 +26,7 @@ const MemberItem: FC<Props> = ({ workspace, member, closeModal }) => {
 
   const handleRemoveMember = async () => {
     try {
-      await removeMemberFromWorkspace(workspace.id, member.user.id)
+      await removeMemberFromWorkspace({ workspaceId: workspace.id, memberId: member.user.id })
       router.refresh()
     } catch (err) {
       toast({ variant: 'destructive', description: (err as Error).message })
@@ -35,7 +35,7 @@ const MemberItem: FC<Props> = ({ workspace, member, closeModal }) => {
 
   const handleLeave = async () => {
     try {
-      await leaveWorkspace(workspace.id)
+      await leaveWorkspace({ workspaceId: workspace.id })
 
       closeModal()
       router.refresh()

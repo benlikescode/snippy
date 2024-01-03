@@ -54,7 +54,7 @@ const HomeCard: FC<Props> = ({ template }) => {
 
   const handleDeleteTemplate = async () => {
     try {
-      await deleteTemplate(template.id)
+      await deleteTemplate({ templateId: template.id })
 
       router.refresh()
     } catch (err) {

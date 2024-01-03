@@ -39,7 +39,7 @@ const Home: FC<Props> = ({ initialTemplates }) => {
 
   const fetchTemplates = async () => {
     try {
-      const res = await getTemplates(page)
+      const res = await getTemplates({ page })
 
       setTemplates((prev) => [...prev, ...res.templates])
       setHasMore(res.hasMore)
@@ -61,7 +61,7 @@ const Home: FC<Props> = ({ initialTemplates }) => {
     try {
       setIsSearching(true)
 
-      const res = await getTemplates(1, query)
+      const res = await getTemplates({ page: 1, query })
 
       setSearchResults(res.templates)
       setSearchHasMore(res.hasMore)
@@ -80,7 +80,7 @@ const Home: FC<Props> = ({ initialTemplates }) => {
 
   const getNextSearchResults = async () => {
     try {
-      const res = await getTemplates(searchPage, searchQuery)
+      const res = await getTemplates({ page: searchPage, query: searchQuery })
 
       setSearchResults((prev) => [...prev, ...res.templates])
       setSearchHasMore(res.hasMore)

@@ -10,7 +10,7 @@ const HomePage = async () => {
 
   if (!session?.user) return redirect('/login')
 
-  const templates = await getTemplates()
+  const templates = await getTemplates({ page: 1 })
   const randomFact = funFacts[Math.floor(Math.random() * funFacts.length)]
 
   return (

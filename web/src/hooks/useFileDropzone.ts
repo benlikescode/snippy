@@ -4,6 +4,7 @@ import type { FileDataType, FileItemType, FolderDataType } from '@/types'
 import getFileLanguage from '@/utils/file-helpers/getFileLanguage'
 import useFileStore from '@/stores/useFileStore'
 import { useToast } from '@/components/ui/use-toast'
+import { MAX_FILES_PER_TEMPLATE, MAX_FILE_SIZE } from '@/validations/template.validations'
 
 type FileOrFolder = {
   type: 'file' | 'folder'
@@ -101,13 +102,19 @@ export const useFileDropzone = (item: FileItemType, canDropFile: boolean) => {
     async (acceptedFiles: FileWithPath[]) => {
       setFileDropzone(undefined)
 
-      if (acceptedFiles.length > 20) {
-        return toast({ description: 'You can only upload a maximum of 20 files' })
+      // File validation
+      if (acceptedFiles.length > MAX_FILES_PER_TEMPLATE) {
+        return toast({
+          variant: 'destructive',
+          description: `You can only upload a maximum of ${MAX_FILES_PER_TEMPLATE} files`,
+        })
       }
 
-      // Validate individual file sizes
-      if (acceptedFiles.some((file) => file.size > 1000 * 50)) {
-        return toast({ description: 'Files must not exceed 50 KB in size' })
+      if (acceptedFiles.some((file) => file.size > MAX_FILE_SIZE)) {
+        return toast({
+          variant: 'destructive',
+          description: `Files must not exceed ${MAX_FILE_SIZE / 1000} KB in size`,
+        })
       }
 
       const folderStructure = await buildFolderStructure(acceptedFiles)
