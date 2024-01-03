@@ -33,6 +33,7 @@ import { changeWorkspace, createWorkspace } from '@/server/actions/workspace.act
 import { toast } from '@/components/ui/use-toast'
 import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
 import { CheckIcon, ChevronUpDownIcon, PlusIcon } from '@heroicons/react/24/solid'
+import { MAX_WORKSPACES_PER_ACCOUNT } from '@/validations/workspace.validations'
 
 type Props = ComponentPropsWithoutRef<typeof DropdownMenuTrigger> & {
   activeWorkspace: WorkspaceWithInfo
@@ -163,15 +164,24 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) =>
               <CommandGroup>
                 <DialogTrigger asChild>
                   <CommandItem
+                    disabled={workspaces.length >= MAX_WORKSPACES_PER_ACCOUNT}
                     onSelect={() => {
                       setOpen(false)
                       setDialogOpen(true)
                     }}
                   >
-                    <div className="mr-1 flex h-7 w-7 shrink-0 items-center justify-center">
-                      <PlusIcon className="h-[18px] opacity-50" />
-                    </div>
-                    <span className="text-muted-foreground">Create Workspace</span>
+                    {workspaces.length >= MAX_WORKSPACES_PER_ACCOUNT ? (
+                      <span className="text-sm text-muted-foreground">
+                        Workspace limit reached.
+                      </span>
+                    ) : (
+                      <>
+                        <div className="mr-1 flex h-7 w-7 shrink-0 items-center justify-center">
+                          <PlusIcon className="h-[18px] opacity-50" />
+                        </div>
+                        <span className="text-muted-foreground">Create Workspace</span>
+                      </>
+                    )}
                   </CommandItem>
                 </DialogTrigger>
               </CommandGroup>

@@ -20,6 +20,8 @@ import { XMarkIcon } from '@heroicons/react/24/solid'
 import MemberItem from '@/components/workspace-settings/member-item'
 import DestructiveButton from '@/components/workspace-settings/destructive-button'
 import SidebarItem from '@/components/sidebar/sidebar-item'
+import { MAX_MEMBERS_PER_WORKSPACE } from '@/validations/workspace.validations'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
 const EMAIL_REGEX = /\S+@\S+\.\S+/
 
@@ -51,9 +53,7 @@ const WorkspaceSettings: FC<Props> = ({ workspace }) => {
   }
 
   const handleInvite = async () => {
-    if (!emailsToInvite.includes(inviteEmail)) {
-      emailsToInvite.push(inviteEmail)
-    }
+    addEmailToList()
 
     try {
       await addMembersToWorkspace({ workspaceId: workspace.id, emails: emailsToInvite })
@@ -68,10 +68,20 @@ const WorkspaceSettings: FC<Props> = ({ workspace }) => {
   }
 
   const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.key === 'Enter' && inviteEmail && !emailsToInvite.includes(inviteEmail)) {
-      setInviteEmail('')
-      setEmailsToInvite((prev) => [...prev, inviteEmail])
+    if (e.key !== 'Enter') {
+      return
     }
+
+    addEmailToList()
+  }
+
+  const addEmailToList = () => {
+    if (!inviteEmail || emailsToInvite.includes(inviteEmail)) {
+      return
+    }
+
+    setInviteEmail('')
+    setEmailsToInvite((prev) => [...prev, inviteEmail])
   }
 
   const handleRemoveEmailToInvite = (emailToRemove: string) => {
@@ -167,33 +177,42 @@ const WorkspaceSettings: FC<Props> = ({ workspace }) => {
           </TabsContent>
 
           <TabsContent value="members">
-            <div className="p-6">
-              <Input
-                id="invite"
-                placeholder="Invite by email"
-                value={inviteEmail}
-                onChange={(e) => setInviteEmail(e.target.value)}
-                onKeyDown={handleKeyDown}
-              />
+            {workspace.members.length >= MAX_MEMBERS_PER_WORKSPACE ? (
+              <div className="flex items-center px-6 py-8">
+                <ExclamationTriangleIcon className="mr-2 h-5 w-5 text-muted-foreground" />
+                <span className="text-sm text-muted-foreground">
+                  Workspace member limit reached.
+                </span>
+              </div>
+            ) : (
+              <div className="mb-6 border-b border-[#181818] p-6">
+                <Input
+                  id="invite"
+                  placeholder="Invite by email"
+                  value={inviteEmail}
+                  onChange={(e) => setInviteEmail(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                />
 
-              {!!emailsToInvite.length && (
-                <div className="mt-4 flex flex-wrap gap-2">
-                  {emailsToInvite.map((email) => (
-                    <div
-                      key={email}
-                      className="flex w-fit items-center justify-center rounded-md bg-[#1f1f1f] px-2 py-1 text-sm text-[#a5a5a5]"
-                    >
-                      {email}
-                      <button onClick={() => handleRemoveEmailToInvite(email)}>
-                        <XMarkIcon className="ml-1 h-4 w-4 shrink-0 text-[#737373]" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                {!!emailsToInvite.length && (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {emailsToInvite.map((email) => (
+                      <div
+                        key={email}
+                        className="flex w-fit items-center justify-center rounded-md bg-[#1f1f1f] px-2 py-1 text-sm text-[#a5a5a5]"
+                      >
+                        {email}
+                        <button onClick={() => handleRemoveEmailToInvite(email)}>
+                          <XMarkIcon className="ml-1 h-4 w-4 shrink-0 text-[#737373]" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
-            <div className="space-y-1 overflow-y-auto border-t border-[#181818] px-4 pt-6">
+            <div className="space-y-1 overflow-y-auto px-4">
               {sortMembers(workspace.members).map((member) => (
                 <MemberItem
                   key={member.user.id}

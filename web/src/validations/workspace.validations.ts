@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const MAX_WORKSPACES_PER_ACCOUNT = 10
+export const MAX_WORKSPACES_PER_ACCOUNT = 3
 export const MAX_MEMBERS_PER_WORKSPACE = 10
 
 const NAME_MAX_LENGTH = 100

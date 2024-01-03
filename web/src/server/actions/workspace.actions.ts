@@ -29,10 +29,20 @@ export const createWorkspace = async (params: CreateWorkspace) => {
 
   const { name } = validateInput(params, createWorkspaceSchema)
 
-  const numWorkspaces = await db.workspace.count()
+  const numWorkspaces = await db.workspace.count({
+    where: {
+      members: {
+        some: {
+          userId: session.user.id,
+        },
+      },
+    },
+  })
 
   if (numWorkspaces >= MAX_WORKSPACES_PER_ACCOUNT) {
-    throw new Error('You have reached the maximum amount of workspaces for this account')
+    throw new Error(
+      `You have reached the maximum amount of workspaces for this account (${MAX_WORKSPACES_PER_ACCOUNT})`,
+    )
   }
 
   const alreadyExists = await db.workspace.findFirst({
@@ -252,9 +262,7 @@ export const addMembersToWorkspace = async (params: AddWorkspaceMembers) => {
   const currentMemberCount = workspace._count.members
 
   if (newMembers.length + currentMemberCount > MAX_MEMBERS_PER_WORKSPACE) {
-    throw new Error(
-      `Can not invite all members since this workspace already has ${currentMemberCount} / ${MAX_MEMBERS_PER_WORKSPACE} allowed members`,
-    )
+    throw new Error(`Can only have a maximum of ${MAX_MEMBERS_PER_WORKSPACE} members per workspace`)
   }
 
   await db.workspaceMember.createMany({

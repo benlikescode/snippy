@@ -1,12 +1,4 @@
-import { type FC } from 'react'
-
-type Props = {
-  dontShow: boolean
-}
-
-const InstallExtension: FC<Props> = ({ dontShow }) => {
-  if (dontShow) return null
-
+const InstallExtension = () => {
   return (
     <div className="rounded-xl bg-[#171717]">
       <div className="px-6 pb-6">
