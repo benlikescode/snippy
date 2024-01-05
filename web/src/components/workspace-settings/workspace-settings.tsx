@@ -1,3 +1,5 @@
+'use client'
+
 import {
   Dialog,
   DialogContent,
@@ -130,7 +132,7 @@ const WorkspaceSettings: FC<Props> = ({ workspace }) => {
       <DialogTrigger asChild>
         <SidebarItem>
           <CogIcon className="mr-3 h-6" />
-          Workspace Settings
+          <span className="hidden md:block">Workspace Settings</span>
         </SidebarItem>
       </DialogTrigger>
       <DialogContent className="gap-0 p-0" noCloseIcon>

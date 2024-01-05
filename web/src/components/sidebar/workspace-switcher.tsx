@@ -101,7 +101,7 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) =>
           <div
             aria-expanded={true}
             aria-label="Select a workspace"
-            className="flex cursor-pointer items-center justify-between border-b p-4 hover:bg-[#151515]"
+            className="flex w-full cursor-pointer select-none items-center justify-between p-4 hover:bg-[#151515]"
           >
             <div className="flex items-center">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-[#2c3036] font-semibold">

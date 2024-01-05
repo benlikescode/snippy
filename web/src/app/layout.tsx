@@ -4,6 +4,7 @@ import '@/styles/globals.css'
 import { Inter } from 'next/font/google'
 import Providers from './providers'
 import { Toaster } from '@/components/ui/toaster'
+import MobileNav from '@/components/mobile-nav'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -19,10 +20,11 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`font-sans ${inter.variable}`}>
+      <body className={`font-sans ${inter.variable} flex flex-col md:flex-row`}>
         <Providers>
           <Sidebar />
           {children}
+          <MobileNav />
           <Toaster />
         </Providers>
       </body>
