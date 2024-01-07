@@ -12,7 +12,7 @@ import { createTemplate, updateTemplate } from '@/server/actions/template.action
 import { toast } from '@/components/ui/use-toast'
 import { type FileItemType, type PromptType } from '@/types'
 import { useRouter } from 'next/navigation'
-import { ChevronLeftIcon } from '@radix-ui/react-icons'
+import { ChevronLeftIcon, HamburgerMenuIcon } from '@radix-ui/react-icons'
 import Prompts from './prompts/prompts'
 import Link from 'next/link'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
@@ -29,6 +29,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { cn } from '@/utils/cn'
 
 type Props = {
   snippy?: TemplateWithInfo
@@ -120,7 +121,7 @@ const Snippy: FC<Props> = ({ snippy }) => {
     <>
       <div className="flex h-full w-full flex-col ">
         <div className="flex h-[70px] w-full shrink-0 items-center justify-between border-b px-5">
-          <div className="flex items-center space-x-3">
+          <div className="flex flex-1 items-center space-x-3">
             <Link href="/" className="h-8 w-8">
               <Button variant="ghost" className="h-full w-full">
                 <ChevronLeftIcon className="h-7 w-7 shrink-0 text-[#484848]" />
@@ -130,11 +131,11 @@ const Snippy: FC<Props> = ({ snippy }) => {
             <NameInput autoFocus={!snippy} />
           </div>
 
-          <div className="flex items-center gap-5">
+          <div className="flex shrink-0 items-center gap-5">
             {snippy?.updatedAt && snippy?.updatedBy && (
               <Tooltip delayDuration={150}>
                 <TooltipTrigger asChild>
-                  <div className="flex items-center space-x-2">
+                  <div className="hidden items-center space-x-2 md:flex">
                     {snippy.updatedBy.image && (
                       <Avatar className="h-[18px] w-[18px]">
                         <AvatarImage src={snippy.updatedBy.image ?? ''} />
@@ -167,7 +168,7 @@ const Snippy: FC<Props> = ({ snippy }) => {
               size="lg"
               onClick={() => (snippy ? handleSaveChanges() : handleCreateSnippy())}
               showSpinner={isSaving}
-              className="px-5"
+              className="shrink-0 px-5"
             >
               <span>{snippy ? 'Save Changes' : 'Create Snippy'}</span>
             </Button>
@@ -175,7 +176,12 @@ const Snippy: FC<Props> = ({ snippy }) => {
         </div>
 
         <div className="flex h-[calc(100%_-_70px)]">
-          <div className="flex w-[460px] shrink-0 flex-col border-r bg-[#070707]">
+          <div
+            className={cn(
+              'flex w-full shrink-0  flex-col border-r bg-[#070707] md:w-[460px]',
+              openFile?.data.name && !!pathToOpenFile.length && 'hidden md:flex',
+            )}
+          >
             <Prompts />
             <FileSystem
               noFiles={snippy?.files ? !(snippy?.files as FileItemType[]).length : true}
@@ -185,22 +191,40 @@ const Snippy: FC<Props> = ({ snippy }) => {
           {openFile?.data.name && !!pathToOpenFile.length ? (
             <div className="h-full w-full">
               <div className="grid h-full grid-rows-[48px_auto]">
-                <div className="flex items-center bg-[#0c0c0c] px-4 text-sm font-medium text-[#bababa]">
-                  {pathToOpenFile.map((str, idx) => (
-                    <div key={idx} className="flex items-center">
-                      {idx !== 0 && (
-                        <ChevronRightIcon className="h-4 stroke-[2px] text-[#767676]" />
-                      )}
-                      {str}
-                    </div>
-                  ))}
+                <div className="flex items-center justify-between bg-[#0c0c0c] px-4 text-sm font-medium text-[#bababa]">
+                  <div className="flex items-center">
+                    {pathToOpenFile.map((str, idx) => (
+                      <div key={idx} className="flex items-center">
+                        {idx !== 0 && (
+                          <ChevronRightIcon className="h-4 stroke-[2px] text-[#767676]" />
+                        )}
+                        {str}
+                      </div>
+                    ))}
+                  </div>
+
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="md:hidden"
+                        onClick={() => setOpenFile(null)}
+                      >
+                        <HamburgerMenuIcon className="h-5 text-[#484848]" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Open sidebar</p>
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
 
                 <CodeEditor />
               </div>
             </div>
           ) : (
-            <div className="flex w-full select-none flex-col items-center justify-center space-y-4">
+            <div className="hidden w-full select-none flex-col items-center justify-center space-y-4 md:flex">
               <div className="flex h-20 w-20 items-center justify-center rounded-full border border-[#222] bg-[#181818] shadow-lg">
                 <MagnifyingGlassIcon className="h-8 w-8 text-[#737373]" />
               </div>

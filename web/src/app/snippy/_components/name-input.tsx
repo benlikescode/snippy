@@ -41,7 +41,7 @@ const NameInput: FC<Props> = ({ className, ...props }) => {
         maxWidth: '100%',
       }}
       className={cn(
-        'max-w-[390px] rounded-sm px-1 focus-within:ring-1 focus-within:ring-border hover:ring-1 hover:ring-border [&>input]:placeholder:text-[#464646]',
+        'max-w-[200px] rounded-sm px-1 focus-within:ring-1 focus-within:ring-border hover:ring-1 hover:ring-border md:max-w-[390px] [&>input]:placeholder:text-[#464646]',
         className,
       )}
       {...props}
