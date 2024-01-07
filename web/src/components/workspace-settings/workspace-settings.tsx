@@ -132,7 +132,7 @@ const WorkspaceSettings: FC<Props> = ({ workspace }) => {
       <DialogTrigger asChild>
         <SidebarItem>
           <CogIcon className="mr-3 h-6" />
-          <span className="hidden md:block">Workspace Settings</span>
+          <span className="hidden lg:block">Workspace Settings</span>
         </SidebarItem>
       </DialogTrigger>
       <DialogContent className="gap-0 p-0" noCloseIcon>

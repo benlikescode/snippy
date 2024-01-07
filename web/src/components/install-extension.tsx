@@ -1,6 +1,6 @@
 const InstallExtension = () => {
   return (
-    <div className="rounded-xl bg-[#171717]">
+    <div className="hidden rounded-xl bg-[#171717] lg:block">
       <div className="px-6 pb-6">
         <div className="mt-[-24px] flex items-center">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[linear-gradient(180deg,_#0958F2_0%,_#7242FA_100%)] shadow-[0px_4px_10px_rgba(0,_0,_0,_0.30)]">

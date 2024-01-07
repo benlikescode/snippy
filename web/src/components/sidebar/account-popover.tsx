@@ -47,17 +47,17 @@ const AccountPopover: FC<Props> = ({ user, ...props }) => {
         <div
           aria-expanded={open}
           aria-label="Account options"
-          className="flex cursor-pointer select-none items-center p-4 md:hover:bg-[#151515]"
+          className="flex cursor-pointer select-none items-center p-3 md:justify-center md:hover:bg-[#151515] lg:p-4"
         >
           <Avatar className="h-6 w-6 md:h-11 md:w-11">
             <AvatarImage src={user.image ?? ''} />
           </Avatar>
 
-          <div className="ml-3 hidden md:block">
+          <div className="ml-3 hidden lg:block">
             <div>{user.name}</div>
             <div className="text-left text-sm text-[#5a626c]">{user.email}</div>
           </div>
-          <CaretSortIcon className="ml-auto hidden h-6 w-6 shrink-0 opacity-50 md:block" />
+          <CaretSortIcon className="ml-auto hidden h-6 w-6 shrink-0 opacity-50 lg:block" />
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="p-0" align="start" alignOffset={16} {...props}>
