@@ -101,14 +101,14 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) =>
           <div
             aria-expanded={true}
             aria-label="Select a workspace"
-            className="flex cursor-pointer items-center justify-between border-b p-4 hover:bg-[#151515]"
+            className="flex w-full cursor-pointer select-none items-center justify-between p-3 hover:bg-[#151515] md:justify-center lg:justify-between lg:p-4"
           >
             <div className="flex items-center">
               <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-[#2c3036] font-semibold">
                 {getAcronym(workspace.name)}
               </div>
 
-              <div className="ml-3 grid">
+              <div className="ml-3 grid md:hidden lg:grid">
                 <div className="truncate">{workspace.name}</div>
 
                 <div className="text-sm text-[#737373]">
@@ -117,7 +117,7 @@ const WorkspaceSwitcher: FC<Props> = ({ activeWorkspace, initialWorkspaces }) =>
               </div>
             </div>
 
-            <ChevronUpDownIcon className="ml-2 h-6 w-6 shrink-0 opacity-50" />
+            <ChevronUpDownIcon className="ml-2 h-6 w-6 shrink-0 opacity-50 md:hidden lg:block" />
           </div>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-[300px] p-0" align="start" alignOffset={16}>
