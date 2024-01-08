@@ -81,7 +81,7 @@ const FileItemName: FC<Props> = ({ item, isEditing, setIsEditing }) => {
         onChange={handleOnChange}
         onKeyDown={handleKeyDown}
         maxLength={100}
-        className="ml-1 w-full rounded-[5px] bg-transparent p-1 text-sm text-[#dcdcdc] focus:bg-[#070707] focus:outline-none focus:ring-2 focus:ring-[#084986]"
+        className="ml-1 w-full appearance-none rounded-[5px] bg-transparent p-1 text-sm text-[#dcdcdc] focus:bg-[#070707] focus:outline-none focus:ring-2 focus:ring-[#084986]"
       />
     )
   }
