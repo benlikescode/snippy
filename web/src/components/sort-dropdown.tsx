@@ -80,7 +80,7 @@ const SortDropdown: FC<Props> = ({ templates, setTemplates }) => {
       <DropdownMenuTrigger asChild>
         <Button
           variant="secondary"
-          className="h-[42px] w-[180px] justify-between rounded-[5px] border border-[#323232] bg-[#151515] text-[#737373] data-[state=open]:bg-accent "
+          className="h-[42px] w-[180px] justify-between rounded-[5px] border border-[#323232] bg-transparent text-[#737373] hover:bg-[#151515]"
         >
           <span>{sortBy.label}</span>
           <CaretSortIcon className="ml-2 h-5 w-5" />
