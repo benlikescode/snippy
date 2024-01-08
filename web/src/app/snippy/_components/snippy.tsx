@@ -121,7 +121,7 @@ const Snippy: FC<Props> = ({ snippy }) => {
     <>
       <div className="flex h-full w-full flex-col ">
         <div className="flex h-[70px] w-full shrink-0 items-center justify-between border-b px-5">
-          <div className="flex flex-1 items-center space-x-3">
+          <div className="flex flex-1 items-center space-x-2.5">
             <Link href="/" className="h-8 w-8">
               <Button variant="ghost" className="h-full w-full">
                 <ChevronLeftIcon className="h-7 w-7 shrink-0 text-[#484848]" />
@@ -131,7 +131,7 @@ const Snippy: FC<Props> = ({ snippy }) => {
             <NameInput autoFocus={!snippy} />
           </div>
 
-          <div className="flex shrink-0 items-center gap-5">
+          <div className="flex items-center gap-5">
             {snippy?.updatedAt && snippy?.updatedBy && (
               <Tooltip delayDuration={150}>
                 <TooltipTrigger asChild>
@@ -168,9 +168,10 @@ const Snippy: FC<Props> = ({ snippy }) => {
               size="lg"
               onClick={() => (snippy ? handleSaveChanges() : handleCreateSnippy())}
               showSpinner={isSaving}
-              className="shrink-0 px-5"
+              className="px-5"
             >
-              <span>{snippy ? 'Save Changes' : 'Create Snippy'}</span>
+              <span className="hidden md:block">{snippy ? 'Save Changes' : 'Create Snippy'}</span>
+              <span className="block md:hidden">{snippy ? 'Save' : 'Create'}</span>
             </Button>
           </div>
         </div>
@@ -178,7 +179,7 @@ const Snippy: FC<Props> = ({ snippy }) => {
         <div className="flex h-[calc(100%_-_70px)]">
           <div
             className={cn(
-              'flex w-full shrink-0  flex-col border-r bg-[#070707] md:w-[460px]',
+              'flex w-full shrink-0 flex-col bg-[#070707] md:w-[460px] md:border-r',
               openFile?.data.name && !!pathToOpenFile.length && 'hidden md:flex',
             )}
           >
