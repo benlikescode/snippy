@@ -1,7 +1,6 @@
 'use client'
 
 import HomeCard from '@/components/home-card'
-import HomeCardSkeleton from '@/components/home-card-skeleton'
 import SortDropdown from '@/components/sort-dropdown'
 import { Searchbar } from '@/components/ui/searchbar'
 import { toast } from '@/components/ui/use-toast'

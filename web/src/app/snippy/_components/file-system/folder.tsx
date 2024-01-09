@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import FileContextMenu from './file-context-menu'
 import useFileStore from '@/stores/useFileStore'
 import type { FolderType, FileItemType } from '@/types'

@@ -229,7 +229,7 @@ const Snippy: FC<Props> = ({ snippy }) => {
               <div className="flex h-20 w-20 items-center justify-center rounded-full border border-[#222] bg-[#181818] shadow-lg">
                 <MagnifyingGlassIcon className="h-8 w-8 text-[#737373]" />
               </div>
-              <p className=" text-[#737373]">Open a file to preview it here</p>
+              <p className="text-[#737373]">Open a file to preview it here</p>
             </div>
           )}
         </div>
