@@ -1,4 +1,5 @@
 import * as vscode from 'vscode'
+import { registerStatusBar } from './registerStatusBar'
 
 const GITHUB_AUTH_PROVIDER_ID = 'github'
 const SCOPES = ['user:email']
@@ -8,14 +9,16 @@ export class Auth {
 
   async initialize(context: vscode.ExtensionContext): Promise<void> {
     this.registerListeners(context)
-    this.setSession()
+    this.setSession(context)
   }
 
-  private async setSession() {
+  private async setSession(context: vscode.ExtensionContext) {
     const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, { createIfNone: true })
 
     if (session) {
       this.session = session
+
+      registerStatusBar(context)
 
       return
     }
@@ -30,7 +33,7 @@ export class Auth {
     context.subscriptions.push(
       vscode.authentication.onDidChangeSessions(async (e) => {
         if (e.provider.id === GITHUB_AUTH_PROVIDER_ID) {
-          await this.setSession()
+          await this.setSession(context)
         }
       })
     )
