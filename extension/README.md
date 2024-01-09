@@ -1,71 +1,28 @@
-# snippy README
+# Snippy VS Code Extension
 
-This is the README for your extension "snippy". After writing up a brief description, we recommend including the following sections.
+Snippy is an extension built to speed up development in VS Code. 
+
+Have you ever found yourself creating the same files over and over again? Maybe you are on a team and want to share code snippets with each other that you can simply drop into the editor?
+
+These are some of the problems that led to the development of Snippy.
+
+## Installation
+
+1. First, make sure you have an account on [Snippy](https://snippy.app).
+  
+2. Install the VS Code extension from the [extension marketplace](https://code.visualstudio.com/docs/editor/extension-marketplace).
+   
+3. Wait for the extension to finish downloading and then reload VS Code when prompted.
+ 
+4. You will be prompted to sign in with your GitHub account (use the same GitHub account you used for your Snippy account).
+
+5. Once signed in, you'll see your default workspace in the status bar.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- Change workspaces by clicking on the status bar and choosing a different workspace from the list of options
+- Create a template by right clicking where you want to add your template and selecting `Use Snippy Template`
 
-For example if there is an image subfolder under your extension project workspace:
+## Roadmap
 
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Following extension guidelines
-
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
-
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+- The ability to add code snippets
