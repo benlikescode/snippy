@@ -1,5 +1,5 @@
 export { addSnippetToEditor } from './addSnippetToEditor'
-export { Auth } from './auth'
+export { getAccessToken, handleAuthPrompt, GITHUB_AUTH_PROVIDER_ID, SCOPES } from './auth'
 export { buildFolderStructure } from './buildFolderStructure'
 export { getTemplateFolderStructure } from './getTemplateFolderStructure'
 export { getWebviewContent } from './getWebviewContent'

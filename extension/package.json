@@ -1,7 +1,7 @@
 {
   "name": "snippy",
   "displayName": "Snippy",
-  "description": "Code once, use forever. Speed up development with shortcuts for your most used code snippets and file templates.",
+  "description": "Code once, use forever. Speed up development with shortcuts for your most used file templates.",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.74.0"
@@ -11,34 +11,24 @@
   ],
   "activationEvents": [
     "onCommand:snippy.addFileTemplate",
-    "onCommand:snippy.addCodeSnippet",
-    "onView:snippy.snippyView",
     "onStartupFinished",
-    "onCommand:snippy.selectWorkspace"
+    "onCommand:snippy.selectWorkspace",
+    "onCommand:snippy.handleLogin"
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "views": {
-      "explorer": [
-        {
-          "type": "webview",
-          "id": "snippy.snippyView",
-          "name": "Snippy Code Snippets"
-        }
-      ]
-    },
     "commands": [
       {
         "command": "snippy.addFileTemplate",
         "title": "Use Snippy Template"
       },
       {
-        "command": "snippy.addCodeSnippet",
-        "title": "Use Snippy Snippet"
-      },
-      {
         "command": "snippy.selectWorkspace",
         "title": "Select Workspace"
+      },
+      {
+        "command": "snippy.handleLogin",
+        "title": "Login To Snippy"
       },
       {
         "command": "snippy.getGitHubUser",
@@ -57,29 +47,7 @@
           "when": "explorerResourceIsFolder",
           "command": "snippy.addFileTemplate"
         }
-      ],
-      "editor/context": [
-        {
-          "when": "editorTextFocus",
-          "command": "snippy.addCodeSnippet"
-        }
       ]
-    },
-    "keybindings": [
-      {
-        "command": "snippy.addCodeSnippet",
-        "key": "ctrl+alt+s",
-        "when": "editorTextFocus"
-      }
-    ],
-    "configuration": {
-      "title": "Snippy",
-      "properties": {
-        "snippy.authToken": {
-          "type": "string",
-          "default": ""
-        }
-      }
     }
   },
   "scripts": {

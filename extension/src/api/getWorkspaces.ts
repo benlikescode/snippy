@@ -1,15 +1,14 @@
 import fetch from 'node-fetch'
 import { Workspace } from '../types'
-import { Auth } from '../utils'
+import { getAccessToken } from '../utils'
 import { SNIPPY_API_URL } from '../constants'
 
 export const getWorkspaces = async () => {
-  const auth = new Auth()
-  const session = await auth.getSession()
+  const accessToken = await getAccessToken()
 
   const res = await fetch(`${SNIPPY_API_URL}/workspaces`, {
     headers: {
-      authorization: session.accessToken,
+      authorization: accessToken,
     },
   })
 
