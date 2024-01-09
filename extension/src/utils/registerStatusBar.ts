@@ -2,6 +2,7 @@ import * as vscode from 'vscode'
 import { Workspace } from '../types'
 import { getWorkspaces } from '../api'
 import { handleAuthPrompt, GITHUB_AUTH_PROVIDER_ID } from './auth'
+import { SNIPPY_SITE_URL } from '../constants'
 
 export const registerStatusBar = async (context: vscode.ExtensionContext) => {
   const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left)
@@ -14,13 +15,41 @@ export const registerStatusBar = async (context: vscode.ExtensionContext) => {
     statusBarItem.text = `$(organization) ${newWorkspace.name}`
   }
 
+  const fetchWorkspaces = async () => {
+    const workspaces = await getWorkspaces()
+
+    if (!workspaces.length) {
+      statusBarItem.command = 'snippy.handleLogin'
+      statusBarItem.text = 'Sync Snippy Account'
+
+      const choices = ['Create Snippy Account', 'Later']
+
+      const selection = await vscode.window.showErrorMessage(
+        'No Snippy account linked to this GitHub profile.',
+        ...choices
+      )
+
+      if (selection === choices[0]) {
+        vscode.env.openExternal(vscode.Uri.parse(SNIPPY_SITE_URL))
+      }
+
+      return
+    }
+
+    return workspaces
+  }
+
   const handleLogin = async () => {
     try {
       handleAuthPrompt()
 
-      statusBarItem.command = 'snippy.selectWorkspace'
+      const workspaces = await fetchWorkspaces()
 
-      const workspaces = await getWorkspaces()
+      if (!workspaces) {
+        return
+      }
+
+      statusBarItem.command = 'snippy.selectWorkspace'
 
       const savedWorkspace = context.globalState.get('currWorkspace') as Workspace | undefined
       const stillMemberOfSavedWorkspace =
@@ -39,7 +68,11 @@ export const registerStatusBar = async (context: vscode.ExtensionContext) => {
 
   context.subscriptions.push(
     vscode.commands.registerCommand('snippy.selectWorkspace', async () => {
-      const workspaces = await getWorkspaces()
+      const workspaces = await fetchWorkspaces()
+
+      if (!workspaces) {
+        return
+      }
 
       const workspaceOptions = workspaces.map((workspace) => ({ ...workspace, label: workspace.name }))
 
