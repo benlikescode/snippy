@@ -17,8 +17,9 @@ export const registerStatusBar = async (context: vscode.ExtensionContext) => {
   statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Left)
   statusBarItem.command = 'snippy.selectWorkspace'
 
-  const savedWorkspace = context.globalState.get('currWorkspace') as Workspace
-  const stillMemberOfSavedWorkspace = workspaces.some((workspace) => workspace.id === savedWorkspace.id)
+  const savedWorkspace = context.globalState.get('currWorkspace') as Workspace | undefined
+  const stillMemberOfSavedWorkspace =
+    savedWorkspace && workspaces.some((workspace) => workspace.id === savedWorkspace.id)
 
   if (!stillMemberOfSavedWorkspace) {
     context.globalState.update('currWorkspace', workspaces[0])

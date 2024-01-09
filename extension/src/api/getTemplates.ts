@@ -5,7 +5,12 @@ import { Auth } from '../utils'
 import { SNIPPY_API_URL } from '../constants'
 
 export const getTemplates = async (context: vscode.ExtensionContext) => {
-  const currWorkspace = context.globalState.get('currWorkspace') as Workspace
+  const currWorkspace = context.globalState.get('currWorkspace') as Workspace | undefined
+
+  if (!currWorkspace?.id) {
+    throw new Error('Failed to link workspace. Please select a workspace and try again')
+  }
+
   const auth = new Auth()
   const session = await auth.getSession()
 
