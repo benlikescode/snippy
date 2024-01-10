@@ -163,9 +163,12 @@ const InstallExtension = () => {
           <li>Start snipping</li>
         </ol>
 
-        <button className="h-14 w-full rounded-lg border border-[#0957f2] bg-[linear-gradient(180deg,_rgba(9,_88,_242,_0.20)_0%,_rgba(114,_66,_250,_0.20)_100%)]">
+        <a
+          href="vscode:extension/snippy.snippy"
+          className="flex h-14 w-full items-center justify-center rounded-lg border border-[#0957f2] bg-[linear-gradient(180deg,_rgba(9,_88,_242,_0.20)_0%,_rgba(114,_66,_250,_0.20)_100%)]"
+        >
           Open in VS Code
-        </button>
+        </a>
       </div>
     </div>
   )
