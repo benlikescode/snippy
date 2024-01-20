@@ -6,6 +6,8 @@ Have you ever found yourself creating similar files over and over again? Maybe y
 
 These are some of the problems that led to the development of Snippy.
 
+https://github.com/benlikescode/snippy/assets/63207900/054b48ce-bfeb-49c3-ad05-7bfbbfcd2ba8
+
 ## Installation
 
 1. First, make sure you have an account on [Snippy](https://snippy.app).
