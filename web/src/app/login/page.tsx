@@ -32,15 +32,15 @@ const LoginPage: FC<Props> = ({ searchParams }) => {
         <AppLogo className="h-[60px] w-[60px]" />
 
         <div className="mt-20 flex flex-col items-center">
-          <h1 className="text-3xl font-semibold sm:text-5xl">Sign in to Snippy</h1>
-          <p className="mt-4 hidden text-[#a3a3a3] sm:block">
+          <h1 className="text-2xl font-semibold sm:text-5xl">Sign in to Snippy</h1>
+          <p className="mt-4 text-center text-xs text-[#a3a3a3] sm:text-base">
             A Visual Studio Code extension to accelerate development.
           </p>
         </div>
 
         <video
           src="snippy-demo.mov"
-          className="my-12 rounded-2xl border bg-black"
+          className="mb-8 mt-12 rounded-2xl border bg-black"
           autoPlay
           loop
           muted
