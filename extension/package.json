@@ -3,7 +3,7 @@
   "displayName": "Snippy",
   "publisher": "Snippy",
   "description": "Code once, use forever. Speed up development with shortcuts for your most used file templates.",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "engines": {
     "vscode": "^1.74.0"
   },

@@ -1,7 +1,7 @@
 import * as vscode from 'vscode'
 import { Workspace } from '../types'
 import { getWorkspaces } from '../api'
-import { handleAuthPrompt, GITHUB_AUTH_PROVIDER_ID } from './auth'
+import { GITHUB_AUTH_PROVIDER_ID, SCOPES } from './auth'
 import { SNIPPY_SITE_URL } from '../constants'
 
 export const registerStatusBar = async (context: vscode.ExtensionContext) => {
@@ -39,9 +39,18 @@ export const registerStatusBar = async (context: vscode.ExtensionContext) => {
     return workspaces
   }
 
-  const handleLogin = async () => {
+  const handleLogin = async (createIfNone = true) => {
     try {
-      handleAuthPrompt()
+      const session = await vscode.authentication.getSession(GITHUB_AUTH_PROVIDER_ID, SCOPES, {
+        createIfNone: createIfNone,
+      })
+
+      if (!session) {
+        statusBarItem.command = 'snippy.handleLogin'
+        statusBarItem.text = 'Login To Snippy'
+
+        return
+      }
 
       const workspaces = await fetchWorkspaces()
 
@@ -99,10 +108,10 @@ export const registerStatusBar = async (context: vscode.ExtensionContext) => {
   context.subscriptions.push(
     vscode.authentication.onDidChangeSessions(async (e) => {
       if (e.provider.id === GITHUB_AUTH_PROVIDER_ID) {
-        await handleLogin()
+        await handleLogin(false)
       }
     })
   )
 
-  await handleLogin()
+  await handleLogin(false)
 }
