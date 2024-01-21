@@ -1,13 +1,27 @@
 {
   "name": "snippy",
   "displayName": "Snippy",
+  "publisher": "Snippy",
   "description": "Code once, use forever. Speed up development with shortcuts for your most used file templates.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.74.0"
   },
+  "license": "MIT",
+  "icon": "icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/benlikescode/snippy",
+    "directory": "extension"
+  },
   "categories": [
     "Other"
+  ],
+  "keywords": [
+    "template",
+    "snippet",
+    "component",
+    "boilerplate"
   ],
   "activationEvents": [
     "onCommand:snippy.addFileTemplate",
