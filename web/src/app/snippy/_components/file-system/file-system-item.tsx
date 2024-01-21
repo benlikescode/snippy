@@ -1,7 +1,7 @@
+import { type FC } from 'react'
+import { type FileItemType } from '@/types'
 import File from './file'
 import Folder from './folder'
-import { type FileItemType } from '@/types'
-import { type FC } from 'react'
 
 type Props = {
   item: FileItemType

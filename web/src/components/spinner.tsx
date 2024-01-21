@@ -1,5 +1,5 @@
-import { cn } from '@/utils/cn'
 import { type FC, type SVGAttributes } from 'react'
+import { cn } from '@/utils/cn'
 
 type Props = SVGAttributes<SVGElement> & {
   position?: 'default' | 'absolute'

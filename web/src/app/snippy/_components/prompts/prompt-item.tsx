@@ -1,6 +1,6 @@
+import { type FC } from 'react'
 import PromptItemPopover from '@/app/snippy/_components/prompts/prompt-item-popover'
 import { type PromptType } from '@/types'
-import { type FC } from 'react'
 
 type Props = {
   prompt: PromptType

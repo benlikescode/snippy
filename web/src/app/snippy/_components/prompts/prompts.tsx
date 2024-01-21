@@ -1,6 +1,6 @@
-import PromptItem from './prompt-item'
-import NewPrompt from './new-prompt'
 import useSnippyStore from '@/stores/useSnippyStore'
+import NewPrompt from './new-prompt'
+import PromptItem from './prompt-item'
 
 const Prompts = () => {
   const { prompts } = useSnippyStore()

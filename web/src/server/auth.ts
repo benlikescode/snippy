@@ -1,9 +1,9 @@
 import type { DefaultSession, NextAuthOptions } from 'next-auth'
 import { getServerSession } from 'next-auth'
 import GitHubProvider from 'next-auth/providers/github'
+import { PrismaAdapter } from '@next-auth/prisma-adapter'
 import { env } from '@/env.mjs'
 import { db } from '@/server/db'
-import { PrismaAdapter } from '@next-auth/prisma-adapter'
 
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`

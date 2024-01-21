@@ -1,6 +1,6 @@
+import { headers } from 'next/headers'
 import type { NextRequest } from 'next/server'
 import { db } from '@/server/db'
-import { headers } from 'next/headers'
 
 export const GET = async (req: NextRequest) => {
   const searchParams = req.nextUrl.searchParams

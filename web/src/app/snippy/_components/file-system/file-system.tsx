@@ -1,10 +1,10 @@
-import Folder from '@/app/snippy/_components/file-system/folder'
-import { Button } from '@/components/ui/button'
-import useFileStore from '@/stores/useFileStore'
-import { type FileItemType } from '@/types'
 import { type FC, type UIEvent, useEffect, useState } from 'react'
 import { DocumentPlusIcon, FolderPlusIcon } from '@heroicons/react/24/solid'
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
+import Folder from '@/app/snippy/_components/file-system/folder'
+import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
+import useFileStore from '@/stores/useFileStore'
+import { type FileItemType } from '@/types'
 import { cn } from '@/utils/cn'
 
 type Props = {

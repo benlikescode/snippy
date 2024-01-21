@@ -1,5 +1,5 @@
-import { db } from '@/server/db'
 import { headers } from 'next/headers'
+import { db } from '@/server/db'
 
 export const GET = async () => {
   const headersList = headers()

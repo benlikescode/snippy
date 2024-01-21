@@ -1,18 +1,18 @@
 'use client'
 
+import { type FC, useState, useEffect, useMemo, type ChangeEvent } from 'react'
+import InfiniteScroll from 'react-infinite-scroll-component'
+import Link from 'next/link'
+import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
+import { type Template } from '@prisma/client'
+import debounce from 'lodash.debounce'
 import HomeCard from '@/components/home-card'
 import SortDropdown from '@/components/sort-dropdown'
+import Spinner from '@/components/spinner'
+import { Button } from '@/components/ui/button'
 import { Searchbar } from '@/components/ui/searchbar'
 import { toast } from '@/components/ui/use-toast'
 import { getTemplates } from '@/server/actions/template.actions'
-import { type Template } from '@prisma/client'
-import { type FC, useState, useEffect, useMemo, type ChangeEvent } from 'react'
-import InfiniteScroll from 'react-infinite-scroll-component'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
-import debounce from 'lodash.debounce'
-import Spinner from '@/components/spinner'
 
 type Props = {
   initialTemplates: { templates: Template[]; hasMore: boolean }

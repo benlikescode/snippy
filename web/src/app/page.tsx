@@ -1,9 +1,9 @@
+import { redirect } from 'next/navigation'
+import { LightBulbIcon } from '@heroicons/react/24/solid'
 import Home from '@/components/home'
+import { funFacts } from '@/constants/funFacts'
 import { getTemplates } from '@/server/actions/template.actions'
 import { getServerAuthSession } from '@/server/auth'
-import { redirect } from 'next/navigation'
-import { funFacts } from '@/constants/funFacts'
-import { LightBulbIcon } from '@heroicons/react/24/solid'
 
 const HomePage = async () => {
   const session = await getServerAuthSession()

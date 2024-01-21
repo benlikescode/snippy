@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
 import { type FileWithPath, useDropzone } from 'react-dropzone'
+import { useToast } from '@/components/ui/use-toast'
+import useFileStore from '@/stores/useFileStore'
 import type { FileDataType, FileItemType, FolderDataType } from '@/types'
 import getFileLanguage from '@/utils/file-helpers/getFileLanguage'
-import useFileStore from '@/stores/useFileStore'
-import { useToast } from '@/components/ui/use-toast'
 import { MAX_FILES_PER_TEMPLATE, MAX_FILE_SIZE } from '@/validations/template.validations'
 
 type FileOrFolder = {

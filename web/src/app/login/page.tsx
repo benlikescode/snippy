@@ -1,10 +1,10 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
 import { type FC, useState } from 'react'
 import { signIn } from 'next-auth/react'
-import { GitHubIcon } from '@/components/icons'
 import AppLogo from '@/components/app-logo'
+import { GitHubIcon } from '@/components/icons'
+import { Button } from '@/components/ui/button'
 
 type Props = {
   searchParams: {

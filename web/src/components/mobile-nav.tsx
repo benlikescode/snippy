@@ -1,9 +1,9 @@
 import { HomeIcon, ShapesIcon, CreateIcon } from '@/components/icons'
-import SidebarItem from '@/components/sidebar/sidebar-item'
-import { db } from '@/server/db'
-import { getServerAuthSession } from '@/server/auth'
-import WorkspaceSettings from '@/components/workspace-settings/workspace-settings'
 import AccountPopover from '@/components/sidebar/account-popover'
+import SidebarItem from '@/components/sidebar/sidebar-item'
+import WorkspaceSettings from '@/components/workspace-settings/workspace-settings'
+import { getServerAuthSession } from '@/server/auth'
+import { db } from '@/server/db'
 
 const MobileNav = async () => {
   const session = await getServerAuthSession()

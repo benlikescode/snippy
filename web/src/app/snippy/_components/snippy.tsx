@@ -1,26 +1,14 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
 import { useEffect, type FC, useState } from 'react'
-import NameInput from './name-input'
-import FileSystem from './file-system/file-system'
-import useFileStore from '@/stores/useFileStore'
-import { ChevronRightIcon } from '@heroicons/react/24/outline'
-import useSnippyStore from '@/stores/useSnippyStore'
-import CodeEditor from '@/app/snippy/_components/code-editor'
-import { createTemplate, updateTemplate } from '@/server/actions/template.actions'
-import { toast } from '@/components/ui/use-toast'
-import { type FileItemType, type PromptType } from '@/types'
-import { useRouter } from 'next/navigation'
-import { ChevronLeftIcon, HamburgerMenuIcon } from '@radix-ui/react-icons'
-import Prompts from './prompts/prompts'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { ChevronRightIcon } from '@heroicons/react/24/outline'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/solid'
-import { type TemplateWithInfo } from '@/app/snippy/[id]/page'
-import formatTimeAgo from '@/utils/formatTimeAgo'
-import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
-import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { type User } from '@prisma/client'
+import { ChevronLeftIcon, HamburgerMenuIcon } from '@radix-ui/react-icons'
+import { type TemplateWithInfo } from '@/app/snippy/[id]/page'
+import CodeEditor from '@/app/snippy/_components/code-editor'
 import {
   AlertDialog,
   AlertDialogContent,
@@ -29,7 +17,19 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { Avatar, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { Tooltip, TooltipTrigger, TooltipContent } from '@/components/ui/tooltip'
+import { toast } from '@/components/ui/use-toast'
+import { createTemplate, updateTemplate } from '@/server/actions/template.actions'
+import useFileStore from '@/stores/useFileStore'
+import useSnippyStore from '@/stores/useSnippyStore'
+import { type FileItemType, type PromptType } from '@/types'
 import { cn } from '@/utils/cn'
+import formatTimeAgo from '@/utils/formatTimeAgo'
+import FileSystem from './file-system/file-system'
+import NameInput from './name-input'
+import Prompts from './prompts/prompts'
 
 type Props = {
   snippy?: TemplateWithInfo

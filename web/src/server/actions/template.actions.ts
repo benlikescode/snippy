@@ -1,20 +1,20 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
 import { getServerAuthSession } from '@/server/auth'
 import { db } from '@/server/db'
 import validateInput from '@/utils/validateInput'
 import {
   type CreateTemplate,
+  type GetTemplates,
+  MAX_SNIPPYS_PER_WORKSPACE,
+  type TemplateId,
   type UpdateTemplate,
   createTemplateSchema,
-  updateTemplateSchema,
-  type TemplateId,
-  templateIdSchema,
-  type GetTemplates,
   getTemplatesSchema,
-  MAX_SNIPPYS_PER_WORKSPACE,
+  templateIdSchema,
+  updateTemplateSchema,
 } from '@/validations/template.validations'
-import { revalidatePath } from 'next/cache'
 
 export const createTemplate = async (params: CreateTemplate) => {
   const session = await getServerAuthSession()

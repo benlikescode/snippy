@@ -1,3 +1,5 @@
+import { type FC, useState, type FormEvent } from 'react'
+import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/components/ui/button'
 import {
   Dialog,
@@ -15,8 +17,6 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { type FC, useState, type FormEvent } from 'react'
-import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'
 import { useToast } from '@/components/ui/use-toast'
 import useSnippyStore from '@/stores/useSnippyStore'
 import { type PromptType } from '@/types'

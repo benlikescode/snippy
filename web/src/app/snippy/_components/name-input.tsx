@@ -1,7 +1,7 @@
+import { type FC, type InputHTMLAttributes, type KeyboardEvent, useState } from 'react'
+import AutosizeInput from 'react-input-autosize'
 import useSnippyStore from '@/stores/useSnippyStore'
 import { cn } from '@/utils/cn'
-import { type FC, useState, type KeyboardEvent, type InputHTMLAttributes } from 'react'
-import AutosizeInput from 'react-input-autosize'
 
 const DEFAULT_TEMPLATE_NAME = 'Untitled Snippy'
 

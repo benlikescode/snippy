@@ -1,17 +1,17 @@
 'use client'
 
-import SidebarItem from '@/components/sidebar/sidebar-item'
-import { Button } from '../ui/button'
-import { CreateIcon, HomeIcon, ShapesIcon } from '@/components/icons'
-import WorkspaceSwitcher from './workspace-switcher'
-import { usePathname, useRouter } from 'next/navigation'
-import AccountPopover from '@/components/sidebar/account-popover'
 import { type FC } from 'react'
-import WorkspaceSettings from '@/components/workspace-settings/workspace-settings'
-import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
-import InstallExtension from '@/components/install-extension'
 import { type User } from 'next-auth'
+import { usePathname, useRouter } from 'next/navigation'
+import { CreateIcon, HomeIcon, ShapesIcon } from '@/components/icons'
+import InstallExtension from '@/components/install-extension'
+import AccountPopover from '@/components/sidebar/account-popover'
+import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
+import SidebarItem from '@/components/sidebar/sidebar-item'
+import WorkspaceSettings from '@/components/workspace-settings/workspace-settings'
 import { MAX_SNIPPYS_PER_WORKSPACE } from '@/validations/template.validations'
+import { Button } from '../ui/button'
+import WorkspaceSwitcher from './workspace-switcher'
 
 type Props = {
   user: User

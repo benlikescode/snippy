@@ -1,5 +1,3 @@
-// TODO - Add language specific icons?
-
 export const FILE_LANGUAGES: Record<string, { name: string }> = {
   txt: {
     name: 'txt',

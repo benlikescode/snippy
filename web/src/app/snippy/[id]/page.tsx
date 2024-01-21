@@ -1,8 +1,8 @@
-import Snippy from '@/app/snippy/_components/snippy'
 import { type FC } from 'react'
 import { notFound, redirect } from 'next/navigation'
-import { db } from '@/server/db'
+import Snippy from '@/app/snippy/_components/snippy'
 import { getServerAuthSession } from '@/server/auth'
+import { db } from '@/server/db'
 
 type Props = {
   params: { id: string }

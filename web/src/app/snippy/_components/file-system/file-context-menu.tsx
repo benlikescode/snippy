@@ -1,5 +1,4 @@
 import { type FC, type ReactNode, useState } from 'react'
-import { Button } from '@/components/ui/button'
 import {
   AlertDialog,
   AlertDialogContent,
@@ -8,15 +7,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
 } from '@/components/ui/context-menu'
-
-import { type FileItemType } from '@/types'
 import useFileStore from '@/stores/useFileStore'
+import { type FileItemType } from '@/types'
 
 type Props = {
   children: ReactNode
