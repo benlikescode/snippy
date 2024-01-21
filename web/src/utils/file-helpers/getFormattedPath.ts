@@ -1,5 +1,5 @@
-import { getPathToItem } from '@/utils/file-helpers'
 import { type FileItemType } from '@/types'
+import { getPathToItem } from '@/utils/file-helpers'
 
 const getFormattedPath = (files: FileItemType[], id: string) => {
   if (!id) {

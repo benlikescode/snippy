@@ -1,6 +1,6 @@
-import type { PromptType } from '@/types'
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
+import type { PromptType } from '@/types'
 
 type State = {
   snippyName: string

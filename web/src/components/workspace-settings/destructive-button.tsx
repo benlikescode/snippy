@@ -1,3 +1,7 @@
+import { type FC, useState } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
 import {
   AlertDialog,
   AlertDialogContent,
@@ -7,13 +11,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { type FC, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
-import { deleteWorkspace, leaveWorkspace } from '@/server/actions/workspace.actions'
-import { useRouter } from 'next/navigation'
 import { toast } from '@/components/ui/use-toast'
-import { useSession } from 'next-auth/react'
+import { deleteWorkspace, leaveWorkspace } from '@/server/actions/workspace.actions'
 
 const DELETE_COPY = {
   title: 'Delete workspace',

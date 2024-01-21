@@ -1,8 +1,8 @@
+import { type ChangeEvent, type FC, type KeyboardEvent, useEffect, useRef, useState } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import useFileStore from '@/stores/useFileStore'
 import { type FileItemType } from '@/types'
 import getFileLanguage from '@/utils/file-helpers/getFileLanguage'
-import { type FC, type ChangeEvent, type KeyboardEvent, useEffect, useRef, useState } from 'react'
 
 type Props = {
   item: FileItemType

@@ -1,8 +1,7 @@
 import * as React from 'react'
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
-
-import { cn } from '@/utils/cn'
 import Spinner from '@/components/spinner'
+import { cn } from '@/utils/cn'
 
 export type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   isSearching?: boolean

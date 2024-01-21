@@ -1,6 +1,8 @@
 'use client'
 
-import { cn } from '@/utils/cn'
+import { type ComponentPropsWithoutRef, type FC, useState, type FormEvent, useEffect } from 'react'
+import { CheckIcon, ChevronUpDownIcon, PlusIcon } from '@heroicons/react/24/solid'
+import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -20,19 +22,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { type ComponentPropsWithoutRef, type FC, useState, type FormEvent, useEffect } from 'react'
-import pluralize from '@/utils/pluralize'
-import { changeWorkspace, createWorkspace } from '@/server/actions/workspace.actions'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { toast } from '@/components/ui/use-toast'
-import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
-import { CheckIcon, ChevronUpDownIcon, PlusIcon } from '@heroicons/react/24/solid'
+import { changeWorkspace, createWorkspace } from '@/server/actions/workspace.actions'
+import { cn } from '@/utils/cn'
+import pluralize from '@/utils/pluralize'
 import { MAX_WORKSPACES_PER_ACCOUNT } from '@/validations/workspace.validations'
 
 type Props = ComponentPropsWithoutRef<typeof DropdownMenuTrigger> & {

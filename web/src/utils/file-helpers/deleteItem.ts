@@ -1,5 +1,5 @@
-import { getPathToItem } from '@/utils/file-helpers'
 import { type FileItemType } from '@/types'
+import { getPathToItem } from '@/utils/file-helpers'
 
 const deleteItem = (files: FileItemType[], id: string) => {
   const pathToItem = getPathToItem(files, id)

@@ -1,18 +1,18 @@
+import { type FC } from 'react'
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { EllipsisHorizontalIcon } from '@heroicons/react/24/solid'
+import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
+import { Avatar, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { type FC } from 'react'
-import { Avatar, AvatarImage } from '@/components/ui/avatar'
-import { EllipsisHorizontalIcon } from '@heroicons/react/24/solid'
-import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
-import { Button } from '@/components/ui/button'
-import { leaveWorkspace, removeMemberFromWorkspace } from '@/server/actions/workspace.actions'
 import { toast } from '@/components/ui/use-toast'
-import { useRouter } from 'next/navigation'
-import { useSession } from 'next-auth/react'
+import { leaveWorkspace, removeMemberFromWorkspace } from '@/server/actions/workspace.actions'
 
 type Props = {
   workspace: WorkspaceWithInfo

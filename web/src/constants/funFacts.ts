@@ -1,4 +1,3 @@
-// Come up with 31+ and then show one each day
 export const funFacts = [
   "GitHub's mascot is a cat with five octopus-like legs called the Octocat.",
   'Google was originally named "Backrub".',

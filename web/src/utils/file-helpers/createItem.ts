@@ -1,6 +1,6 @@
-import { appendItemToParent } from '@/utils/file-helpers'
-import type { FileType, FileItemType, FolderType } from '@/types'
 import { v4 as uuid } from 'uuid'
+import type { FileType, FileItemType, FolderType } from '@/types'
+import { appendItemToParent } from '@/utils/file-helpers'
 
 export const constructFile = (data: FileType['data']): FileItemType => ({
   id: uuid(),

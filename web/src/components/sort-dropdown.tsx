@@ -1,6 +1,9 @@
 'use client'
 
 import { type FC, useState, useEffect } from 'react'
+import { type Template } from '@prisma/client'
+import { CaretSortIcon } from '@radix-ui/react-icons'
+import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -10,9 +13,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { CaretSortIcon } from '@radix-ui/react-icons'
-import { Button } from '@/components/ui/button'
-import { type Template } from '@prisma/client'
 
 const SORT_OPTIONS = [
   {

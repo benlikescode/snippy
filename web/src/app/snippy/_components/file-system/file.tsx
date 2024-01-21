@@ -1,12 +1,12 @@
-import FileContextMenu from './file-context-menu'
-import useFileStore from '@/stores/useFileStore'
-import { type FileItemType } from '@/types'
 import { type FC, useEffect, useState } from 'react'
 import { useDrag } from 'react-dnd'
 import { DocumentIcon } from '@heroicons/react/24/outline'
 import FileItemName from '@/app/snippy/_components/file-system/file-item-name'
-import { getFormattedPath } from '@/utils/file-helpers'
+import useFileStore from '@/stores/useFileStore'
+import { type FileItemType } from '@/types'
 import { cn } from '@/utils/cn'
+import { getFormattedPath } from '@/utils/file-helpers'
+import FileContextMenu from './file-context-menu'
 
 type Props = {
   item: FileItemType

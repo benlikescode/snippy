@@ -1,5 +1,13 @@
 'use client'
 
+import { useState, type FC, type KeyboardEvent, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
+import { XMarkIcon } from '@heroicons/react/24/solid'
+import { CogIcon } from '@/components/icons'
+import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
+import SidebarItem from '@/components/sidebar/sidebar-item'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
@@ -8,22 +16,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { useState, type FC, type KeyboardEvent, useMemo } from 'react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { toast } from '@/components/ui/use-toast'
-import { addMembersToWorkspace, updateWorkspace } from '@/server/actions/workspace.actions'
-import { useRouter } from 'next/navigation'
-import { CogIcon } from '@/components/icons'
-import { type WorkspaceWithInfo } from '@/components/sidebar/sidebar'
-import { XMarkIcon } from '@heroicons/react/24/solid'
-import MemberItem from '@/components/workspace-settings/member-item'
 import DestructiveButton from '@/components/workspace-settings/destructive-button'
-import SidebarItem from '@/components/sidebar/sidebar-item'
+import MemberItem from '@/components/workspace-settings/member-item'
+import { addMembersToWorkspace, updateWorkspace } from '@/server/actions/workspace.actions'
 import { MAX_MEMBERS_PER_WORKSPACE } from '@/validations/workspace.validations'
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 
 const EMAIL_REGEX = /\S+@\S+\.\S+/
 

@@ -1,5 +1,5 @@
-import { getPathToItem, sortFiles, validateName } from '@/utils/file-helpers'
 import { type FileItemType } from '@/types'
+import { getPathToItem, sortFiles, validateName } from '@/utils/file-helpers'
 
 const appendItemToParent = (files: FileItemType[], item: FileItemType, parentFolderId: string) => {
   // Add to root

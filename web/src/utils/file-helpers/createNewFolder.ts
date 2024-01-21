@@ -1,5 +1,5 @@
-import { createItem } from '@/utils/file-helpers'
 import type { FileItemType, FolderDataType } from '@/types'
+import { createItem } from '@/utils/file-helpers'
 
 const createNewFolder = (files: FileItemType[], parentFolderId?: string) => {
   const folderData: FolderDataType = {

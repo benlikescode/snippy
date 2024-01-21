@@ -1,5 +1,5 @@
-import { getPathToItem, sortFiles } from '@/utils/file-helpers'
 import { type FileItemType } from '@/types'
+import { getPathToItem, sortFiles } from '@/utils/file-helpers'
 
 const renameItem = (files: FileItemType[], id: string, newName: string) => {
   const pathToItem = getPathToItem(files, id)

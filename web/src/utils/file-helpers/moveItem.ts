@@ -1,5 +1,5 @@
-import { appendItemToParent, cloneItem, deleteItem } from '@/utils/file-helpers'
 import { type FileItemType } from '@/types'
+import { appendItemToParent, cloneItem, deleteItem } from '@/utils/file-helpers'
 
 const moveItem = (files: FileItemType[], item: FileItemType, newFolderId: string) => {
   // Need to make a copy with different id so we don't have duplicate ids after appending

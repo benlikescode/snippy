@@ -1,3 +1,7 @@
+import { useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { CaretSortIcon } from '@radix-ui/react-icons'
+import { TemplateIcon, SnippetIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import {
   DropdownMenu,
@@ -5,11 +9,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu'
-import { CaretSortIcon } from '@radix-ui/react-icons'
-import { useState } from 'react'
-import { TemplateIcon, SnippetIcon } from '@/components/icons'
 import { cn } from '@/utils/cn'
-import { useSearchParams } from 'next/navigation'
 
 type SnippyTypes = 'Template' | 'Snippets'
 

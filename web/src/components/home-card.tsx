@@ -1,10 +1,8 @@
-import { type FileItemType } from '@/types'
-import formatTimeAgo from '@/utils/formatTimeAgo'
-import { type Template } from '@prisma/client'
-import Link from 'next/link'
 import { type FC, useState } from 'react'
-import { Button } from '@/components/ui/button'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { TrashIcon } from '@heroicons/react/24/solid'
+import { type Template } from '@prisma/client'
 import {
   AlertDialog,
   AlertDialogContent,
@@ -14,9 +12,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { deleteTemplate } from '@/server/actions/template.actions'
-import { useRouter } from 'next/navigation'
+import { Button } from '@/components/ui/button'
 import { toast } from '@/components/ui/use-toast'
+import { deleteTemplate } from '@/server/actions/template.actions'
+import { type FileItemType } from '@/types'
+import formatTimeAgo from '@/utils/formatTimeAgo'
 
 type Props = {
   template: Template

@@ -1,5 +1,5 @@
-import { type FileDataType, type FileItemType } from '@/types'
 import cloneDeep from 'lodash.clonedeep'
+import { type FileDataType, type FileItemType } from '@/types'
 
 // TEST CASE 1
 const test1: FileItemType[] = [

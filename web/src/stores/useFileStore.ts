@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
+import { toast } from '@/components/ui/use-toast'
 import type { FileDataType, FileItemType } from '@/types'
 import {
   createItem,
@@ -12,7 +13,6 @@ import {
   renameItem,
   updateItemData,
 } from '@/utils/file-helpers'
-import { toast } from '@/components/ui/use-toast'
 
 type State = {
   files: FileItemType[]
@@ -23,7 +23,8 @@ type State = {
   setOpenFile: (openFile: FileItemType | null) => void
   setPathToOpenFile: (pathToOpenFile: string[]) => void
   setFileDropzone: (fileDropzone?: string) => void
-  // File Helpers
+
+  // File helpers
   createItem: (type: 'file' | 'folder', data: FileItemType['data'], parentFolderId: string) => void
   createNewFile: (parentFolderId?: string) => void
   createNewFolder: (parentFolderId?: string) => void
@@ -117,7 +118,6 @@ const useFileStore = create<State>()(
         const res = moveItem(files, item, newFolderId)
 
         if (!res) {
-          // toast({ description: 'Failed to move file' })
           return { files: files }
         }
 

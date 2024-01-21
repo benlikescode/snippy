@@ -1,5 +1,5 @@
-import { type FileItemType } from '@/types'
 import { v4 as uuid } from 'uuid'
+import { type FileItemType } from '@/types'
 
 // Creates a clone of the item with a new id
 

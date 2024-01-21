@@ -1,18 +1,18 @@
 'use client'
 
+import React, { type FC, useState } from 'react'
+import { type User } from 'next-auth'
+import { signOut } from 'next-auth/react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { type DropdownMenuContentProps } from '@radix-ui/react-dropdown-menu'
+import { CaretSortIcon, ExitIcon } from '@radix-ui/react-icons'
+import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import React, { type FC, useState } from 'react'
-import { CaretSortIcon, ExitIcon } from '@radix-ui/react-icons'
-import { signOut } from 'next-auth/react'
-import { Avatar, AvatarImage } from '@/components/ui/avatar'
-import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { type User } from 'next-auth'
-import { type DropdownMenuContentProps } from '@radix-ui/react-dropdown-menu'
 
 interface Props extends DropdownMenuContentProps {
   user: User
