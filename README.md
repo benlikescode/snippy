@@ -13,9 +13,9 @@ These are some of the problems that led to the development of Snippy.
 1. First, make sure you have an account on [Snippy](https://snippy.app).
   
 2. Install the VS Code extension from the [extension marketplace](https://marketplace.visualstudio.com/items?itemName=snippy.snippy).
-   
-3. You will be prompted to sign in with your GitHub account (use the same GitHub account as your Snippy account).
 
+3. Click `Login To Snippy` in the bottom status bar and sign in to your GitHub account.
+   
 4. Once signed in, you'll see your default workspace in the status bar.
 
 ## Features
