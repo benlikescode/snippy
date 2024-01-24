@@ -6,6 +6,7 @@ import AppLogo from '@/components/app-logo'
 import { GitHubIcon } from '@/components/icons'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
+import Spinner from '@/components/spinner'
 
 type Props = {
   searchParams: {
@@ -28,7 +29,7 @@ const LoginPage: FC<Props> = ({ searchParams }) => {
   }
 
   return (
-    <div className="h-full w-full overflow-y-auto">
+    <div className="h-full w-full overflow-y-auto bg-[length:30px_30px] bg-[linear-gradient(to_right,_rgb(21,_21,_21)_1px,_transparent_1px),_linear-gradient(rgb(21,_21,_21)_1px,_transparent_1px)]">
       <div className="mx-auto flex max-w-[650px] flex-col items-center px-4 py-8 md:py-16">
         <AppLogo className="h-[60px] w-[60px]" />
 
@@ -39,15 +40,23 @@ const LoginPage: FC<Props> = ({ searchParams }) => {
           </p>
         </div>
 
-        <Image src="/snippy-demo.gif" alt="Snippy extension demo" height={433} width={800} className='mb-8 mt-12 rounded-2xl border bg-black' />
+        <Image src="/snippy-demo.gif" alt="Snippy extension demo" height={433} width={800} className='mb-8 mt-12 rounded-2xl border border-[rgba(255,_255,_255,_0.2)] bg-black' />
     
         <Button
+          variant="ghost"
           onClick={handleLogin}
-          className="h-12 w-full shrink-0 rounded-lg border border-[rgba(255,_255,_255,_0.1)]"
+          className="h-14 w-full shrink-0 rounded-lg border border-[rgba(255,_255,_255,_0.05)] bg-[linear-gradient(180deg,_rgba(9,_88,_242,_0.40)_0%,_rgba(114,_66,_250,_0.40)_100%)]"
           disabled={state === 'loading'}
         >
-          <GitHubIcon className="mr-3 h-5 w-5 fill-[#fff]" />
-          Sign in with GitHub
+          {state === 'loading' ? (
+            <Spinner />
+          ) : (
+            <>
+              <GitHubIcon className="mr-3 h-5 w-5 fill-[#fff]" />
+              Sign in with GitHub
+            </>
+          )}
+         
         </Button>
       </div>
     </div>
