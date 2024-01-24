@@ -113,7 +113,7 @@ const Home: FC<Props> = ({ initialTemplates }) => {
 
   return (
     <>
-      <div className="mb-5 flex items-center gap-3">
+      <div className="mb-8 flex items-center gap-4">
         <Searchbar
           placeholder="Search..."
           isSearching={isSearching}
@@ -137,7 +137,7 @@ const Home: FC<Props> = ({ initialTemplates }) => {
           scrollableTarget="main"
           style={{ overflow: 'visible' }} // override default
         >
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
             {searchResults.map((template) => (
               <HomeCard key={template.id} template={template} />
             ))}
@@ -171,7 +171,7 @@ const Home: FC<Props> = ({ initialTemplates }) => {
           scrollableTarget="main"
           style={{ overflow: 'visible' }} // override default
         >
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 md:grid-cols-3">
+          <div className="grid grid-cols-1 gap-x-5 gap-y-8 sm:grid-cols-2 md:grid-cols-3">
             {templates.map((template) => (
               <HomeCard key={template.id} template={template} />
             ))}

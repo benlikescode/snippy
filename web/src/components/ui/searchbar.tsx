@@ -12,7 +12,7 @@ const Searchbar = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div
         className={cn(
-          'flex h-[42px] flex-1 items-center rounded-[5px] border border-[#323232] bg-transparent pl-3 text-[#737373] focus-within:ring-1 focus-within:ring-ring',
+          'flex h-[42px] flex-1 items-center rounded-[5px] border bg-transparent pl-3 text-[#737373] focus-within:ring-1 focus-within:ring-ring',
           className,
         )}
       >
@@ -25,7 +25,7 @@ const Searchbar = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           type="search"
           ref={ref}
-          className="w-full rounded-[5px] bg-inherit p-2  text-[16px] text-[#dcdcdc] placeholder:text-[#737373] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
+          className="w-full rounded-[5px] bg-inherit p-2 text-[16px] text-[#dcdcdc] placeholder:text-[#737373] focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
           {...props}
         />
       </div>

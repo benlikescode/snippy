@@ -64,10 +64,10 @@ const HomeCard: FC<Props> = ({ template }) => {
 
   return (
     <div className="group grid gap-4">
-      <div className="relative h-44 w-full overflow-hidden rounded-[10px] border border-[#323232] bg-[#0D0D0D] focus-within:shadow-[0_0_0_1px_#aaa] group-hover:border-[#aaa]">
+      <div className="relative h-44 w-full overflow-hidden rounded-[10px] border border-[#1f1f1f] bg-[#0D0D0D] focus-within:shadow-[0_0_0_1px_#737373] group-hover:border-[#262626]">
         <Link href={`/snippy/${template.id}`}>
-          <div className="h-full pl-4 pt-4">
-            <div className="h-full rounded-br-[10px] rounded-tl-md border-l border-t border-[#323232] bg-[#171717] p-4 font-mono text-xs font-semibold text-[#a3a3a3]">
+          <div className="h-full pl-3 pt-3">
+            <div className="h-full rounded-tl-[10px] bg-[#171717] border-t border-l border-[#1f1f1f] p-4 font-mono text-xs font-semibold text-[#737373]">
               <pre>{getPreviewCode()}</pre>
             </div>
           </div>
@@ -77,9 +77,8 @@ const HomeCard: FC<Props> = ({ template }) => {
           <AlertDialogTrigger asChild>
             <div>
               <Button
-                variant="ghost"
                 size="icon"
-                className="absolute right-2 top-2 z-50 bg-[#252525] opacity-0 hover:bg-[#252525] focus:opacity-100 group-hover:opacity-100"
+                className="absolute right-2 top-2 z-50 bg-[#252525] hover:bg-[#282828] shadow-md opacity-0 focus:opacity-100 group-hover:opacity-100"
               >
                 <TrashIcon className="h-5 text-[#d57070]" />
               </Button>
@@ -106,9 +105,9 @@ const HomeCard: FC<Props> = ({ template }) => {
         </AlertDialog>
       </div>
 
-      <div className="grid gap-1">
-        <p className="truncate text-sm">{template.name}</p>
-        <p className="text-xs text-[#737373]">Edited {formatTimeAgo(template.updatedAt, 'long')}</p>
+      <div>
+        <p className="truncate text-sm text-[#dcdcdc]">{template.name}</p>
+        <p className="text-xs mt-[4px] font-semibold text-[#555555]">Edited {formatTimeAgo(template.updatedAt, 'long')}</p>
       </div>
     </div>
   )
