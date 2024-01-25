@@ -35,9 +35,9 @@ Instead of creating the folder, then the files, then writing the boilerplate cod
 
 ### Creating A Template
 
-1. Go to the Snippy [Web App](https://snippy.app/) and when signed in click `New Snippy`.
+1. Go to the Snippy [Web App](https://snippy.app/) and when signed in, click `New Snippy`.
 2. Give your snippy a name.
-3. Add any prompts you want (variables you can use to make the template dynamic) - see below for more info on Prompts.
+3. Add any prompts you want (variables to make the template dynamic) - see below for more info.
 4. Create your file/folder structure as you want it to appear in VS Code.
 5. Add the boilerplate code to each file by clicking on the file and adding it in the editor.
 6. Click the `Create Snippy` button to save your new template.
