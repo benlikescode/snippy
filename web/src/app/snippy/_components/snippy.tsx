@@ -119,8 +119,8 @@ const Snippy: FC<Props> = ({ snippy }) => {
 
   return (
     <>
-      <div className="flex h-full w-full flex-col ">
-        <div className="flex h-[70px] w-full shrink-0 items-center justify-between border-b px-5">
+      <div className="h-full w-full grid grid-rows-[70px_minmax(0,_1fr)]">
+        <div className="flex w-full shrink-0 items-center justify-between border-b px-5">
           <div className="flex flex-1 items-center space-x-2.5">
             <Link href="/" className="h-8 w-8">
               <Button variant="ghost" className="h-full w-full">
@@ -162,8 +162,6 @@ const Snippy: FC<Props> = ({ snippy }) => {
               </Tooltip>
             )}
 
-            {/* <TypeSelector /> */}
-
             <Button
               size="lg"
               onClick={() => (snippy ? handleSaveChanges() : handleCreateSnippy())}
@@ -176,7 +174,7 @@ const Snippy: FC<Props> = ({ snippy }) => {
           </div>
         </div>
 
-        <div className="flex h-[calc(100%_-_70px)]">
+        <div className="flex">
           <div
             className={cn(
               'w-full shrink-0 bg-[#070707] md:w-[460px] md:border-r grid grid-rows-[auto_minmax(0,_1fr)]',
