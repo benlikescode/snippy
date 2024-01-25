@@ -6,7 +6,7 @@ Have you ever found yourself creating similar files over and over again? Maybe y
 
 These are some of the problems that led to the development of Snippy.
 
-https://github.com/benlikescode/snippy/assets/63207900/fb1ba333-24e2-473e-8127-f65d22c5c755
+![snippy-demo](https://github.com/benlikescode/snippy/assets/63207900/fb1ba333-24e2-473e-8127-f65d22c5c755)
 
 ## Installation 💻
 
