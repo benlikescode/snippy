@@ -73,6 +73,7 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.202",
     "@types/mocha": "^10.0.2",
     "@types/node": "18.x",
     "@types/node-fetch": "^2.6.9",
@@ -88,6 +89,7 @@
   "dependencies": {
     "@octokit/rest": "^20.0.2",
     "handlebars": "^4.7.8",
+    "lodash": "^4.17.21",
     "node-fetch": "2.6.7"
   }
 }
