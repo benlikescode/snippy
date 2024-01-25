@@ -179,8 +179,8 @@ const Snippy: FC<Props> = ({ snippy }) => {
         <div className="flex h-[calc(100%_-_70px)]">
           <div
             className={cn(
-              'flex w-full shrink-0 flex-col bg-[#070707] md:w-[460px] md:border-r',
-              openFile?.data.name && !!pathToOpenFile.length && 'hidden md:flex',
+              'w-full shrink-0 bg-[#070707] md:w-[460px] md:border-r grid grid-rows-[auto_minmax(0,_1fr)]',
+              openFile?.data.name && !!pathToOpenFile.length && 'hidden md:grid',
             )}
           >
             <Prompts />

@@ -49,10 +49,10 @@ const FileSystem: FC<Props> = ({ noFiles }) => {
   }, [])
 
   return (
-    <div className="flex-1 overflow-y-auto border-t bg-[#070707]">
+    <div className="border-t bg-[#070707] grid grid-rows-[64px_minmax(0,_1fr)] h-full">
       <div
         className={cn(
-          'flex h-[64px] items-center justify-between border-b border-transparent px-[22px] text-[#767676]',
+          'flex items-center justify-between border-b border-transparent px-[22px] text-[#767676]',
           showSeparator && 'border-border',
         )}
       >
@@ -82,8 +82,8 @@ const FileSystem: FC<Props> = ({ noFiles }) => {
         </div>
       </div>
 
-      <div className="h-[calc(100%_-_64px)] overflow-y-auto" onScroll={handleScroll}>
-        <div className="h-full min-h-full p-2.5 pt-0">
+      <div className="overflow-y-auto grid" onScroll={handleScroll}>
+        <div className="p-2.5 pt-0">
           <Folder
             item={ROOT_FOLDER}
             canDropFile={canDropFile}
